@@ -63,15 +63,36 @@ export default {
         'bootstrap-vue/nuxt',
         // Doc: https://axios.nuxtjs.org/usage
         '@nuxtjs/axios',
+
+        '@nuxtjs/style-resources',
     ],
     /*
      ** Axios module configuration
      ** See https://axios.nuxtjs.org/options
      */
-    axios: {},
+    axios: {
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    },
     /*
      ** Build configuration
      ** See https://nuxtjs.org/api/configuration-build/
      */
     build: {},
+
+    styleResources: {
+        scss: ['./assets/*.scss'],
+    },
+
+    publicRuntimeConfig: {
+        axios: {
+            baseURL: process.env.API_URL,
+        },
+        baseUrl: process.env.BASE_URL,
+    },
+
+    bootstrapVue: {
+        icons: true,
+    },
 }
