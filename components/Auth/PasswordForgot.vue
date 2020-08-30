@@ -1,9 +1,10 @@
 <template>
     <b-form novalidate @submit="onSubmit">
         <b-card footer-tag="footer" header-tag="header">
-            <template v-slot:header>Sign In</template>
+            <template v-slot:header>Reset Password</template>
 
             <b-form-group
+                v-show="!isSuccess"
                 label-align-md="right"
                 label-cols-md="4"
                 label-for="email"
@@ -13,7 +14,7 @@
                 <template v-slot:label>Email</template>
                 <b-form-input
                     id="email"
-                    v-model="form.email"
+                    v-model="email"
                     class="col-md-8"
                     required
                     type="email"
@@ -23,44 +24,26 @@
                 ></b-form-input>
             </b-form-group>
 
-            <b-form-group
-                label-align-md="right"
-                label-cols-md="4"
-                label-for="password"
-                :invalid-feedback="validationMessage('password')"
-                :state="validationState('password')"
-            >
-                <template v-slot:label>Password</template>
-                <b-form-input
-                    id="password"
-                    v-model="form.password"
-                    class="col-md-8"
-                    required
-                    type="password"
-                    :disabled="isLoading"
-                    :state="validationState('password')"
-                    @change="resetValidationMessage('password')"
-                ></b-form-input>
-            </b-form-group>
-
-            <b-form-group label-cols-md="4">
-                <b-form-checkbox v-model="form.remember" :disabled="isLoading">
-                    Remember Me
-                </b-form-checkbox>
-            </b-form-group>
-
             <b-alert
                 variant="warning"
                 fade
                 dismissible
-                :show="hasMessage"
+                :show="hasMessage && !isSuccess"
                 @dismissed="resetMessage()"
             >
                 <b-icon-exclamation-triangle-fill></b-icon-exclamation-triangle-fill>
                 {{ message }}
             </b-alert>
 
-            <template v-slot:footer>
+            <b-alert variant="success" fade :show="isSuccess">
+                <b-icon-check2-circle></b-icon-check2-circle>
+                Password reset link has been sent to you email address.<br />Follow
+                instruction in email message. <br />
+                Pay attention - reset link is temporary and may be expired
+                quickly.
+            </b-alert>
+
+            <template v-if="!isSuccess" v-slot:footer>
                 <div class="form-row">
                     <b-col md="8" offset-md="4">
                         <b-button
@@ -69,11 +52,8 @@
                             variant="primary"
                             @click="onSubmit"
                         >
-                            Login
+                            Reset
                             <b-spinner v-show="isLoading" small></b-spinner>
-                        </b-button>
-                        <b-button to="/password/forgot" variant="link">
-                            Forgot Your Password?
                         </b-button>
                     </b-col>
                 </div>
@@ -87,36 +67,31 @@ import { Mixins, Component } from 'vue-property-decorator'
 import Loader from '~/shared/Loader'
 import Messager from '~/shared/Messager'
 import Validator from '~/shared/Validator'
-import {
-    login,
-    LoginRequestInterface,
-    LoginResponseInterface,
-} from '~/api/login'
+import { forgotPassword } from '~/api/password'
 
 @Component
-export default class Login extends Mixins(Loader, Messager, Validator) {
-    form: LoginRequestInterface = {
-        email: '',
-        password: '',
-        remember: false,
-    }
+export default class PasswordForgot extends Mixins(
+    Loader,
+    Messager,
+    Validator
+) {
+    email: string = ''
 
-    protected onSubmit(event: Event) {
-        event.preventDefault()
-        event.stopPropagation()
+    isSuccess: boolean = false
 
-        this.resetValidationMessages()
+    onSubmit() {
         this.resetMessage()
+        this.resetValidationMessages()
         this.setLoading()
 
-        login(this.$axios, this.form)
+        forgotPassword(this.$axios, this.email)
             .then(this.onSuccess)
             .catch(this.dispatchError)
             .finally(this.setLoaded)
     }
 
-    protected onSuccess(response: LoginResponseInterface) {
-        // TODO. Store tokens from response in localstorage / cookies and redirect to web app
+    onSuccess() {
+        this.isSuccess = true
     }
 }
 </script>
