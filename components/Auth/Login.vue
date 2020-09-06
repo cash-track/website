@@ -116,7 +116,7 @@ export default class Login extends Mixins(Loader, Messager, Validator) {
     }
 
     protected onSuccess(response: LoginResponseInterface) {
-        // TODO. Store tokens from response in localstorage / cookies and redirect to web app
+        console.log('redirecting...', response.redirectUrl)
     }
 }
 </script>

@@ -235,7 +235,7 @@ export default class Register extends Mixins(Loader, Messager, Validator) {
     }
 
     protected onSuccess(response: RegisterResponseInterface) {
-        // TODO. Store tokens from response in localstorage / cookies and redirect to web app
+        console.log('redirecting...', response.redirectUrl)
     }
 }
 </script>

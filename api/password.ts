@@ -7,11 +7,11 @@ export interface ResetPasswordRequestInterface {
 }
 
 export function forgotPassword(http: NuxtAxiosInstance, email: string) {
-    return http.$post('/auth/password/forgot', { email })
+    return http.$post('/api/auth/password/forgot', { email })
 }
 
 export function resetPassword(http: NuxtAxiosInstance, data: ResetPasswordRequestInterface) {
-    return http.$post('/auth/password/reset', {
+    return http.$post('/api/auth/password/reset', {
         code: data.code,
         password: data.password,
         passwordConfirmation: data.passwordConfirmation,
