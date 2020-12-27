@@ -22,7 +22,12 @@ async function ApiRequest<T = any>(
         'User-Agent': req.headers['user-agent'],
         Referer: req.headers.referer,
         Host: host,
+        Origin: '',
         'X-Forwarded-For': req.connection.remoteAddress,
+    }
+
+    if (req.headers.origin !== undefined) {
+        clientHeaders.Origin = req.headers.origin
     }
 
     const request: AxiosRequestConfig = Object.assign(
@@ -111,11 +116,15 @@ export async function handleFullForwardedApiRequest(
     try {
         const response = await ApiRequest(req, res, {})
 
+        forwardApiHeaders(response.headers, res)
+
         res.statusCode = response.status
         res.write(JSON.stringify(response.data))
         res.end()
     } catch (error) {
         if (error.response) {
+            forwardApiHeaders(error.response.headers, res)
+
             res.statusCode = error.response.status
             res.write(JSON.stringify(error.response.data))
             res.end()
@@ -163,4 +172,14 @@ export async function handleErrorsForwardedApiRequest<T>(
     return new Promise<T>((resolve) => {
         return resolve(response.data)
     })
+}
+
+function forwardApiHeaders(headers: any, response: ServerResponse) {
+    if (headers['access-control-allow-origin']) {
+        response.setHeader(
+            'Access-Control-Allow-Origin',
+            headers['access-control-allow-origin']
+        )
+        response.setHeader('Access-Control-Allow-Credentials', 'true')
+    }
 }
