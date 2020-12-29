@@ -236,6 +236,8 @@ export default class Register extends Mixins(Loader, Messager, Validator) {
 
     protected onSuccess(response: RegisterResponseInterface) {
         console.log('redirecting...', response.redirectUrl)
+
+        window.location.href = response.redirectUrl
     }
 }
 </script>
