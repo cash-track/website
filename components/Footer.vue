@@ -6,7 +6,6 @@
             </div>
             <b-nav class="justify-content-center float-sm-right">
                 <b-nav-item to="help">Help</b-nav-item>
-                <b-nav-item>Blog</b-nav-item>
                 <b-nav-item to="about">About</b-nav-item>
             </b-nav>
             <div class="clearfix"></div>
