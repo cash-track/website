@@ -1,5 +1,4 @@
 import { NuxtAxiosInstance } from '@nuxtjs/axios'
-import { EntityIDResponseInterface } from '~/api/response'
 
 export interface RegisterRequestInterface {
     name: string
@@ -11,22 +10,18 @@ export interface RegisterRequestInterface {
 }
 
 export interface RegisterResponseInterface {
-    data: EntityIDResponseInterface
-    accessToken: string
-    accessTokenExpiredAt: string
-    refreshToken: string
-    refreshTokenExpiredAt: string
+    redirectUrl: string
 }
 
 export function checkNickName(http: NuxtAxiosInstance, nickName: string) {
-    return http.$post('/auth/register/check/nick-name', { nickName })
+    return http.$post('/api/auth/register/check/nick-name', { nickName })
 }
 
 export function register(
     http: NuxtAxiosInstance,
     data: RegisterRequestInterface
 ): Promise<RegisterResponseInterface> {
-    return http.$post<RegisterResponseInterface>('/auth/register', {
+    return http.$post<RegisterResponseInterface>('/api/auth/register', {
         name: data.name,
         lastName: data.lastName,
         nickName: data.nickName,

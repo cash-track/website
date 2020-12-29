@@ -1,5 +1,4 @@
 import { NuxtAxiosInstance } from '@nuxtjs/axios'
-import { EntityIDResponseInterface } from '~/api/response'
 
 export interface LoginRequestInterface {
     email: string
@@ -8,19 +7,21 @@ export interface LoginRequestInterface {
 }
 
 export interface LoginResponseInterface {
-    data: EntityIDResponseInterface
-    accessToken: string
-    accessTokenExpiredAt: string
-    refreshToken: string
-    refreshTokenExpiredAt: string
+    redirectUrl: string
 }
 
 export function login(
     http: NuxtAxiosInstance,
     data: LoginRequestInterface
 ): Promise<LoginResponseInterface> {
-    return http.$post<LoginResponseInterface>('/auth/login', {
+    return http.$post<LoginResponseInterface>('/api/auth/login', {
         email: data.email,
         password: data.password,
     })
+}
+
+export function logout(
+    http: NuxtAxiosInstance
+): Promise<LoginResponseInterface> {
+    return http.$post('/api/auth/logout')
 }

@@ -87,12 +87,20 @@ export default {
 
     publicRuntimeConfig: {
         axios: {
-            baseURL: process.env.API_URL,
+            baseURL: process.env.BASE_URL,
         },
         baseUrl: process.env.BASE_URL,
+        webAppUrl: process.env.WEB_APP_URL,
     },
 
     bootstrapVue: {
         icons: true,
     },
+
+    serverMiddleware: [
+        {
+            path: '/api',
+            handler: '~/api/internal/routes.ts',
+        },
+    ],
 }
