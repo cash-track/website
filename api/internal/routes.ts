@@ -21,10 +21,7 @@ export default function (
     router.post('/auth/password/reset', handleFullForwardedApiRequest)
     router.get('/profile', handleFullForwardedApiRequest)
 
-    router.fallback(function (_req: IncomingMessage, res: ServerResponse) {
-        res.statusCode = 404
-        res.end()
-    })
+    router.fallback(handleFullForwardedApiRequest)
 
     try {
         router.dispatch(req, res)

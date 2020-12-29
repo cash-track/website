@@ -18,6 +18,8 @@ async function ApiRequest<T = any>(
     const clientHeaders = {
         Accept: 'application/json',
         'Accept-Language': req.headers['accept-language'],
+        'Access-Control-Request-Headers': '',
+        'Access-Control-Request-Method': '',
         'Content-Type': 'application/json',
         'User-Agent': req.headers['user-agent'],
         Referer: req.headers.referer,
@@ -28,6 +30,16 @@ async function ApiRequest<T = any>(
 
     if (req.headers.origin !== undefined) {
         clientHeaders.Origin = req.headers.origin
+    }
+
+    if (req.headers['access-control-request-method'] !== undefined) {
+        clientHeaders['Access-Control-Request-Method'] =
+            req.headers['access-control-request-method']
+    }
+
+    if (req.headers['access-control-request-headers'] !== undefined) {
+        clientHeaders['Access-Control-Request-Headers'] =
+            req.headers['access-control-request-headers']
     }
 
     const request: AxiosRequestConfig = Object.assign(
@@ -181,5 +193,30 @@ function forwardApiHeaders(headers: any, response: ServerResponse) {
             headers['access-control-allow-origin']
         )
         response.setHeader('Access-Control-Allow-Credentials', 'true')
+    }
+
+    if (headers.vary) {
+        response.setHeader('Vary', headers.vary)
+    }
+
+    if (headers['access-control-allow-methods']) {
+        response.setHeader(
+            'Access-Control-Allow-Methods',
+            headers['access-control-allow-methods']
+        )
+    }
+
+    if (headers['access-control-allow-headers']) {
+        response.setHeader(
+            'Access-Control-Allow-Headers',
+            headers['access-control-allow-headers']
+        )
+    }
+
+    if (headers['access-control-max-age']) {
+        response.setHeader(
+            'Access-Control-Max-Age',
+            headers['access-control-max-age']
+        )
     }
 }
