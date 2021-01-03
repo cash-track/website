@@ -8,8 +8,8 @@
 
                 <b-collapse id="nav-collapse" is-nav>
                     <b-navbar-nav>
-                        <b-nav-item v-if="isLogged" :href="profileLink">Dashboard</b-nav-item>
-                        <b-nav-item v-if="isLogged" href="#">Profile</b-nav-item>
+                        <b-nav-item v-if="isLogged" :href="walletsLink">Wallets</b-nav-item>
+                        <b-nav-item v-if="isLogged" :href="profileLink">Profile</b-nav-item>
                         <b-nav-item :to="{name: 'help'}" exact-active-class="active">Help</b-nav-item>
                         <b-nav-item :to="{name: 'about'}" exact-active-class="active">About</b-nav-item>
                     </b-navbar-nav>
@@ -77,8 +77,12 @@ export default class Header extends Vue {
         })
     }
 
+    get walletsLink() {
+        return `${this.$config.webAppUrl}/wallets`
+    }
+
     get profileLink() {
-        return this.$config.webAppUrl
+        return `${this.$config.webAppUrl}/profile`
     }
 }
 </script>
