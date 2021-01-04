@@ -52,8 +52,36 @@ async function ApiRequest<T = any>(
         config
     )
 
-    if (req.readable) {
+    // Read request body in a safe way.
+    // Sometimes request is nt finished before we read it so body is getting empty or damaged.
+    // In that case we must ensure that request is ended
+    if (
+        req.method !== undefined &&
+        ['POST', 'PUT', 'PATCH'].includes(req.method)
+    ) {
+        // try to read entire body (expect request is completed)
         request.data = req.read()
+
+        // if request is not completed we always get null
+        if (request.data === null) {
+            const body: Array<Uint8Array> = []
+
+            // then we're going to read data by chunks
+            req.on('data', (chunk) => {
+                body.push(chunk)
+            })
+
+            // and wait before it's finished and we're able to join chunks
+            await (() => {
+                return new Promise((resolve) => {
+                    req.on('end', () => {
+                        request.data = Buffer.concat(body)
+
+                        resolve(true)
+                    })
+                })
+            })()
+        }
     }
 
     const cookies = parseCookies(req.headers.cookie)
@@ -77,6 +105,7 @@ async function ApiRequest<T = any>(
             error.response.status !== 401
         ) {
             // pass result to the next level
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
             return new Promise<AxiosResponse>((resolve, reject) => {
                 reject(error)
             })
@@ -90,6 +119,7 @@ async function ApiRequest<T = any>(
             })
         } catch (err) {
             // refresh token failed
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
             return new Promise<AxiosResponse<T>>((resolve, reject) => {
                 reject(error)
             })
@@ -141,13 +171,14 @@ export async function handleFullForwardedApiRequest(
             res.write(JSON.stringify(error.response.data))
             res.end()
         } else {
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
             return new Promise((resolve, reject) => {
                 return reject(error)
             })
         }
     }
 
-    return new Promise((resolve) => {
+    return new Promise<void>((resolve) => {
         return resolve()
     })
 }
@@ -170,12 +201,14 @@ export async function handleErrorsForwardedApiRequest<T>(
             res.statusCode = 500
             res.write(
                 JSON.stringify({
-                    message: 'Unexpected response from server. Please try again later.',
+                    message:
+                        'Unexpected response from server. Please try again later.',
                     error: error.toString(),
                 })
             )
         }
 
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         return new Promise<T>((resolve, reject) => {
             return reject(error)
         })
