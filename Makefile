@@ -14,7 +14,7 @@ IMAGE_LATEST=$(REPO):latest
 .PHONY: build tag push start stop
 
 build:
-	docker build . -t $(IMAGE_DEV) --no-cache
+	docker build . -t $(IMAGE_DEV)
 
 tag:
 	docker tag $(IMAGE_DEV) $(IMAGE_RELEASE)

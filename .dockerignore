@@ -1,4 +1,6 @@
 .env
 .git
+.bin
+.idea
 node_modules
 .nuxt

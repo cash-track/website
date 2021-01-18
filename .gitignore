@@ -79,6 +79,7 @@ dist
 
 # IDE / Editor
 .idea
+.bin
 
 # Service worker
 sw.*
