@@ -10,7 +10,7 @@ async function ApiRequest<T = any>(
     res: ServerResponse,
     config: AxiosRequestConfig
 ): Promise<AxiosResponse<T>> {
-    const host = (process.env.BASE_URL ?? '')
+    const host = (process.env.API_URL ?? '')
         .replace('http://', '')
         .replace('https://', '')
         .replace('/', '')
