@@ -252,4 +252,8 @@ function forwardApiHeaders(headers: any, response: ServerResponse) {
             headers['access-control-max-age']
         )
     }
+
+    if (headers['content-type']) {
+        response.setHeader('Content-Type', headers['content-type'])
+    }
 }
