@@ -12,6 +12,9 @@ import Login from '~/components/Auth/Login.vue'
 
 @Component({
     components: { Login },
+    head: {
+        title: 'Login | Cash Track',
+    },
 })
 export default class LoginPage extends Vue {}
 </script>

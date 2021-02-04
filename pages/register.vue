@@ -12,6 +12,9 @@ import Register from '~/components/Auth/Register.vue'
 
 @Component({
     components: { Register },
+    head: {
+        title: 'Register | Cash Track',
+    },
 })
 export default class RegisterPage extends Vue {}
 </script>

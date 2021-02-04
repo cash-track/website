@@ -27,6 +27,10 @@
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator'
 
-@Component
+@Component({
+    head: {
+        title: 'Cash Track',
+    },
+})
 export default class IndexPage extends Vue {}
 </script>

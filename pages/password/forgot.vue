@@ -12,6 +12,9 @@ import PasswordForgot from '~/components/Auth/PasswordForgot.vue'
 
 @Component({
     components: { PasswordForgot },
+    head: {
+        title: 'Restore Password | Cash Track',
+    },
 })
 export default class PasswordForgotPage extends Vue {}
 </script>
