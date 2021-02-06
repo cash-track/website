@@ -193,8 +193,12 @@ export async function handleErrorsForwardedApiRequest<T>(
 
     try {
         response = await ApiRequest<T>(req, res, config)
+
+        forwardApiHeaders(response.headers, res)
     } catch (error) {
         if (error.response) {
+            forwardApiHeaders(error.response.headers, res)
+
             res.statusCode = error.response.status
             res.write(JSON.stringify(error.response.data))
         } else {

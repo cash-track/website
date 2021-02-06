@@ -12,6 +12,9 @@ import PasswordReset from '~/components/Auth/PasswordReset.vue'
 
 @Component({
     components: { PasswordReset },
+    head: {
+        title: 'Reset Password | Cash Track',
+    },
 })
 export default class PasswordResetPage extends Vue {}
 </script>

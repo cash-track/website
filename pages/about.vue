@@ -41,6 +41,10 @@
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator'
 
-@Component
+@Component({
+    head: {
+        title: 'About | Cash Track',
+    },
+})
 export default class AboutPage extends Vue {}
 </script>

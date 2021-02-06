@@ -12,6 +12,9 @@ import EmailConfirmation from '~/components/Auth/EmailConfirmation.vue'
 
 @Component({
     components: { EmailConfirmation },
+    head: {
+        title: 'Email Confirmation | Cash Track',
+    },
 })
 export default class EmailConfirmTokenPage extends Vue {}
 </script>
