@@ -54,7 +54,7 @@ export default {
     /*
      ** Nuxt.js dev-modules
      */
-    buildModules: ['@nuxt/typescript-build'],
+    buildModules: ['@nuxt/typescript-build', '@nuxtjs/google-analytics'],
     /*
      ** Nuxt.js modules
      */
@@ -91,6 +91,13 @@ export default {
         },
         baseUrl: process.env.BASE_URL,
         webAppUrl: process.env.WEB_APP_URL,
+        googleAnalytics: {
+            id: process.env.GOOGLE_ANALYTICS_ID,
+        },
+    },
+
+    googleAnalytics: {
+        id: 'UA-12301-2',
     },
 
     bootstrapVue: {
