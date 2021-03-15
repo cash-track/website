@@ -2,6 +2,11 @@ import { IncomingMessage, ServerResponse } from 'http'
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios'
 import { parseCookies } from './cookies'
 import { writeCredentials, refreshToken, TokensResponseInterface } from './auth'
+import {
+    captchaBadResponse,
+    captchaErrorResponse,
+    captchaVerify,
+} from './captcha'
 
 // TODO. Uncle Refactoring want's to meed with this file
 
@@ -137,6 +142,26 @@ async function ApiRequest<T = any>(
     return new Promise<AxiosResponse<T>>((resolve) => {
         resolve(response)
     })
+}
+
+// Validate captcha challenge and forward any request to API and fill response
+export async function handleFullForwardedApiRequestWithCaptcha(
+    req: IncomingMessage,
+    res: ServerResponse
+) {
+    try {
+        const captchaOk = await captchaVerify(req)
+
+        if (!captchaOk) {
+            captchaBadResponse(res)
+            return
+        }
+    } catch (error) {
+        captchaErrorResponse(error, res)
+        return
+    }
+
+    return handleFullForwardedApiRequest(req, res)
 }
 
 // Forward any request to API and fill response

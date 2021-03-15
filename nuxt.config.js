@@ -65,6 +65,8 @@ export default {
         '@nuxtjs/axios',
 
         '@nuxtjs/style-resources',
+
+        '@nuxtjs/recaptcha',
     ],
     /*
      ** Axios module configuration
@@ -94,6 +96,9 @@ export default {
         googleAnalytics: {
             id: process.env.GOOGLE_ANALYTICS_ID,
         },
+        recaptcha: {
+            siteKey: process.env.CAPTCHA_CLIENT_KEY,
+        },
     },
 
     googleAnalytics: {
@@ -114,5 +119,11 @@ export default {
     server: {
         port: 3000,
         host: '0.0.0.0',
+    },
+
+    recaptcha: {
+        hideBadge: false,
+        version: 3,
+        size: 'normal',
     },
 }

@@ -79,12 +79,32 @@ export default class PasswordForgot extends Mixins(
 
     isSuccess: boolean = false
 
-    onSubmit() {
+    async mounted() {
+        try {
+            await this.$recaptcha.init()
+        } catch (error) {
+            console.error('Captcha init error: ', error)
+        }
+    }
+
+    beforeDestroy() {
+        this.$recaptcha.destroy()
+    }
+
+    async onSubmit() {
         this.resetMessage()
         this.resetValidationMessages()
         this.setLoading()
 
-        forgotPassword(this.$axios, this.email)
+        let challenge = ''
+
+        try {
+            challenge = await this.$recaptcha.execute('login')
+        } catch (error) {
+            console.log('Captcha execute error: ', error)
+        }
+
+        forgotPassword(this.$axios, this.email, challenge)
             .then(this.onSuccess)
             .catch(this.dispatchError)
             .finally(this.setLoaded)

@@ -1,6 +1,9 @@
 import { IncomingMessage, ServerResponse } from 'http'
 import { Router } from './router'
-import { handleFullForwardedApiRequest } from './api'
+import {
+    handleFullForwardedApiRequest,
+    handleFullForwardedApiRequestWithCaptcha,
+} from './api'
 import loginHandler from './loginHandler'
 import registerHandler from './registerHandler'
 import logoutHandler from './logoutHandler'
@@ -12,14 +15,20 @@ export default function (
 ) {
     const router = new Router()
 
+    router.get('/profile', handleFullForwardedApiRequest)
     router.post('/auth/login', loginHandler)
     router.post('/auth/logout', logoutHandler)
     router.post('/auth/register', registerHandler)
     router.post('/auth/register/check/nick-name', handleFullForwardedApiRequest)
     router.post('/auth/email/confirmation/', handleFullForwardedApiRequest)
-    router.post('/auth/password/forgot', handleFullForwardedApiRequest)
-    router.post('/auth/password/reset', handleFullForwardedApiRequest)
-    router.get('/profile', handleFullForwardedApiRequest)
+    router.post(
+        '/auth/password/forgot',
+        handleFullForwardedApiRequestWithCaptcha
+    )
+    router.post(
+        '/auth/password/reset',
+        handleFullForwardedApiRequestWithCaptcha
+    )
 
     router.fallback(handleFullForwardedApiRequest)
 
@@ -29,7 +38,8 @@ export default function (
         res.statusCode = 500
         res.write(
             JSON.stringify({
-                message: 'Unexpected response from server. Please try again later.',
+                message:
+                    'Unexpected response from server. Please try again later.',
                 error: error.toString(),
             })
         )

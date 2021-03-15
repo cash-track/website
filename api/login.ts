@@ -12,12 +12,21 @@ export interface LoginResponseInterface {
 
 export function login(
     http: NuxtAxiosInstance,
-    data: LoginRequestInterface
+    data: LoginRequestInterface,
+    captchaChallenge: string
 ): Promise<LoginResponseInterface> {
-    return http.$post<LoginResponseInterface>('/api/auth/login', {
-        email: data.email,
-        password: data.password,
-    })
+    return http.$post<LoginResponseInterface>(
+        '/api/auth/login',
+        {
+            email: data.email,
+            password: data.password,
+        },
+        {
+            headers: {
+                'X-CT-Captcha-Challenge': captchaChallenge,
+            },
+        }
+    )
 }
 
 export function logout(
