@@ -115,16 +115,34 @@ export default class PasswordReset extends Mixins(Loader, Messager, Validator) {
 
     isCodeInvalid: boolean = false
 
-    mounted() {
+    async mounted() {
         this.form.code = this.resetCode
+
+        try {
+            await this.$recaptcha.init()
+        } catch (error) {
+            console.error('Captcha init error: ', error)
+        }
     }
 
-    onSubmit() {
+    beforeDestroy() {
+        this.$recaptcha.destroy()
+    }
+
+    async onSubmit() {
         this.resetMessage()
         this.resetValidationMessages()
         this.setLoading()
 
-        resetPassword(this.$axios, this.form)
+        let challenge = ''
+
+        try {
+            challenge = await this.$recaptcha.execute('login')
+        } catch (error) {
+            console.log('Captcha execute error: ', error)
+        }
+
+        resetPassword(this.$axios, this.form, challenge)
             .then(this.onSuccess)
             .catch(this.dispatchError)
             .finally(this.setLoaded)

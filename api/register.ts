@@ -19,14 +19,23 @@ export function checkNickName(http: NuxtAxiosInstance, nickName: string) {
 
 export function register(
     http: NuxtAxiosInstance,
-    data: RegisterRequestInterface
+    data: RegisterRequestInterface,
+    captchaChallenge: string
 ): Promise<RegisterResponseInterface> {
-    return http.$post<RegisterResponseInterface>('/api/auth/register', {
-        name: data.name,
-        lastName: data.lastName,
-        nickName: data.nickName,
-        email: data.email,
-        password: data.password,
-        passwordConfirmation: data.passwordConfirmation,
-    })
+    return http.$post<RegisterResponseInterface>(
+        '/api/auth/register',
+        {
+            name: data.name,
+            lastName: data.lastName,
+            nickName: data.nickName,
+            email: data.email,
+            password: data.password,
+            passwordConfirmation: data.passwordConfirmation,
+        },
+        {
+            headers: {
+                'X-CT-Captcha-Challenge': captchaChallenge,
+            },
+        }
+    )
 }

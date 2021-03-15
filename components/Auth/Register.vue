@@ -186,6 +186,18 @@ export default class Register extends Mixins(Loader, Messager, Validator) {
 
     isNickNameValid: boolean | null = null
 
+    async mounted() {
+        try {
+            await this.$recaptcha.init()
+        } catch (error) {
+            console.error('Captcha init error: ', error)
+        }
+    }
+
+    beforeDestroy() {
+        this.$recaptcha.destroy()
+    }
+
     @Watch('form.nickName')
     onNickNameChanged() {
         this.isNickNameValid = null
@@ -220,7 +232,7 @@ export default class Register extends Mixins(Loader, Messager, Validator) {
             })
     }
 
-    protected onSubmit(event: Event) {
+    protected async onSubmit(event: Event) {
         event.preventDefault()
         event.stopPropagation()
 
@@ -228,7 +240,16 @@ export default class Register extends Mixins(Loader, Messager, Validator) {
         this.resetMessage()
         this.setLoading()
 
-        register(this.$axios, this.form)
+        let challenge = ''
+
+        try {
+            challenge = await this.$recaptcha.execute('login')
+        } catch (error) {
+            console.log('Captcha execute error: ', error)
+        }
+
+        // send token to server alongside your form data
+        register(this.$axios, this.form, challenge)
             .then(this.onSuccess)
             .catch(this.dispatchError)
             .finally(this.setLoaded)

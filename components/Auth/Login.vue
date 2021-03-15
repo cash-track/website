@@ -101,7 +101,19 @@ export default class Login extends Mixins(Loader, Messager, Validator) {
         remember: false,
     }
 
-    protected onSubmit(event: Event) {
+    async mounted() {
+        try {
+            await this.$recaptcha.init()
+        } catch (error) {
+            console.error('Captcha init error: ', error)
+        }
+    }
+
+    beforeDestroy() {
+        this.$recaptcha.destroy()
+    }
+
+    protected async onSubmit(event: Event) {
         event.preventDefault()
         event.stopPropagation()
 
@@ -109,7 +121,15 @@ export default class Login extends Mixins(Loader, Messager, Validator) {
         this.resetMessage()
         this.setLoading()
 
-        login(this.$axios, this.form)
+        let challenge = ''
+
+        try {
+            challenge = await this.$recaptcha.execute('login')
+        } catch (error) {
+            console.log('Captcha execute error: ', error)
+        }
+
+        login(this.$axios, this.form, challenge)
             .then(this.onSuccess)
             .catch(this.dispatchError)
             .finally(this.setLoaded)
