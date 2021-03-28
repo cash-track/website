@@ -92,6 +92,7 @@ import {
     LoginRequestInterface,
     LoginResponseInterface,
 } from '~/api/login'
+import { profileGet } from '~/api/profile'
 
 @Component
 export default class Login extends Mixins(Loader, Messager, Validator) {
@@ -127,12 +128,30 @@ export default class Login extends Mixins(Loader, Messager, Validator) {
             challenge = await this.$recaptcha.execute('login')
         } catch (error) {
             console.log('Captcha execute error: ', error)
+            this.setLoaded()
+            return
         }
 
-        login(this.$axios, this.form, challenge)
-            .then(this.onSuccess)
-            .catch(this.dispatchError)
-            .finally(this.setLoaded)
+        let loginResponse: LoginResponseInterface
+
+        try {
+            loginResponse = await login(this.$axios, this.form, challenge)
+        } catch (error) {
+            this.dispatchError(error)
+            this.setLoaded()
+            return
+        }
+
+        try {
+            const profileResponse = await profileGet(this.$axios)
+            this.$store.commit('auth/login', profileResponse.data)
+        } catch (error) {
+            this.dispatchError(error)
+            this.setLoaded()
+            return
+        }
+
+        this.onSuccess(loginResponse)
     }
 
     protected onSuccess(response: LoginResponseInterface) {

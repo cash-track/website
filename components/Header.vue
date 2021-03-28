@@ -41,40 +41,50 @@ import {
     ProfileResponseInterface,
 } from '~/api/profile'
 import { logout } from '~/api/login'
+import { PROFILE, CookieCache } from '~/services/CookieCache';
 
 @Component
 export default class Header extends Vue {
-    isLogged: boolean = false
-    profile: ProfileInterface | null = null
+    created() {
+        const cache = new CookieCache()
+        const profile = cache.get<ProfileInterface>(PROFILE)
+
+        if (profile !== null && profile.name) {
+            this.$store.commit('auth/login', profile)
+        }
+    }
 
     mounted() {
-        // TODO. Load profile only if logged
         this.loadProfile()
     }
 
     loadProfile() {
-        // TODO. Use vuex actions to fetch and store auth state on frontend
         profileGet(this.$axios)
             .then(this.onProfileSuccess)
             .catch(this.onProfileError)
     }
 
     onProfileSuccess(res: ProfileResponseInterface) {
-        this.profile = res.data
-        this.isLogged = true
+        this.$store.commit('auth/login', res.data)
     }
 
     onProfileError() {
-        this.isLogged = false
+        this.$store.commit('auth/logout')
     }
 
     onLogout() {
-        // TODO. Use vuex actions to update auth state on frontend
         logout(this.$axios).finally(() => {
-            this.isLogged = false
-            this.profile = null
+            this.$store.commit('auth/logout')
             this.$router.push('/')
         })
+    }
+
+    get isLogged(): boolean {
+        return this.$store.state.auth.isLogged
+    }
+
+    get profile(): ProfileInterface | null {
+        return this.$store.state.auth.profile
     }
 
     get walletsLink() {
