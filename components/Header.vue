@@ -41,7 +41,7 @@ import {
     ProfileResponseInterface,
 } from '~/api/profile'
 import { logout } from '~/api/login'
-import { PROFILE, CookieCache } from '~/services/CookieCache';
+import { PROFILE, CookieCache } from '~/services/CookieCache'
 
 @Component
 export default class Header extends Vue {
