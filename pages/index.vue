@@ -5,7 +5,14 @@
             lead="Tracking your money income and expense is important to know where to optimise your life quality"
         >
             <p>Use Cash Track for free. No fees and pricing plan</p>
-            <b-button variant="primary" :to="{name: 'login'}">Login</b-button> or <b-button variant="primary" :to="{name: 'register'}">Register</b-button>
+            <span v-if="isProfileLoading || !isLogged">
+                <b-button variant="primary" :disabled="isProfileLoading" :to="{name: 'login'}">Login</b-button>
+                or
+                <b-button variant="primary" :disabled="isProfileLoading" :to="{name: 'register'}">Register</b-button>
+            </span>
+            <span v-if="isLogged">
+                <b-button variant="primary" :href="walletsLink">Wallet</b-button>
+            </span>
         </b-jumbotron>
         <b-row>
             <b-col md="4">
@@ -25,12 +32,21 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component } from 'vue-property-decorator'
+import { Component, Mixins } from 'vue-property-decorator'
+import WebAppLinks from '~/shared/WebAppLinks'
 
 @Component({
     head: {
         title: 'Cash Track',
     },
 })
-export default class IndexPage extends Vue {}
+export default class IndexPage extends Mixins(WebAppLinks) {
+    get isLogged(): boolean {
+        return this.$store.state.auth.isLogged
+    }
+
+    get isProfileLoading(): boolean {
+        return this.$store.state.auth.isProfileLoading
+    }
+}
 </script>

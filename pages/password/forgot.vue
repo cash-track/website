@@ -7,8 +7,9 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component } from 'vue-property-decorator'
+import { Mixins, Component } from 'vue-property-decorator'
 import PasswordForgot from '~/components/Auth/PasswordForgot.vue'
+import GuestOnly from '~/shared/GuestOnly'
 
 @Component({
     components: { PasswordForgot },
@@ -16,5 +17,5 @@ import PasswordForgot from '~/components/Auth/PasswordForgot.vue'
         title: 'Restore Password | Cash Track',
     },
 })
-export default class PasswordForgotPage extends Vue {}
+export default class PasswordForgotPage extends Mixins(GuestOnly) {}
 </script>

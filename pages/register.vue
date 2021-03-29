@@ -7,8 +7,9 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component } from 'vue-property-decorator'
+import { Mixins, Component } from 'vue-property-decorator'
 import Register from '~/components/Auth/Register.vue'
+import GuestOnly from '~/shared/GuestOnly'
 
 @Component({
     components: { Register },
@@ -16,5 +17,5 @@ import Register from '~/components/Auth/Register.vue'
         title: 'Register | Cash Track',
     },
 })
-export default class RegisterPage extends Vue {}
+export default class RegisterPage extends Mixins(GuestOnly) {}
 </script>

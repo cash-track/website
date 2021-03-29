@@ -7,8 +7,9 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component } from 'vue-property-decorator'
+import { Component, Mixins } from 'vue-property-decorator'
 import Login from '~/components/Auth/Login.vue'
+import GuestOnly from '~/shared/GuestOnly'
 
 @Component({
     components: { Login },
@@ -16,5 +17,5 @@ import Login from '~/components/Auth/Login.vue'
         title: 'Login | Cash Track',
     },
 })
-export default class LoginPage extends Vue {}
+export default class LoginPage extends Mixins(GuestOnly) {}
 </script>

@@ -8,16 +8,16 @@
 
                 <b-collapse id="nav-collapse" is-nav>
                     <b-navbar-nav>
-                        <b-nav-item v-if="isLogged" :href="walletsLink">Wallets</b-nav-item>
-                        <b-nav-item v-if="isLogged" :href="profileLink">Profile</b-nav-item>
+                        <b-nav-item v-if="isProfileLoading || isLogged" :disabled="isProfileLoading" :href="walletsLink">Wallets</b-nav-item>
+                        <b-nav-item v-if="isProfileLoading || isLogged" :disabled="isProfileLoading" :href="profileLink">Profile</b-nav-item>
                         <b-nav-item :to="{name: 'help'}" exact-active-class="active">Help</b-nav-item>
                         <b-nav-item :to="{name: 'about'}" exact-active-class="active">About</b-nav-item>
                     </b-navbar-nav>
 
                     <b-navbar-nav class="ml-auto">
-                        <b-navbar-nav v-if="!isLogged">
-                            <b-nav-item :to="{name: 'login'}" exact-active-class="active">Sign In</b-nav-item>
-                            <b-nav-item :to="{name: 'register'}" exact-active-class="active">Sign Up</b-nav-item>
+                        <b-navbar-nav v-if="isProfileLoading || !isLogged">
+                            <b-nav-item :to="{name: 'login'}" :disabled="isProfileLoading" exact-active-class="active">Sign In</b-nav-item>
+                            <b-nav-item :to="{name: 'register'}" :disabled="isProfileLoading" exact-active-class="active">Sign Up</b-nav-item>
                         </b-navbar-nav>
                         <b-nav-item-dropdown v-if="isLogged" right>
                             <template v-slot:button-content>
@@ -34,55 +34,52 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component } from 'vue-property-decorator'
+import { Component, Mixins } from 'vue-property-decorator'
 import {
     profileGet,
     ProfileInterface,
     ProfileResponseInterface,
 } from '~/api/profile'
 import { logout } from '~/api/login'
+import WebAppLinks from '~/shared/WebAppLinks'
 
 @Component
-export default class Header extends Vue {
-    isLogged: boolean = false
-    profile: ProfileInterface | null = null
-
+export default class Header extends Mixins(WebAppLinks) {
     mounted() {
-        // TODO. Load profile only if logged
         this.loadProfile()
     }
 
     loadProfile() {
-        // TODO. Use vuex actions to fetch and store auth state on frontend
         profileGet(this.$axios)
             .then(this.onProfileSuccess)
             .catch(this.onProfileError)
     }
 
     onProfileSuccess(res: ProfileResponseInterface) {
-        this.profile = res.data
-        this.isLogged = true
+        this.$store.commit('auth/login', res.data)
     }
 
     onProfileError() {
-        this.isLogged = false
+        this.$store.commit('auth/logout')
     }
 
     onLogout() {
-        // TODO. Use vuex actions to update auth state on frontend
         logout(this.$axios).finally(() => {
-            this.isLogged = false
-            this.profile = null
+            this.$store.commit('auth/logout')
             this.$router.push('/')
         })
     }
 
-    get walletsLink() {
-        return `${this.$config.webAppUrl}/wallets`
+    get isLogged(): boolean {
+        return this.$store.state.auth.isLogged
     }
 
-    get profileLink() {
-        return `${this.$config.webAppUrl}/profile`
+    get isProfileLoading(): boolean {
+        return this.$store.state.auth.isProfileLoading
+    }
+
+    get profile(): ProfileInterface | null {
+        return this.$store.state.auth.profile
     }
 }
 </script>
