@@ -1,29 +1,26 @@
 import { ProfileInterface } from '~/api/profile'
-import { CookieCache, PROFILE } from '~/services/CookieCache'
 
 export interface AuthState {
     isLogged: boolean
     profile: ProfileInterface | null
+    isProfileLoading: boolean
 }
 
 export const state = (): AuthState => ({
     isLogged: false,
     profile: null,
+    isProfileLoading: true,
 })
 
 export const mutations = {
     login(state: AuthState, user: ProfileInterface) {
         state.profile = user
         state.isLogged = true
-
-        const cache = new CookieCache()
-        cache.set<ProfileInterface>(PROFILE, user)
+        state.isProfileLoading = false
     },
     logout(state: AuthState) {
         state.profile = null
         state.isLogged = false
-
-        const cache = new CookieCache()
-        cache.forget(PROFILE)
+        state.isProfileLoading = false
     },
 }

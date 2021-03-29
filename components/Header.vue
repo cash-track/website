@@ -8,16 +8,16 @@
 
                 <b-collapse id="nav-collapse" is-nav>
                     <b-navbar-nav>
-                        <b-nav-item v-if="isLogged" :href="walletsLink">Wallets</b-nav-item>
-                        <b-nav-item v-if="isLogged" :href="profileLink">Profile</b-nav-item>
+                        <b-nav-item v-if="isProfileLoading || isLogged" :disabled="isProfileLoading" :href="walletsLink">Wallets</b-nav-item>
+                        <b-nav-item v-if="isProfileLoading || isLogged" :disabled="isProfileLoading" :href="profileLink">Profile</b-nav-item>
                         <b-nav-item :to="{name: 'help'}" exact-active-class="active">Help</b-nav-item>
                         <b-nav-item :to="{name: 'about'}" exact-active-class="active">About</b-nav-item>
                     </b-navbar-nav>
 
                     <b-navbar-nav class="ml-auto">
-                        <b-navbar-nav v-if="!isLogged">
-                            <b-nav-item :to="{name: 'login'}" exact-active-class="active">Sign In</b-nav-item>
-                            <b-nav-item :to="{name: 'register'}" exact-active-class="active">Sign Up</b-nav-item>
+                        <b-navbar-nav v-if="isProfileLoading || !isLogged">
+                            <b-nav-item :to="{name: 'login'}" :disabled="isProfileLoading" exact-active-class="active">Sign In</b-nav-item>
+                            <b-nav-item :to="{name: 'register'}" :disabled="isProfileLoading" exact-active-class="active">Sign Up</b-nav-item>
                         </b-navbar-nav>
                         <b-nav-item-dropdown v-if="isLogged" right>
                             <template v-slot:button-content>
@@ -41,19 +41,9 @@ import {
     ProfileResponseInterface,
 } from '~/api/profile'
 import { logout } from '~/api/login'
-import { PROFILE, CookieCache } from '~/services/CookieCache'
 
 @Component
 export default class Header extends Vue {
-    created() {
-        const cache = new CookieCache()
-        const profile = cache.get<ProfileInterface>(PROFILE)
-
-        if (profile !== null && profile.name) {
-            this.$store.commit('auth/login', profile)
-        }
-    }
-
     mounted() {
         this.loadProfile()
     }
@@ -81,6 +71,10 @@ export default class Header extends Vue {
 
     get isLogged(): boolean {
         return this.$store.state.auth.isLogged
+    }
+
+    get isProfileLoading(): boolean {
+        return this.$store.state.auth.isProfileLoading
     }
 
     get profile(): ProfileInterface | null {
