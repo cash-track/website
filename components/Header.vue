@@ -34,16 +34,17 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component } from 'vue-property-decorator'
+import { Component, Mixins } from 'vue-property-decorator'
 import {
     profileGet,
     ProfileInterface,
     ProfileResponseInterface,
 } from '~/api/profile'
 import { logout } from '~/api/login'
+import WebAppLinks from '~/shared/WebAppLinks'
 
 @Component
-export default class Header extends Vue {
+export default class Header extends Mixins(WebAppLinks) {
     mounted() {
         this.loadProfile()
     }
@@ -79,14 +80,6 @@ export default class Header extends Vue {
 
     get profile(): ProfileInterface | null {
         return this.$store.state.auth.profile
-    }
-
-    get walletsLink() {
-        return `${this.$config.webAppUrl}/wallets`
-    }
-
-    get profileLink() {
-        return `${this.$config.webAppUrl}/profile`
     }
 }
 </script>

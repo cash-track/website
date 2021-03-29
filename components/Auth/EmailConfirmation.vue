@@ -29,10 +29,15 @@
 import { Mixins, Component, Prop } from 'vue-property-decorator'
 import Loader from '~/shared/Loader'
 import Messager from '~/shared/Messager'
+import WebAppLinks from '~/shared/WebAppLinks'
 import { confirmEmail } from '~/api/email'
 
 @Component
-export default class EmailConfirmation extends Mixins(Loader, Messager) {
+export default class EmailConfirmation extends Mixins(
+    Loader,
+    Messager,
+    WebAppLinks
+) {
     @Prop()
     token!: string
 
@@ -40,10 +45,6 @@ export default class EmailConfirmation extends Mixins(Loader, Messager) {
 
     get isLogged(): boolean {
         return this.$store.state.auth.isLogged
-    }
-
-    get profileLink() {
-        return `${this.$config.webAppUrl}/profile`
     }
 
     mounted() {
