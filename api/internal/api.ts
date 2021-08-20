@@ -47,6 +47,10 @@ async function ApiRequest<T = any>(
             req.headers['access-control-request-headers']
     }
 
+    if (req.headers['content-type']?.startsWith('multipart/form-data')) {
+        clientHeaders['Content-Type'] = req.headers['content-type']
+    }
+
     const request: AxiosRequestConfig = Object.assign(
         {
             method: req.method,
