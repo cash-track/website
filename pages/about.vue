@@ -14,20 +14,19 @@
 
         <p>
             Cash Track app it's a free open source project, where you can track
-            your money.
+            your money income and expense.
         </p>
         <p>
             Here you can collaborate with your family, friends and business
-            partners to keep your money count.
+            partners to keep your funds counted.
         </p>
-        <p>Why you must select us?</p>
+        <p>Here is why it may be useful:</p>
 
         <ul>
             <li>Free service</li>
             <li>Collaborate with people</li>
             <li>Enable notifications</li>
             <li>Keep track your money</li>
-            <li>... and more</li>
         </ul>
 
         <p class="lead">Connect with us and try to use it free.</p>
@@ -35,6 +34,21 @@
             <b-button variant="primary" to="register">Connect</b-button>
             or
             <b-button variant="primary" to="login">Log In</b-button>
+        </p>
+
+        <p>We are working to add more features and fix existing bugs.</p>
+
+        <p>
+            If you have any suggestion or got some bug and wants to report it -
+            we're appreciate it. Go
+            <a
+                href="https://github.com/cash-track/website/issues/new"
+                target="_blank"
+                >here
+            </a>
+
+            and create new Issue. Feel free to describe your issue or idea with
+            screenshots and a lot of text.
         </p>
     </div>
 </template>
