@@ -2,29 +2,63 @@
     <div>
         <b-navbar toggleable="lg" type="light">
             <b-container>
-                <b-navbar-brand :to="{name: 'index'}">Cash Track</b-navbar-brand>
+                <b-navbar-brand :to="{ name: 'index' }">
+                    Cash Track
+                </b-navbar-brand>
 
                 <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
 
                 <b-collapse id="nav-collapse" is-nav>
                     <b-navbar-nav>
-                        <b-nav-item v-if="isProfileLoading || isLogged" :disabled="isProfileLoading" :href="walletsLink">Wallets</b-nav-item>
-                        <b-nav-item v-if="isProfileLoading || isLogged" :disabled="isProfileLoading" :href="profileLink">Profile</b-nav-item>
-                        <b-nav-item :to="{name: 'help'}" exact-active-class="active">Help</b-nav-item>
-                        <b-nav-item :to="{name: 'about'}" exact-active-class="active">About</b-nav-item>
+                        <b-nav-item
+                            v-if="isProfileLoading || isLogged"
+                            :disabled="isProfileLoading"
+                            :href="walletsLink"
+                            >Wallets</b-nav-item
+                        >
+                        <b-nav-item
+                            v-if="isProfileLoading || isLogged"
+                            :disabled="isProfileLoading"
+                            :href="profileLink"
+                            >Profile</b-nav-item
+                        >
+                        <b-nav-item
+                            :to="{ name: 'help' }"
+                            exact-active-class="active"
+                            >Help</b-nav-item
+                        >
+                        <b-nav-item
+                            :to="{ name: 'about' }"
+                            exact-active-class="active"
+                            >About</b-nav-item
+                        >
                     </b-navbar-nav>
 
                     <b-navbar-nav class="ml-auto">
                         <b-navbar-nav v-if="isProfileLoading || !isLogged">
-                            <b-nav-item :to="{name: 'login'}" :disabled="isProfileLoading" exact-active-class="active">Sign In</b-nav-item>
-                            <b-nav-item :to="{name: 'register'}" :disabled="isProfileLoading" exact-active-class="active">Sign Up</b-nav-item>
+                            <b-nav-item
+                                :to="{ name: 'login' }"
+                                :disabled="isProfileLoading"
+                                exact-active-class="active"
+                                >Sign In</b-nav-item
+                            >
+                            <b-nav-item
+                                :to="{ name: 'register' }"
+                                :disabled="isProfileLoading"
+                                exact-active-class="active"
+                                >Sign Up</b-nav-item
+                            >
                         </b-navbar-nav>
                         <b-nav-item-dropdown v-if="isLogged" right>
                             <template v-slot:button-content>
                                 {{ profile.name }}
                             </template>
-                            <b-dropdown-item :href="profileLink">Dashboard</b-dropdown-item>
-                            <b-dropdown-item href="#" @click="onLogout">Sign Out</b-dropdown-item>
+                            <b-dropdown-item :href="profileLink">
+                                Dashboard
+                            </b-dropdown-item>
+                            <b-dropdown-item href="#" @click="onLogout">
+                                Sign Out
+                            </b-dropdown-item>
                         </b-nav-item-dropdown>
                     </b-navbar-nav>
                 </b-collapse>

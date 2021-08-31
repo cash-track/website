@@ -7,7 +7,7 @@ interface CaptchaVerifyResponseInterface {
     challenge_ts: string
     hostname: string
     score: number
-    'error-codes': Array<string>|undefined
+    'error-codes': Array<string> | undefined
 }
 
 export function captchaErrorResponse(error: Error, res: ServerResponse) {
@@ -35,7 +35,7 @@ export function captchaBadResponse(res: ServerResponse) {
 export async function captchaVerify(req: IncomingMessage): Promise<boolean> {
     const secret = process.env.CAPTCHA_SECRET_KEY
     const response = req.headers['x-ct-captcha-challenge']
-    const remoteip = getClientIP(req)
+    const remoteIP = getClientIP(req)
 
     if (typeof response === 'undefined' || response === '') {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -50,7 +50,7 @@ export async function captchaVerify(req: IncomingMessage): Promise<boolean> {
         params: {
             secret,
             response,
-            remoteip,
+            remoteIP,
         },
     }
 

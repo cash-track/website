@@ -106,6 +106,7 @@ export default class Login extends Mixins(Loader, Messager, Validator) {
         try {
             await this.$recaptcha.init()
         } catch (error) {
+            // eslint-disable-next-line no-console
             console.error('Captcha init error: ', error)
         }
     }
@@ -127,6 +128,7 @@ export default class Login extends Mixins(Loader, Messager, Validator) {
         try {
             challenge = await this.$recaptcha.execute('login')
         } catch (error) {
+            // eslint-disable-next-line no-console
             console.log('Captcha execute error: ', error)
             this.setLoaded()
             return
@@ -155,8 +157,6 @@ export default class Login extends Mixins(Loader, Messager, Validator) {
     }
 
     protected onSuccess(response: LoginResponseInterface) {
-        console.log('redirecting...', response.redirectUrl)
-
         window.location.href = response.redirectUrl
     }
 }
