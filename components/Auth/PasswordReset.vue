@@ -121,6 +121,7 @@ export default class PasswordReset extends Mixins(Loader, Messager, Validator) {
         try {
             await this.$recaptcha.init()
         } catch (error) {
+            // eslint-disable-next-line no-console
             console.error('Captcha init error: ', error)
         }
     }
@@ -139,6 +140,7 @@ export default class PasswordReset extends Mixins(Loader, Messager, Validator) {
         try {
             challenge = await this.$recaptcha.execute('login')
         } catch (error) {
+            // eslint-disable-next-line no-console
             console.log('Captcha execute error: ', error)
         }
 

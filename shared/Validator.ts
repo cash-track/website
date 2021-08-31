@@ -29,7 +29,8 @@ export default class Validator extends Vue {
         }
 
         return (
-            Object.keys(this.validationMessages).filter(key => key === field).length > 0 && this.validationMessages[field] !== ""
+            Object.keys(this.validationMessages).filter((key) => key === field)
+                .length > 0 && this.validationMessages[field] !== ''
         )
     }
 

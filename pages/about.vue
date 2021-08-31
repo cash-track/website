@@ -4,7 +4,8 @@
         <hr />
         <blockquote class="blockquote">
             <p class="mb-0">
-                Life is like riding a bicycle. To keep your balance, you must keep moving.
+                Life is like riding a bicycle. To keep your balance, you must
+                keep moving.
             </p>
             <footer class="blockquote-footer">
                 <cite title="Source Title">Albert Einstein</cite>
@@ -12,14 +13,14 @@
         </blockquote>
 
         <p>
-            Finance app it's a free open source project, where you can track your money.
+            Cash Track app it's a free open source project, where you can track
+            your money.
         </p>
         <p>
-            Here you can collaborate with your family, friends and business partners to keep your money count.
+            Here you can collaborate with your family, friends and business
+            partners to keep your money count.
         </p>
-        <p>
-            Why you must select us?
-        </p>
+        <p>Why you must select us?</p>
 
         <ul>
             <li>Free service</li>

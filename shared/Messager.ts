@@ -68,7 +68,7 @@ export default class Messager extends Vue {
     }
 
     protected onUnprocessableEntityResponse(
-        response: ValidationResponseInterface
+        _response: ValidationResponseInterface
     ) {
         this.setMessage('One or more fields is not valid')
     }

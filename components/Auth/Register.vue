@@ -190,6 +190,7 @@ export default class Register extends Mixins(Loader, Messager, Validator) {
         try {
             await this.$recaptcha.init()
         } catch (error) {
+            // eslint-disable-next-line no-console
             console.error('Captcha init error: ', error)
         }
     }
@@ -245,7 +246,8 @@ export default class Register extends Mixins(Loader, Messager, Validator) {
         try {
             challenge = await this.$recaptcha.execute('login')
         } catch (error) {
-            console.log('Captcha execute error: ', error)
+            // eslint-disable-next-line no-console
+            console.error('Captcha execute error: ', error)
         }
 
         // send token to server alongside your form data
@@ -256,8 +258,6 @@ export default class Register extends Mixins(Loader, Messager, Validator) {
     }
 
     protected onSuccess(response: RegisterResponseInterface) {
-        console.log('redirecting...', response.redirectUrl)
-
         window.location.href = response.redirectUrl
     }
 }
