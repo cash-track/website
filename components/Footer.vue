@@ -1,14 +1,20 @@
 <template>
     <div class="footer text-center">
         <b-container>
-            <div class="text-center float-sm-left">
-                © {{ year() }} Cash Track
+            <div class="row align-items-start">
+                <div class="col-sm text-sm-left text-center">
+                    © {{ year() }} Cash Track
+                </div>
+                <div class="col-sm text-center">Made with ❤️ &nbsp;in 🇺🇦</div>
+                <div class="col-sm text-sm-right text-center">
+                    <b-nav
+                        class="justify-content-sm-end justify-content-center"
+                    >
+                        <b-nav-item to="help">Help</b-nav-item>
+                        <b-nav-item to="about">About</b-nav-item>
+                    </b-nav>
+                </div>
             </div>
-            <b-nav class="justify-content-center float-sm-right">
-                <b-nav-item to="help">Help</b-nav-item>
-                <b-nav-item to="about">About</b-nav-item>
-            </b-nav>
-            <div class="clearfix"></div>
         </b-container>
     </div>
 </template>
