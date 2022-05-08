@@ -35,6 +35,22 @@ export default {
                 type: 'image/x-icon',
                 href: '/favicon.ico',
             },
+            {
+                rel: 'icon',
+                type: 'image/png',
+                href: '/img/icons/favicon-32x32.png',
+                size: '32x32',
+            },
+            {
+                rel: 'icon',
+                type: 'image/png',
+                href: '/img/icons/favicon-16x16.png',
+                size: '16x16',
+            },
+            {
+                rel: 'apple-touch-icon',
+                href: '/img/icons/apple-touch-icon.png',
+            },
         ],
     },
     /*
