@@ -13,7 +13,7 @@ env:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, Linux, x64]
     permissions:
       contents: read
       packages: write
@@ -55,7 +55,7 @@ jobs:
 
   deploy:
     needs: [ build ]
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, Linux, x64]
     permissions:
       contents: read
       packages: write
@@ -72,6 +72,12 @@ jobs:
         uses: digitalocean/action-doctl@v2
         with:
           token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+
+      - name: Install kubectl
+        run: |
+            curl -LO ${{ env.KUBECTL_BIN }}
+            chmod +x ./kubectl
+            sudo mv ./kubectl /usr/local/bin/kubectl
 
       - name: Configure kubectl
         run: doctl kubernetes cluster kubeconfig save --expiry-seconds 600 ${{ env.CLUSTER }}
