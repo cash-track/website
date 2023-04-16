@@ -1,7 +1,7 @@
 <template>
     <b-form novalidate @submit="onSubmit">
         <b-card footer-tag="footer" header-tag="header">
-            <template v-slot:header>Sign In</template>
+            <template v-slot:header>{{ $t('signIn.signIn') }}</template>
 
             <b-form-group
                 label-align-md="right"
@@ -10,7 +10,7 @@
                 :invalid-feedback="validationMessage('email')"
                 :state="validationState('email')"
             >
-                <template v-slot:label>Email</template>
+                <template v-slot:label>{{ $t('signIn.email') }}</template>
                 <b-form-input
                     id="email"
                     v-model="form.email"
@@ -30,7 +30,7 @@
                 :invalid-feedback="validationMessage('password')"
                 :state="validationState('password')"
             >
-                <template v-slot:label>Password</template>
+                <template v-slot:label>{{ $t('signIn.password') }}</template>
                 <b-form-input
                     id="password"
                     v-model="form.password"
@@ -41,12 +41,6 @@
                     :state="validationState('password')"
                     @change="resetValidationMessage('password')"
                 ></b-form-input>
-            </b-form-group>
-
-            <b-form-group label-cols-md="4">
-                <b-form-checkbox v-model="form.remember" :disabled="isLoading">
-                    Remember Me
-                </b-form-checkbox>
             </b-form-group>
 
             <b-alert
@@ -60,6 +54,12 @@
                 {{ message }}
             </b-alert>
 
+            <b-form-group label-align-md="right" label-cols-md="4">
+                <b-button to="/register" variant="link">
+                    {{ $t('signIn.dontHaveAccount') }}
+                </b-button>
+            </b-form-group>
+
             <template v-slot:footer>
                 <div class="form-row">
                     <b-col md="8" offset-md="4">
@@ -69,12 +69,13 @@
                             variant="primary"
                             @click="onSubmit"
                         >
-                            Login
+                            {{ $t('signIn.login') }}
                             <b-spinner v-show="isLoading" small></b-spinner>
                         </b-button>
                         <b-button to="/password/forgot" variant="link">
-                            Forgot Your Password?
+                            {{ $t('signIn.forgotPassword') }}
                         </b-button>
+
                     </b-col>
                 </div>
             </template>

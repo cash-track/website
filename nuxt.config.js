@@ -15,6 +15,13 @@ export default {
      */
     head: {
         title: 'Cash Track',
+        script: [
+            {
+                type: 'text/javascript',
+                src:
+                    'https://cdn-cookieyes.com/client_data/095aace7a4edac9e6f314df6/script.js',
+            },
+        ],
         meta: [
             {
                 charset: 'utf-8',
@@ -75,6 +82,8 @@ export default {
      ** Nuxt.js modules
      */
     modules: [
+        '@nuxtjs/i18n',
+
         // Doc: https://bootstrap-vue.js.org
         'bootstrap-vue/nuxt',
         // Doc: https://axios.nuxtjs.org/usage
@@ -141,5 +150,39 @@ export default {
         hideBadge: false,
         version: 3,
         size: 'normal',
+    },
+
+    i18n: {
+        baseUrl: process.env.BASE_URL,
+        locales: [
+            {
+                code: 'en',
+                file: 'en.ts',
+                iso: 'en-US',
+                name: '🇺🇸 English',
+                flag: '🇺🇸',
+            },
+            {
+                code: 'uk',
+                file: 'uk.ts',
+                iso: 'uk-UA',
+                name: '🇺🇦 Українська',
+                flag: '🇺🇦',
+            },
+        ],
+        defaultLocale: 'en',
+        strategy: 'no_prefix',
+        langDir: 'lang/',
+
+        detectBrowserLanguage: {
+            useCookie: true,
+            cookieKey: 'cshtrkl',
+        },
+
+        vueI18n: {
+            fallbackLocale: 'en',
+        },
+
+        /* module options */
     },
 }

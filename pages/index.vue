@@ -1,52 +1,40 @@
 <template>
     <div class="landing-page">
-        <b-jumbotron
-            header="Monitor your money"
-            lead="Tracking your money income and expense is important to know where to optimise your life quality"
-        >
-            <p>Use Cash Track for free. No fees and pricing plan</p>
+        <b-jumbotron :header="$t('home.header')" :lead="$t('home.lead')">
+            <p>{{ $t('home.banner') }}</p>
             <span v-if="isProfileLoading || !isLogged">
                 <b-button
                     variant="primary"
                     :disabled="isProfileLoading"
                     :to="{ name: 'login' }"
-                    >Login</b-button
+                    >{{ $t('home.login') }}</b-button
                 >
-                or
+                {{ $t('home.or') }}
                 <b-button
                     variant="primary"
                     :disabled="isProfileLoading"
                     :to="{ name: 'register' }"
-                    >Register</b-button
+                    >{{ $t('home.register') }}</b-button
                 >
             </span>
             <span v-if="isLogged">
                 <b-button variant="primary" :href="walletsLink">
-                    Wallet
+                    {{ $t('home.wallets') }}
                 </b-button>
             </span>
         </b-jumbotron>
         <b-row>
             <b-col md="4">
-                <h2>Easy</h2>
-                <p>
-                    Our service is easy to go. Just log in or register to start
-                    track anything you need
-                </p>
+                <h2>{{ $t('home.easy') }}</h2>
+                <p>{{ $t('home.easyDescription') }}</p>
             </b-col>
             <b-col md="4">
-                <h2>Fast</h2>
-                <p>
-                    Try for yourself. It's quite fast. Let us know if it is not
-                    ;)
-                </p>
+                <h2>{{ $t('home.fast') }}</h2>
+                <p>{{ $t('home.fastDescription') }}</p>
             </b-col>
             <b-col md="4">
-                <h2>Secure</h2>
-                <p>
-                    We're keeping your data protected from others. Be sure you
-                    can manage who can see it.
-                </p>
+                <h2>{{ $t('home.secure') }}</h2>
+                <p>{{ $t('home.secureDescription') }}</p>
             </b-col>
         </b-row>
     </div>

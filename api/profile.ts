@@ -18,3 +18,9 @@ export function profileGet(
 ): Promise<ProfileResponseInterface> {
     return http.$get<ProfileResponseInterface>('/api/profile')
 }
+
+export function profilePutLocale(http: NuxtAxiosInstance, locale: string) {
+    return http.$put<ProfileResponseInterface>('/api/profile/locale', {
+        locale,
+    })
+}

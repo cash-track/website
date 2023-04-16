@@ -1,55 +1,49 @@
 <template>
     <div class="about">
-        <h1 class="display-4">About Cash Track</h1>
+        <h1 class="display-4">{{ $t('about.title') }}</h1>
         <hr />
         <blockquote class="blockquote">
-            <p class="mb-0">
-                Life is like riding a bicycle. To keep your balance, you must
-                keep moving.
-            </p>
+            <p class="mb-0">{{ $t('about.quote') }}</p>
             <footer class="blockquote-footer">
-                <cite title="Source Title">Albert Einstein</cite>
+                <cite title="Source Title">{{ $t('about.quoteAuthor') }}</cite>
             </footer>
         </blockquote>
 
-        <p>
-            Cash Track app it's a free open source project, where you can track
-            your money income and expense.
-        </p>
-        <p>
-            Here you can collaborate with your family, friends and business
-            partners to keep your funds counted.
-        </p>
-        <p>Here is why it may be useful:</p>
+        <p>{{ $t('about.lines[0]') }}</p>
+        <p>{{ $t('about.lines[1]') }}</p>
+        <p>{{ $t('about.lines[2]') }}</p>
 
         <ul>
-            <li>Free service</li>
-            <li>Collaborate with people</li>
-            <li>Enable notifications</li>
-            <li>Keep track your money</li>
+            <li>{{ $t('about.features[0]') }}</li>
+            <li>{{ $t('about.features[1]') }}</li>
+            <li>{{ $t('about.features[2]') }}</li>
+            <li>{{ $t('about.features[3]') }}</li>
         </ul>
 
-        <p class="lead">Connect with us and try to use it free.</p>
+        <p class="lead">{{ $t('about.connect') }}</p>
         <p>
-            <b-button variant="primary" to="register">Connect</b-button>
-            or
-            <b-button variant="primary" to="login">Log In</b-button>
+            <b-button variant="primary" to="register">
+                {{ $t('about.register') }}
+            </b-button>
+            {{ $t('about.or') }}
+            <b-button variant="primary" to="login">
+                {{ $t('about.login') }}
+            </b-button>
         </p>
 
-        <p>We are working to add more features and fix existing bugs.</p>
+        <p>{{ $t('about.moreLines[0]') }}</p>
 
         <p>
-            If you have any suggestion or got some bug and wants to report it -
-            we're appreciate it. Go
+            {{ $t('about.moreLines[1]') }}
+            {{ $t('about.moreLines[2]') }}
             <a
                 href="https://github.com/cash-track/website/issues/new"
                 target="_blank"
-                >here
+                >{{ $t('about.moreLines[3]') }}
             </a>
-
-            and create new Issue. Feel free to describe your issue or idea with
-            screenshots and a lot of text.
+            {{ $t('about.moreLines[4]') }}
         </p>
+        <p>{{ $t('about.moreLines[5]') }}</p>
     </div>
 </template>
 

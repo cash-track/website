@@ -7,6 +7,7 @@ export interface RegisterRequestInterface {
     email: string
     password: string
     passwordConfirmation: string
+    locale: string
 }
 
 export interface RegisterResponseInterface {
@@ -31,6 +32,7 @@ export function register(
             email: data.email,
             password: data.password,
             passwordConfirmation: data.passwordConfirmation,
+            locale: data.locale,
         },
         {
             headers: {

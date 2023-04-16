@@ -1,7 +1,7 @@
 <template>
     <b-form novalidate @submit="onSubmit">
         <b-card footer-tag="footer" header-tag="header">
-            <template v-slot:header>Reset Password</template>
+            <template v-slot:header>{{ $t('passwordForgot.title') }}</template>
 
             <b-form-group
                 v-show="!isSuccess"
@@ -11,7 +11,9 @@
                 :invalid-feedback="validationMessage('email')"
                 :state="validationState('email')"
             >
-                <template v-slot:label>Email</template>
+                <template v-slot:label>
+                    {{ $t('passwordForgot.email') }}
+                </template>
                 <b-form-input
                     id="email"
                     v-model="email"
@@ -37,10 +39,10 @@
 
             <b-alert variant="success" fade :show="isSuccess">
                 <b-icon-check2-circle></b-icon-check2-circle>
-                Password reset link has been sent to you email address.<br />Follow
-                instruction in email message. <br />
-                Pay attention - reset link is temporary and may be expired
-                quickly.
+                {{ $t('passwordForgot.success[0]') }}<br />
+                {{ $t('passwordForgot.success[1]') }}<br />
+                {{ $t('passwordForgot.success[2]') }}<br />
+                {{ $t('passwordForgot.success[3]') }}
             </b-alert>
 
             <template v-if="!isSuccess" v-slot:footer>
@@ -52,7 +54,7 @@
                             variant="primary"
                             @click="onSubmit"
                         >
-                            Reset
+                            {{ $t('passwordForgot.reset') }}
                             <b-spinner v-show="isLoading" small></b-spinner>
                         </b-button>
                     </b-col>
