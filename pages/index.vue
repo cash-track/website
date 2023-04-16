@@ -48,6 +48,7 @@ import WebAppLinks from '~/shared/WebAppLinks'
     head: {
         title: 'Cash Track',
     },
+    nuxtI18n: false,
 })
 export default class IndexPage extends Mixins(WebAppLinks) {
     get isLogged(): boolean {

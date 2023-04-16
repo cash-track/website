@@ -23,12 +23,12 @@
                             >{{ $t('profile') }}</b-nav-item
                         >
                         <b-nav-item
-                            :to="{ name: 'help' }"
+                            :to="localePath({ name: 'help' })"
                             exact-active-class="active"
                             >{{ $t('help.help') }}</b-nav-item
                         >
                         <b-nav-item
-                            :to="{ name: 'about' }"
+                            :to="localePath({ name: 'about' })"
                             exact-active-class="active"
                             >{{ $t('about.about') }}</b-nav-item
                         >
@@ -152,7 +152,10 @@ export default class Header extends Mixins(WebAppLinks) {
         event.stopPropagation()
 
         this.$i18n.setLocale(locale)
-        profilePutLocale(this.$axios, locale)
+
+        if (this.isLogged) {
+            profilePutLocale(this.$axios, locale)
+        }
     }
 }
 </script>

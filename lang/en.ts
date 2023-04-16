@@ -213,6 +213,7 @@ export default {
         cookies: [
             '7. Cookies Etc.',
             'To learn more about how we use these and your choices in relation to these tracking technologies, please refer to our',
+            'Cookie Policy',
         ],
         security: [
             '8. Security:',

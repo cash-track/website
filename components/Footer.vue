@@ -10,10 +10,10 @@
                     <b-nav
                         class="justify-content-sm-end justify-content-center"
                     >
-                        <b-nav-item to="cookie-policy">
+                        <b-nav-item :to="localePath('cookie-policy')">
                             {{ $t('cookiePolicy.link') }}
                         </b-nav-item>
-                        <b-nav-item to="privacy-policy">
+                        <b-nav-item :to="localePath('privacy-policy')">
                             {{ $t('privacyPolicy.link') }}
                         </b-nav-item>
                     </b-nav>

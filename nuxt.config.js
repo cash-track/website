@@ -171,7 +171,7 @@ export default {
             },
         ],
         defaultLocale: 'en',
-        strategy: 'no_prefix',
+        strategy: 'prefix_except_default',
         langDir: 'lang/',
 
         detectBrowserLanguage: {
@@ -182,7 +182,5 @@ export default {
         vueI18n: {
             fallbackLocale: 'en',
         },
-
-        /* module options */
     },
 }

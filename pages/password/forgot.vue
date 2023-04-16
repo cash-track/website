@@ -16,6 +16,7 @@ import GuestOnly from '~/shared/GuestOnly'
     head: {
         title: 'Restore Password | Cash Track',
     },
+    nuxtI18n: false,
 })
 export default class PasswordForgotPage extends Mixins(GuestOnly) {}
 </script>
