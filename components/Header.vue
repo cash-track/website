@@ -14,50 +14,69 @@
                             v-if="isProfileLoading || isLogged"
                             :disabled="isProfileLoading"
                             :href="walletsLink"
-                            >Wallets</b-nav-item
+                            >{{ $t('wallets') }}</b-nav-item
                         >
                         <b-nav-item
                             v-if="isProfileLoading || isLogged"
                             :disabled="isProfileLoading"
                             :href="profileLink"
-                            >Profile</b-nav-item
+                            >{{ $t('profile') }}</b-nav-item
                         >
                         <b-nav-item
-                            :to="{ name: 'help' }"
+                            :to="localePath({ name: 'help' })"
                             exact-active-class="active"
-                            >Help</b-nav-item
+                            >{{ $t('help.help') }}</b-nav-item
                         >
                         <b-nav-item
-                            :to="{ name: 'about' }"
+                            :to="localePath({ name: 'about' })"
                             exact-active-class="active"
-                            >About</b-nav-item
+                            >{{ $t('about.about') }}</b-nav-item
                         >
                     </b-navbar-nav>
 
                     <b-navbar-nav class="ml-auto">
+                        <b-nav-item-dropdown right>
+                            <template v-slot:button-content>
+                                <span class="current-locale">
+                                    {{ $t('flag') }}
+                                </span>
+                            </template>
+                            <b-dropdown-item
+                                v-for="locale of locales"
+                                :key="locale.code"
+                                :active="currentLocale === locale.code"
+                                @click="onLocaleChange(locale.code, $event)"
+                            >
+                                {{ locale.name }}
+                            </b-dropdown-item>
+                        </b-nav-item-dropdown>
+
                         <b-navbar-nav v-if="isProfileLoading || !isLogged">
                             <b-nav-item
                                 :to="{ name: 'login' }"
                                 :disabled="isProfileLoading"
                                 exact-active-class="active"
-                                >Sign In</b-nav-item
+                                >{{ $t('signIn.signIn') }}</b-nav-item
                             >
                             <b-nav-item
                                 :to="{ name: 'register' }"
                                 :disabled="isProfileLoading"
                                 exact-active-class="active"
-                                >Sign Up</b-nav-item
+                                >{{ $t('register.signUp') }}</b-nav-item
                             >
                         </b-navbar-nav>
                         <b-nav-item-dropdown v-if="isLogged" right>
                             <template v-slot:button-content>
+                                <profile-avatar
+                                    :user="profile"
+                                ></profile-avatar>
                                 {{ profile.name }}
                             </template>
                             <b-dropdown-item :href="profileLink">
-                                Dashboard
+                                {{ $t('dashboard') }}
                             </b-dropdown-item>
                             <b-dropdown-item href="#" @click="onLogout">
-                                Sign Out
+                                {{ $t('signOut') }}
                             </b-dropdown-item>
                         </b-nav-item-dropdown>
                     </b-navbar-nav>
@@ -71,13 +90,17 @@
 import { Component, Mixins } from 'vue-property-decorator'
 import {
     profileGet,
+    profilePutLocale,
     ProfileInterface,
     ProfileResponseInterface,
 } from '~/api/profile'
 import { logout } from '~/api/login'
+import ProfileAvatar from '~/components/ProfileAvatar.vue'
 import WebAppLinks from '~/shared/WebAppLinks'
 
-@Component
+@Component({
+    components: { ProfileAvatar },
+})
 export default class Header extends Mixins(WebAppLinks) {
     mounted() {
         this.loadProfile()
@@ -115,6 +138,25 @@ export default class Header extends Mixins(WebAppLinks) {
     get profile(): ProfileInterface | null {
         return this.$store.state.auth.profile
     }
+
+    get locales() {
+        return this.$i18n.locales
+    }
+
+    get currentLocale() {
+        return this.$i18n.locale
+    }
+
+    onLocaleChange(locale: string, event: Event) {
+        event.preventDefault()
+        event.stopPropagation()
+
+        this.$i18n.setLocale(locale)
+
+        if (this.isLogged) {
+            profilePutLocale(this.$axios, locale)
+        }
+    }
 }
 </script>
 
@@ -124,5 +166,15 @@ export default class Header extends Mixins(WebAppLinks) {
     border-bottom: 1px solid #e5e5e5;
     border-radius: 0;
     margin-bottom: 20px;
+
+    .b-avatar {
+        margin: -13px 5px -10px 0;
+    }
+
+    .current-locale {
+        color: rgba(0, 0, 0, 1);
+        line-height: 1;
+        font-size: 20px;
+    }
 }
 </style>

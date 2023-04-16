@@ -1,7 +1,7 @@
 <template>
     <b-form novalidate @submit="onSubmit">
         <b-card footer-tag="footer" header-tag="header">
-            <template v-slot:header>Sign Up</template>
+            <template v-slot:header>{{ $t('register.signUp') }}</template>
 
             <b-form-group
                 label-cols-md="4"
@@ -11,7 +11,8 @@
                 :state="validationState('name')"
             >
                 <template v-slot:label>
-                    Name <span class="text-danger">*</span>
+                    {{ $t('register.name') }}
+                    <span class="text-danger">*</span>
                 </template>
 
                 <b-form-input
@@ -32,7 +33,9 @@
                 :invalid-feedback="validationMessage('lastName')"
                 :state="validationState('lastName')"
             >
-                <template v-slot:label>Last Name</template>
+                <template v-slot:label>
+                    {{ $t('register.lastName') }}
+                </template>
                 <b-form-input
                     id="last-name"
                     v-model="form.lastName"
@@ -51,7 +54,8 @@
                 :state="nickNameValidationState"
             >
                 <template v-slot:label>
-                    Nick Name <span class="text-danger">*</span>
+                    {{ $t('register.nickName') }}
+                    <span class="text-danger">*</span>
                 </template>
                 <b-form-input
                     id="nick-name"
@@ -73,7 +77,8 @@
                 :state="validationState('email')"
             >
                 <template v-slot:label>
-                    Email <span class="text-danger">*</span>
+                    {{ $t('register.email') }}
+                    <span class="text-danger">*</span>
                 </template>
                 <b-form-input
                     id="email"
@@ -95,7 +100,8 @@
                 :state="validationState('password')"
             >
                 <template v-slot:label>
-                    Password <span class="text-danger">*</span>
+                    {{ $t('register.password') }}
+                    <span class="text-danger">*</span>
                 </template>
                 <b-form-input
                     id="password"
@@ -117,7 +123,8 @@
                 :state="validationState('passwordConfirmation')"
             >
                 <template v-slot:label>
-                    Confirm Password <span class="text-danger">*</span>
+                    {{ $t('register.passwordConfirmation') }}
+                    <span class="text-danger">*</span>
                 </template>
                 <b-form-input
                     id="password-confirmation"
@@ -129,6 +136,15 @@
                     :disabled="isLoading"
                     @input="resetValidationMessage('passwordConfirmation')"
                 ></b-form-input>
+            </b-form-group>
+
+            <b-form-group label-cols-md="4">
+                <b-form-checkbox v-model="confirmation" :disabled="isLoading">
+                    {{ $t('register.confirmation[0]') }}
+                    <router-link to="privacy-policy">
+                        {{ $t('register.confirmation[1]') }}
+                    </router-link>
+                </b-form-checkbox>
             </b-form-group>
 
             <b-alert
@@ -146,12 +162,12 @@
                 <div class="form-row">
                     <b-col md="8" offset-md="4">
                         <b-button
-                            :disabled="isLoading"
+                            :disabled="isLoading || !confirmation"
                             type="submit"
                             variant="primary"
                             @click="onSubmit"
                         >
-                            Register
+                            {{ $t('register.register') }}
                             <b-spinner v-show="isLoading" small></b-spinner>
                         </b-button>
                     </b-col>
@@ -175,6 +191,8 @@ import {
 
 @Component
 export default class Register extends Mixins(Loader, Messager, Validator) {
+    confirmation: boolean = false
+
     form: RegisterRequestInterface = {
         name: '',
         lastName: '',
@@ -182,6 +200,7 @@ export default class Register extends Mixins(Loader, Messager, Validator) {
         email: '',
         password: '',
         passwordConfirmation: '',
+        locale: '',
     }
 
     isNickNameValid: boolean | null = null
@@ -249,6 +268,9 @@ export default class Register extends Mixins(Loader, Messager, Validator) {
             // eslint-disable-next-line no-console
             console.error('Captcha execute error: ', error)
         }
+
+        // set current locale for the user
+        this.form.locale = this.$i18n.locale
 
         // send token to server alongside your form data
         register(this.$axios, this.form, challenge)

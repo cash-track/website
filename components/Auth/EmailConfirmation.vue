@@ -2,25 +2,36 @@
     <div>
         <b-alert variant="primary" :show="isLoading">
             <b-spinner small></b-spinner>
-            Confirming your email. Just a few moments..
+            {{ $t('emailConfirmation.loading') }}
         </b-alert>
         <b-alert variant="success" :show="!isLoading && isSuccess">
             <b-icon-check2-circle></b-icon-check2-circle>
             <span v-if="isLogged">
-                Your email has been confirmed. You'll be redirected to your
-                account page. Or go manually to your
-                <a :href="profileLink">account</a>.
+                {{ $t('emailConfirmation.successLogged[0]') }}
+                {{ $t('emailConfirmation.successLogged[1]') }}
+                {{ $t('emailConfirmation.successLogged[2]') }}
+                <a :href="profileLink">
+                    {{ $t('emailConfirmation.successLogged[3]') }}
+                </a>
+                .
             </span>
             <span v-else>
-                Your email has been confirmed. Now you can
-                <nuxt-link to="/login">log in</nuxt-link> to your account.
+                {{ $t('emailConfirmation.success[0]') }}
+                {{ $t('emailConfirmation.success[1]') }}
+                <nuxt-link to="/login">
+                    {{ $t('emailConfirmation.success[2]') }}
+                </nuxt-link>
+                {{ $t('emailConfirmation.success[3]') }}
             </span>
         </b-alert>
         <b-alert variant="warning" :show="!isLoading && !isSuccess">
-            Your email is not confirmed. Confirmation link may be expired.
-            Please
-            <span v-if="!isLogged">login to your account and</span> request
-            another confirmation message.
+            {{ $t('emailConfirmation.codeInvalid[0]') }}
+            {{ $t('emailConfirmation.codeInvalid[1]') }}
+            {{ $t('emailConfirmation.codeInvalid[2]') }}
+            <span v-if="!isLogged">
+                {{ $t('emailConfirmation.codeInvalid[3]') }}
+            </span>
+            {{ $t('emailConfirmation.codeInvalid[4]') }}
         </b-alert>
     </div>
 </template>

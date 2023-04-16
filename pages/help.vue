@@ -1,9 +1,9 @@
 <template>
     <div class="help">
-        <h1 class="display-4">Help</h1>
+        <h1 class="display-4">{{ $t('help.help') }}</h1>
         <hr />
 
-        ...
+        <p>{{ $t('help.notice') }}</p>
     </div>
 </template>
 

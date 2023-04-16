@@ -16,6 +16,7 @@ import GuestOnly from '~/shared/GuestOnly'
     head: {
         title: 'Login | Cash Track',
     },
+    nuxtI18n: false,
 })
 export default class LoginPage extends Mixins(GuestOnly) {}
 </script>

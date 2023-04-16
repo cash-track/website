@@ -1,7 +1,9 @@
 <template>
     <b-form novalidate @submit="onSubmit">
         <b-card footer-tag="footer" header-tag="header">
-            <template v-slot:header>Reset Password</template>
+            <template v-slot:header>
+                {{ $t('passwordReset.title') }}
+            </template>
 
             <b-form-group
                 v-if="!isCodeInvalid && !isSuccess"
@@ -12,7 +14,8 @@
                 :state="validationState('password')"
             >
                 <template v-slot:label>
-                    New Password <span class="text-danger">*</span>
+                    {{ $t('passwordReset.newPassword') }}
+                    <span class="text-danger">*</span>
                 </template>
                 <b-form-input
                     id="password"
@@ -35,7 +38,8 @@
                 :state="validationState('passwordConfirmation')"
             >
                 <template v-slot:label>
-                    Confirm Password <span class="text-danger">*</span>
+                    {{ $t('passwordReset.newPasswordConfirmation') }}
+                    <span class="text-danger">*</span>
                 </template>
                 <b-form-input
                     id="password-confirmation"
@@ -62,15 +66,22 @@
 
             <b-alert variant="success" fade :show="isSuccess">
                 <b-icon-check2-circle></b-icon-check2-circle>
-                Your password has been changed. Now you can
-                <nuxt-link to="/login">login</nuxt-link> using new credentials.
+                {{ $t('passwordReset.success[0]') }}
+                {{ $t('passwordReset.success[1]') }}
+                <nuxt-link to="/login">
+                    {{ $t('passwordReset.success[2]') }}
+                </nuxt-link>
+                {{ $t('passwordReset.success[3]') }}
             </b-alert>
 
             <b-alert variant="warning" fade :show="isCodeInvalid">
                 <b-icon-exclamation-triangle-fill></b-icon-exclamation-triangle-fill>
-                Your reset password link is not valid or expired. Please
-                <nuxt-link to="/password/forgot">request</nuxt-link>
-                another password reset link.
+                {{ $t('passwordReset.codeInvalid[0]') }}
+                {{ $t('passwordReset.codeInvalid[1]') }}
+                <nuxt-link to="/password/forgot">
+                    {{ $t('passwordReset.codeInvalid[2]') }}
+                </nuxt-link>
+                {{ $t('passwordReset.codeInvalid[3]') }}
             </b-alert>
 
             <template v-if="!isSuccess && !isCodeInvalid" v-slot:footer>
@@ -82,7 +93,7 @@
                             variant="primary"
                             @click="onSubmit"
                         >
-                            Reset
+                            {{ $t('passwordReset.reset') }}
                             <b-spinner v-show="isLoading" small></b-spinner>
                         </b-button>
                     </b-col>
