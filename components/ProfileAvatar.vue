@@ -40,7 +40,3 @@ export default class ProfileAvatar extends Vue {
     }
 }
 </script>
-
-<style lang="scss" scoped>
-
-</style>

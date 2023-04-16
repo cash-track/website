@@ -75,7 +75,6 @@
                         <b-button to="/password/forgot" variant="link">
                             {{ $t('signIn.forgotPassword') }}
                         </b-button>
-
                     </b-col>
                 </div>
             </template>
