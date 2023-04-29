@@ -20,35 +20,29 @@ async function ApiRequest<T = any>(
         .replace('https://', '')
         .replace('/', '')
 
-    const clientHeaders = {
+    const clientHeaders: { [key: string]: string | string[] | undefined } = {
         Accept: 'application/json',
-        'Accept-Language': req.headers['accept-language'],
-        'Access-Control-Request-Headers': '',
-        'Access-Control-Request-Method': '',
-        'Content-Type': 'application/json',
-        'User-Agent': req.headers['user-agent'],
-        Referer: req.headers.referer,
+        'Accept-Language': req.headers['accept-language'] ?? '',
+        'Access-Control-Request-Headers':
+            req.headers['access-control-request-headers'] ?? '',
+        'Access-Control-Request-Method':
+            req.headers['access-control-request-method'] ?? '',
+        'Content-Type': req.headers['content-type'] ?? 'application/json',
+        'User-Agent': req.headers['user-agent'] ?? '',
+        Referer: req.headers.referer ?? '',
         Host: host,
-        Origin: '',
-        'X-Forwarded-For': req.connection.remoteAddress,
+        Origin: req.headers.origin ?? '',
+        'X-Forwarded-For': req.connection.remoteAddress ?? '',
     }
 
-    if (req.headers.origin !== undefined) {
-        clientHeaders.Origin = req.headers.origin
-    }
+    // keep original CloudFlare headers for other services behind Website
+    for (const header of Object.keys(req.headers)) {
+        if (header.indexOf('cf-') !== 0) {
+            continue
+        }
 
-    if (req.headers['access-control-request-method'] !== undefined) {
-        clientHeaders['Access-Control-Request-Method'] =
-            req.headers['access-control-request-method']
-    }
-
-    if (req.headers['access-control-request-headers'] !== undefined) {
-        clientHeaders['Access-Control-Request-Headers'] =
-            req.headers['access-control-request-headers']
-    }
-
-    if (req.headers['content-type']?.startsWith('multipart/form-data')) {
-        clientHeaders['Content-Type'] = req.headers['content-type']
+        clientHeaders[`cf-original-${header.substring(3)}`] =
+            req.headers[header] ?? ''
     }
 
     const request: AxiosRequestConfig = Object.assign(
