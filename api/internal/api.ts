@@ -20,11 +20,13 @@ async function ApiRequest<T = any>(
         .replace('https://', '')
         .replace('/', '')
 
-    const clientHeaders : { [key: string]: string | string[] | undefined; } = {
+    const clientHeaders: { [key: string]: string | string[] | undefined } = {
         Accept: 'application/json',
         'Accept-Language': req.headers['accept-language'] ?? '',
-        'Access-Control-Request-Headers': req.headers['access-control-request-headers'] ?? '',
-        'Access-Control-Request-Method': req.headers['access-control-request-method'] ?? '',
+        'Access-Control-Request-Headers':
+            req.headers['access-control-request-headers'] ?? '',
+        'Access-Control-Request-Method':
+            req.headers['access-control-request-method'] ?? '',
         'Content-Type': req.headers['content-type'] ?? 'application/json',
         'User-Agent': req.headers['user-agent'] ?? '',
         Referer: req.headers.referer ?? '',
@@ -34,12 +36,13 @@ async function ApiRequest<T = any>(
     }
 
     // keep original CloudFlare headers for other services behind Website
-    for (let header of Object.keys(req.headers)) {
+    for (const header of Object.keys(req.headers)) {
         if (header.indexOf('cf-') !== 0) {
             continue
         }
 
-        clientHeaders[`cf-original-${header.substring(3)}`] = req.headers[header] ?? ''
+        clientHeaders[`cf-original-${header.substring(3)}`] =
+            req.headers[header] ?? ''
     }
 
     const request: AxiosRequestConfig = Object.assign(
