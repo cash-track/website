@@ -1,8 +1,8 @@
 # Website
 
-[![Check](https://github.com/cash-track/website/actions/workflows/pull.yml/badge.svg)](https://github.com/cash-track/website/actions/workflows/pull.yml) [![Release](https://github.com/cash-track/website/actions/workflows/release.yml/badge.svg)](https://github.com/cash-track/website/actions/workflows/release.yml)
+[![quality](https://github.com/cash-track/website/actions/workflows/quality.yml/badge.svg)](https://github.com/cash-track/website/actions/workflows/quality.yml)
 
-Web service will serve home web site
+Web service will serve home website
 
 ## Push to registry
 
