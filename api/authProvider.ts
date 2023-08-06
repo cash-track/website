@@ -1,5 +1,5 @@
 import { NuxtAxiosInstance } from '@nuxtjs/axios'
-import { LoginResponseInterface } from '~/api/login';
+import { LoginResponseInterface } from '~/api/login'
 
 export interface GoogleAuthRequestInterface {
     token: string
