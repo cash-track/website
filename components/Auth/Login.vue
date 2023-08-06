@@ -60,6 +60,14 @@
                 </b-button>
             </b-form-group>
 
+            <b-form-group
+                label-align-md="right"
+                label-cols-md="4"
+                content-cols-md="5"
+            >
+                <div id="login-google-button"></div>
+            </b-form-group>
+
             <template v-slot:footer>
                 <div class="form-row">
                     <b-col md="8" offset-md="4">
@@ -92,6 +100,7 @@ import {
     LoginRequestInterface,
     LoginResponseInterface,
 } from '~/api/login'
+import { googleAuthProvider } from '~/api/authProvider'
 import { profileGet } from '~/api/profile'
 
 @Component
@@ -109,10 +118,90 @@ export default class Login extends Mixins(Loader, Messager, Validator) {
             // eslint-disable-next-line no-console
             console.error('Captcha init error: ', error)
         }
+
+        this.initGoogleButton()
+    }
+
+    protected initGoogleButton() {
+        const btn = document.getElementById('login-google-button')
+
+        if (!btn) {
+            return
+        }
+
+        // eslint-disable-next-line no-undef
+        google.accounts.id.initialize({
+            client_id: this.$config.googleAuth.clientId,
+            context: 'signin',
+            callback: this.onLoggedByGoogle,
+            ux_mode: 'popup',
+        })
+
+        // eslint-disable-next-line no-undef
+        google.accounts.id.renderButton(btn, {
+            type: 'standard',
+            theme: 'outline',
+            size: 'large',
+            text: 'signin_with',
+        })
     }
 
     beforeDestroy() {
         this.$recaptcha.destroy()
+    }
+
+    protected async onLoggedByGoogle(response: any) {
+        this.resetValidationMessages()
+        this.resetMessage()
+        this.setLoading()
+
+        if (!response.credential) {
+            // eslint-disable-next-line no-console
+            console.log('Google auth error: ', response)
+            this.setMessage(
+                'Unable to login by Google. Please try again later or refresh page.'
+            )
+            this.setLoaded()
+            return
+        }
+
+        let challenge = ''
+
+        try {
+            challenge = await this.$recaptcha.execute('login')
+        } catch (error) {
+            // eslint-disable-next-line no-console
+            console.log('Captcha execute error: ', error)
+            this.setLoaded()
+            return
+        }
+
+        let loginResponse: LoginResponseInterface
+
+        try {
+            loginResponse = await googleAuthProvider(
+                this.$axios,
+                {
+                    token: response.credential,
+                },
+                challenge
+            )
+        } catch (error) {
+            this.dispatchError(error)
+            this.setLoaded()
+            return
+        }
+
+        try {
+            const profileResponse = await profileGet(this.$axios)
+            this.$store.commit('auth/login', profileResponse.data)
+        } catch (error) {
+            this.dispatchError(error)
+            this.setLoaded()
+            // return
+        }
+
+        this.onSuccess(loginResponse)
     }
 
     protected async onSubmit(event: Event) {
