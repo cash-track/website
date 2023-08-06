@@ -21,6 +21,12 @@ export default {
                 src:
                     'https://cdn-cookieyes.com/client_data/095aace7a4edac9e6f314df6/script.js',
             },
+            {
+                type: 'text/javascript',
+                src: 'https://accounts.google.com/gsi/client',
+                defer: true,
+                async: true,
+            },
         ],
         meta: [
             {
@@ -123,6 +129,9 @@ export default {
         },
         recaptcha: {
             siteKey: process.env.CAPTCHA_CLIENT_KEY,
+        },
+        googleAuth: {
+            clientId: process.env.GOOGLE_CLIENT_ID,
         },
     },
 

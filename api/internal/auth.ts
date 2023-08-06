@@ -100,6 +100,10 @@ function cookiesEnv() {
         domain = '.' + domain
     }
 
+    if (domain.includes(':')) {
+        domain = domain.split(':')[0] ?? domain
+    }
+
     return {
         isSecure,
         domain,

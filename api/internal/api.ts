@@ -100,7 +100,7 @@ async function ApiRequest<T = any>(
 
     try {
         return await axios.request(request)
-    } catch (error) {
+    } catch (error: any) {
         if (
             !isLogged ||
             !ableToRefresh ||
@@ -154,7 +154,7 @@ export async function handleFullForwardedApiRequestWithCaptcha(
             captchaBadResponse(res)
             return
         }
-    } catch (error) {
+    } catch (error: any) {
         captchaErrorResponse(error, res)
         return
     }
@@ -186,7 +186,7 @@ export async function handleFullForwardedApiRequest(
         res.statusCode = response.status
         res.write(JSON.stringify(response.data))
         res.end()
-    } catch (error) {
+    } catch (error: any) {
         if (error.response) {
             forwardApiHeaders(error.response.headers, res)
 
@@ -218,7 +218,7 @@ export async function handleErrorsForwardedApiRequest<T>(
         response = await ApiRequest<T>(req, res, config)
 
         forwardApiHeaders(response.headers, res)
-    } catch (error) {
+    } catch (error: any) {
         if (error.response) {
             forwardApiHeaders(error.response.headers, res)
 

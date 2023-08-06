@@ -7,6 +7,7 @@ import {
 import loginHandler from './loginHandler'
 import registerHandler from './registerHandler'
 import logoutHandler from './logoutHandler'
+import googleAuthProviderHandler from './googleAuthProviderHandler'
 
 export default function (
     req: IncomingMessage,
@@ -17,6 +18,7 @@ export default function (
 
     router.get('/profile', handleFullForwardedApiRequest)
     router.post('/auth/login', loginHandler)
+    router.post('/auth/provider/google', googleAuthProviderHandler)
     router.post('/auth/logout', logoutHandler)
     router.post('/auth/register', registerHandler)
     router.post('/auth/register/check/nick-name', handleFullForwardedApiRequest)
@@ -34,7 +36,7 @@ export default function (
 
     try {
         router.dispatch(req, res)
-    } catch (error) {
+    } catch (error: any) {
         res.statusCode = 500
         res.write(
             JSON.stringify({

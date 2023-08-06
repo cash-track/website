@@ -1,18 +1,12 @@
 import { IncomingMessage, ServerResponse } from 'http'
 import { handleErrorsForwardedApiRequest } from './api'
-import { login, TokensResponseInterface } from './auth'
 import {
     captchaVerify,
     captchaBadResponse,
     captchaErrorResponse,
 } from './captcha'
-
-export interface LoginResponseInterface extends TokensResponseInterface {
-    accessToken: string
-    accessTokenExpiredAt: string
-    refreshToken: string
-    refreshTokenExpiredAt: string
-}
+import { LoginResponseInterface } from './loginHandler'
+import { login } from './auth'
 
 export default async function (req: IncomingMessage, res: ServerResponse) {
     res.setHeader('Content-Type', 'application/json')
@@ -37,7 +31,7 @@ export default async function (req: IncomingMessage, res: ServerResponse) {
             res,
             {
                 method: 'POST',
-                url: '/auth/login',
+                url: '/auth/provider/google',
             }
         )
     } catch (error) {
