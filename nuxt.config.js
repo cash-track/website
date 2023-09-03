@@ -41,6 +41,14 @@ export default {
                 name: 'description',
                 content: process.env.npm_package_description || '',
             },
+            {
+                name: 'msapplication-TileColor',
+                content: '#00aba9',
+            },
+            {
+                name: 'theme-color',
+                content: '#ffffff',
+            },
         ],
         link: [
             {
@@ -63,6 +71,16 @@ export default {
             {
                 rel: 'apple-touch-icon',
                 href: '/img/icons/apple-touch-icon.png',
+                sizes: '180x180',
+            },
+            {
+                rel: 'manifest',
+                href: '/site.webmanifest',
+            },
+            {
+                rel: 'mask-icon',
+                href: '/img/icons/safari-pinned-tab.svg',
+                color: '#5bbad5',
             },
         ],
     },

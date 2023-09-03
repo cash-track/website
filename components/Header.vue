@@ -172,6 +172,7 @@ export default class Header extends Mixins(WebAppLinks) {
         padding-top: 0;
         padding-bottom: 0;
         height: 36px;
+        width: 162px;
     }
 
     .b-avatar {
