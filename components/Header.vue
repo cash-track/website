@@ -3,7 +3,7 @@
         <b-navbar toggleable="lg" type="light">
             <b-container>
                 <b-navbar-brand :to="{ name: 'index' }">
-                    Cash Track 🇺🇦
+                    <logo></logo>
                 </b-navbar-brand>
 
                 <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
@@ -96,10 +96,11 @@ import {
 } from '~/api/profile'
 import { logout } from '~/api/login'
 import ProfileAvatar from '~/components/ProfileAvatar.vue'
+import Logo from '~/components/Logo.vue'
 import WebAppLinks from '~/shared/WebAppLinks'
 
 @Component({
-    components: { ProfileAvatar },
+    components: { ProfileAvatar, Logo },
 })
 export default class Header extends Mixins(WebAppLinks) {
     mounted() {
@@ -166,6 +167,12 @@ export default class Header extends Mixins(WebAppLinks) {
     border-bottom: 1px solid #e5e5e5;
     border-radius: 0;
     margin-bottom: 20px;
+
+    .navbar-brand {
+        padding-top: 0;
+        padding-bottom: 0;
+        height: 36px;
+    }
 
     .b-avatar {
         margin: -13px 5px -10px 0;
