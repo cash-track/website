@@ -92,11 +92,18 @@ export default {
         wallets: 'Wallets',
 
         easy: 'Easy',
-        easyDescription: `Our service is easy to go. Just log in or register to start track anything you need`,
+        easyDescription: `Useful & friendly interface. Go and create your wallets to track income and expenses`,
         fast: 'Fast',
-        fastDescription: `Try for yourself. It's quite fast. Let us know if it is not ;)`,
+        fastDescription: `Our servers are one of the most rapid on the Wild West. Seller said..`,
         secure: 'Secure',
-        secureDescription: `We're keeping your data protected from others. Sensitive personal data encrypted. We're using protected communication channels.`,
+        secureDescription: `We're keeping your data protected. Sensitive personal data is encrypted using cryptographically strong algorithms`,
+
+        telegram: {
+            header: 'Telegram',
+            lead:
+                'We have our own Telegram Channel where we are making our reviews and announcements of new features, existing abilities, recommendation of effective Cash Track usage',
+            subscribe: 'Subscribe',
+        },
     },
 
     about: {
@@ -116,10 +123,15 @@ export default {
             'Tags system',
         ],
 
-        connect: 'Connect with us and try to use it free.',
+        connect: 'Connect with us and try it for free.',
         register: 'Connect',
         or: 'or',
         login: 'Sign In',
+
+        tgChannel: [
+            'Join our Telegram channel to get updates and useful recommendation of Cash Track usage.',
+            'Telegram Channel',
+        ],
 
         moreLines: [
             'We are working to add more features and fix existing bugs.',

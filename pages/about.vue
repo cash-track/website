@@ -31,6 +31,18 @@
             </b-button>
         </p>
 
+        <p>{{ $t('about.tgChannel[0]') }}</p>
+        <p>
+            <b-button
+                variant="primary"
+                href="https://t.me/cash_track"
+                target="_blank"
+            >
+                {{ $t('about.tgChannel[1]') }}
+                <tg-icon></tg-icon>
+            </b-button>
+        </p>
+
         <p>{{ $t('about.moreLines[0]') }}</p>
 
         <p>
@@ -49,11 +61,13 @@
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator'
+import TgIcon from '@/components/Shared/TgIcon.vue'
 
 @Component({
     head: {
         title: 'About | Cash Track',
     },
+    components: { TgIcon },
 })
 export default class AboutPage extends Vue {}
 </script>
