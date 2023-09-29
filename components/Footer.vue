@@ -16,6 +16,12 @@
                         <b-nav-item :to="localePath('privacy-policy')">
                             {{ $t('privacyPolicy.link') }}
                         </b-nav-item>
+                        <b-nav-item
+                            href="https://t.me/cash_track"
+                            target="_blank"
+                        >
+                            <tg-icon></tg-icon>
+                        </b-nav-item>
                     </b-nav>
                 </div>
             </div>
@@ -25,8 +31,11 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
+import TgIcon from '@/components/Shared/TgIcon.vue'
 
-@Component
+@Component({
+    components: { TgIcon },
+})
 export default class Footer extends Vue {
     year() {
         return new Date().getFullYear()
