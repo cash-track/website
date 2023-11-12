@@ -16,7 +16,9 @@ export interface ProfileInterface {
 export function profileGet(
     http: NuxtAxiosInstance
 ): Promise<ProfileResponseInterface> {
-    return http.$get<ProfileResponseInterface>('/api/profile')
+    return http.$get<ProfileResponseInterface>('/api/profile', {
+        withCredentials: true,
+    })
 }
 
 export function profilePutLocale(http: NuxtAxiosInstance, locale: string) {

@@ -25,6 +25,7 @@ export function login(
             headers: {
                 'X-CT-Captcha-Challenge': captchaChallenge,
             },
+            withCredentials: true,
         }
     )
 }
@@ -32,5 +33,11 @@ export function login(
 export function logout(
     http: NuxtAxiosInstance
 ): Promise<LoginResponseInterface> {
-    return http.$post('/api/auth/logout')
+    return http.$post(
+        '/api/auth/logout',
+        {},
+        {
+            withCredentials: true,
+        }
+    )
 }

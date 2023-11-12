@@ -32,6 +32,7 @@ start:
       -e BASE_URL=$(BASE_URL) \
       -e API_URL=$(API_URL) \
       -e WEB_APP_URL=$(WEB_APP_URL) \
+      -e GATEWAY_URL=$(GATEWAY_URL) \
       --env-file .env \
       -d \
       $(IMAGE_DEV)

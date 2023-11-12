@@ -15,7 +15,11 @@ export interface RegisterResponseInterface {
 }
 
 export function checkNickName(http: NuxtAxiosInstance, nickName: string) {
-    return http.$post('/api/auth/register/check/nick-name', { nickName })
+    return http.$post(
+        '/api/auth/register/check/nick-name',
+        { nickName },
+        { withCredentials: true }
+    )
 }
 
 export function register(
@@ -38,6 +42,7 @@ export function register(
             headers: {
                 'X-CT-Captcha-Challenge': captchaChallenge,
             },
+            withCredentials: true,
         }
     )
 }
