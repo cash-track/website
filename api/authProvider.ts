@@ -19,6 +19,7 @@ export function googleAuthProvider(
             headers: {
                 'X-CT-Captcha-Challenge': captchaChallenge,
             },
+            withCredentials: true,
         }
     )
 }

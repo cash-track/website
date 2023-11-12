@@ -18,6 +18,7 @@ export function forgotPassword(
             headers: {
                 'X-CT-Captcha-Challenge': captchaChallenge,
             },
+            withCredentials: true,
         }
     )
 }
@@ -38,6 +39,7 @@ export function resetPassword(
             headers: {
                 'X-CT-Captcha-Challenge': captchaChallenge,
             },
+            withCredentials: true,
         }
     )
 }

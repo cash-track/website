@@ -1,3 +1,6 @@
+import path from 'path'
+import fs from 'fs'
+
 export default {
     /*
      ** Nuxt rendering mode
@@ -138,10 +141,11 @@ export default {
 
     publicRuntimeConfig: {
         axios: {
-            baseURL: process.env.BASE_URL,
+            baseURL: process.env.GATEWAY_URL,
         },
         baseUrl: process.env.BASE_URL,
         webAppUrl: process.env.WEB_APP_URL,
+        gatewayUrl: process.env.GATEWAY_URL,
         googleAnalytics: {
             id: process.env.GOOGLE_ANALYTICS_ID,
         },
@@ -161,6 +165,7 @@ export default {
         icons: true,
     },
 
+    /* @deprecated */
     serverMiddleware: [
         {
             path: '/api',
@@ -170,7 +175,23 @@ export default {
 
     server: {
         port: 3000,
-        host: '0.0.0.0',
+        host: (() => {
+            return process.env.HTTPS_ENABLED === 'true'
+                ? process.env.HTTPS_HOST
+                : '0.0.0.0'
+        })(),
+        https: (() => {
+            return process.env.HTTPS_ENABLED !== 'true'
+                ? undefined
+                : {
+                      key: fs.readFileSync(
+                          path.resolve(__dirname, process.env.HTTPS_KEY_PATH)
+                      ),
+                      cert: fs.readFileSync(
+                          path.resolve(__dirname, process.env.HTTPS_CRT_PATH)
+                      ),
+                  }
+        })(),
     },
 
     recaptcha: {
