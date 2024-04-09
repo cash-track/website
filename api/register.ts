@@ -1,4 +1,4 @@
-import { NuxtAxiosInstance } from '@nuxtjs/axios'
+import { useApi } from '@/api/api'
 
 export interface RegisterRequestInterface {
     name: string
@@ -14,35 +14,30 @@ export interface RegisterResponseInterface {
     redirectUrl: string
 }
 
-export function checkNickName(http: NuxtAxiosInstance, nickName: string) {
-    return http.$post(
+export function checkNickName(nickName: string) {
+    return useApi(
         '/api/auth/register/check/nick-name',
-        { nickName },
-        { withCredentials: true }
+        {
+            method: 'POST',
+            body: { nickName },
+            credentials: 'include'
+        }
     )
 }
 
 export function register(
-    http: NuxtAxiosInstance,
     data: RegisterRequestInterface,
     captchaChallenge: string
 ): Promise<RegisterResponseInterface> {
-    return http.$post<RegisterResponseInterface>(
+    return useApi<RegisterResponseInterface>(
         '/api/auth/register',
         {
-            name: data.name,
-            lastName: data.lastName,
-            nickName: data.nickName,
-            email: data.email,
-            password: data.password,
-            passwordConfirmation: data.passwordConfirmation,
-            locale: data.locale,
-        },
-        {
+            method: 'POST',
+            body: data,
             headers: {
-                'X-CT-Captcha-Challenge': captchaChallenge,
+                'X-CT-Captcha-Challenge': captchaChallenge
             },
-            withCredentials: true,
+            credentials: 'include'
         }
     )
 }

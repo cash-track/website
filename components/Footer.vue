@@ -1,68 +1,59 @@
 <template>
     <div class="footer text-center">
-        <b-container>
-            <div class="row align-items-start">
-                <div class="col-sm text-sm-left text-center">
-                    © {{ year() }} Cash Track
+        <UContainer>
+            <div class="sm:flex items-start">
+                <div class="sm:basis-1/3 sm:text-left text-center">
+                    © {{ year }} Cash Track
                 </div>
-                <div class="col-sm text-center" v-html="$t('madeBy')"></div>
-                <div class="col-sm text-sm-right text-center">
-                    <b-nav
-                        class="justify-content-sm-end justify-content-center"
-                    >
-                        <b-nav-item :to="localePath('cookie-policy')">
-                            {{ $t('cookiePolicy.link') }}
-                        </b-nav-item>
-                        <b-nav-item :to="localePath('privacy-policy')">
-                            {{ $t('privacyPolicy.link') }}
-                        </b-nav-item>
-                        <b-nav-item
-                            href="https://t.me/cash_track"
-                            target="_blank"
-                        >
-                            <tg-icon></tg-icon>
-                        </b-nav-item>
-                    </b-nav>
+                <div class="sm:basis-1/3 text-center" v-html="$t('madeBy')" />
+                <div class="sm:basis-1/3 sm:text-right text-center">
+                    <ul class="nav sm:justify-end justify-center">
+                        <li>
+                            <ULink class="link" :to="localePath('cookie-policy')">
+                                {{ $t('cookiePolicy.link') }}
+                            </ULink>
+                        </li>
+                        <li>
+                            <ULink class="link" :to="localePath('privacy-policy')">
+                                {{ $t('privacyPolicy.link') }}
+                            </ULink>
+                        </li>
+                        <li>
+                            <ULink class="link" to="https://t.me/cash_track" target="_blank">
+                                <TgIcon class="link-icon" />
+                            </ULink>
+                        </li>
+                    </ul>
                 </div>
             </div>
-        </b-container>
+        </UContainer>
     </div>
 </template>
 
-<script lang="ts">
-import { Component, Vue } from 'vue-property-decorator'
+<script setup lang="ts">
 import TgIcon from '@/components/Shared/TgIcon.vue'
-
-@Component({
-    components: { TgIcon },
-})
-export default class Footer extends Vue {
-    year() {
-        return new Date().getFullYear()
-    }
-}
+const year = new Date().getFullYear()
+const localePath = useLocalePath()
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
 .footer {
-    border-top: 1px solid #eee;
-    padding: 20px 0;
-    font-size: 14px;
-    bottom: 0;
-    width: 100%;
-    height: 60px;
-    margin-top: 15px;
+    @apply py-5 px-0 w-full h-14 bottom-0 mt-4 text-sm border-t border-t-gray-200;
 
-    .nav-link {
-        display: block;
-        padding: 0 1rem;
-        line-height: 22px;
+    .nav {
+        li {
+            @apply inline-block align-middle leading-6 h-6;
+
+            button, a {
+                @apply block px-4;
+            }
+        }
     }
 }
 
 @media (max-width: 576px) {
     .footer {
-        height: auto;
+        @apply h-auto;
     }
 }
 </style>

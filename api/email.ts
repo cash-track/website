@@ -1,9 +1,11 @@
-import { NuxtAxiosInstance } from '@nuxtjs/axios'
+import { useApi } from '@/api/api'
 
-export function confirmEmail(http: NuxtAxiosInstance, token: string) {
-    return http.$post(
+export function confirmEmail(token: string) {
+    return useApi(
         `/api/auth/email/confirmation/confirm/${token}`,
-        {},
-        { withCredentials: true }
+        {
+            method: 'POST',
+            credentials: 'include'
+        }
     )
 }

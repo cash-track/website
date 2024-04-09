@@ -1,11 +1,13 @@
 <template>
-    <div class="about">
-        <h1 class="display-4">{{ $t('about.title') }}</h1>
-        <hr />
-        <blockquote class="blockquote">
-            <p class="mb-0">{{ $t('about.quote') }}</p>
-            <footer class="blockquote-footer">
-                <cite title="Source Title">{{ $t('about.quoteAuthor') }}</cite>
+    <section class="info-page">
+        <h1>{{ $t('about.about') }}</h1>
+
+        <hr>
+
+        <blockquote>
+            <p>{{ $t('about.quote') }}</p>
+            <footer>
+                <cite>{{ $t('about.quoteAuthor') }}</cite>
             </footer>
         </blockquote>
 
@@ -20,27 +22,28 @@
             <li>{{ $t('about.features[3]') }}</li>
         </ul>
 
-        <p class="lead">{{ $t('about.connect') }}</p>
+        <p class="lead">
+            {{ $t('about.connect') }}
+        </p>
         <p>
-            <b-button variant="primary" to="register">
+            <UButton :to="localePath('/register')">
                 {{ $t('about.register') }}
-            </b-button>
+            </UButton>
             {{ $t('about.or') }}
-            <b-button variant="primary" to="login">
+            <UButton :to="localePath('/login')">
                 {{ $t('about.login') }}
-            </b-button>
+            </UButton>
         </p>
 
         <p>{{ $t('about.tgChannel[0]') }}</p>
         <p>
-            <b-button
-                variant="primary"
-                href="https://t.me/cash_track"
+            <UButton
+                to="https://t.me/cash_track"
                 target="_blank"
             >
                 {{ $t('about.tgChannel[1]') }}
-                <tg-icon></tg-icon>
-            </b-button>
+                <tg-icon />
+            </UButton>
         </p>
 
         <p>{{ $t('about.moreLines[0]') }}</p>
@@ -51,23 +54,23 @@
             <a
                 href="https://github.com/cash-track/website/issues/new"
                 target="_blank"
-                >{{ $t('about.moreLines[3]') }}
+            >{{ $t('about.moreLines[3]') }}
             </a>
             {{ $t('about.moreLines[4]') }}
         </p>
         <p>{{ $t('about.moreLines[5]') }}</p>
-    </div>
+    </section>
 </template>
 
-<script lang="ts">
-import { Vue, Component } from 'vue-property-decorator'
+<script setup lang="ts">
+import { useHead, useI18n, useLocalePath } from '#imports'
 import TgIcon from '@/components/Shared/TgIcon.vue'
 
-@Component({
-    head: {
-        title: 'About | Cash Track',
-    },
-    components: { TgIcon },
+const { t } = useI18n()
+const localePath = useLocalePath()
+
+useHead({
+    title: t('about.title'),
+    meta: [{ property: 'og:title', content: t('about.title') }]
 })
-export default class AboutPage extends Vue {}
 </script>

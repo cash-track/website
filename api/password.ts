@@ -1,4 +1,4 @@
-import { NuxtAxiosInstance } from '@nuxtjs/axios'
+import { useApi } from '@/api/api'
 
 export interface ResetPasswordRequestInterface {
     code: string
@@ -7,39 +7,35 @@ export interface ResetPasswordRequestInterface {
 }
 
 export function forgotPassword(
-    http: NuxtAxiosInstance,
     email: string,
     captchaChallenge: string
 ) {
-    return http.$post(
+    return useApi(
         '/api/auth/password/forgot',
-        { email },
         {
+            method: 'POST',
+            body: { email },
             headers: {
-                'X-CT-Captcha-Challenge': captchaChallenge,
+                'X-CT-Captcha-Challenge': captchaChallenge
             },
-            withCredentials: true,
+            credentials: 'include'
         }
     )
 }
 
 export function resetPassword(
-    http: NuxtAxiosInstance,
     data: ResetPasswordRequestInterface,
     captchaChallenge: string
 ) {
-    return http.$post(
+    return useApi(
         '/api/auth/password/reset',
         {
-            code: data.code,
-            password: data.password,
-            passwordConfirmation: data.passwordConfirmation,
-        },
-        {
+            method: 'POST',
+            body: data,
             headers: {
-                'X-CT-Captcha-Challenge': captchaChallenge,
+                'X-CT-Captcha-Challenge': captchaChallenge
             },
-            withCredentials: true,
+            credentials: 'include'
         }
     )
 }

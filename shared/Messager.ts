@@ -1,58 +1,69 @@
-import { Vue, Component } from 'vue-property-decorator'
-import {
-    ErrorResponseInterface,
-    ValidationResponseInterface,
-} from '~/api/response'
+import { FetchError } from 'ofetch'
+import type { Ref } from 'vue'
+import type { ErrorResponseInterface, ValidationResponseInterface } from '@/api/response'
+import { ref, useI18n } from '#imports'
 
-@Component
-export default class Messager extends Vue {
-    public message = ''
-    public showMessage = false
+export function useMessager(): Messager {
+    return new Messager()
+}
+
+export class Messager {
+    private isUnprocessableEntityMessageDisabled = false
+    public message: Ref<string>
+    public showMessage: Ref<boolean>
+    private t
+
+    constructor() {
+        const { t } = useI18n()
+        this.t = t
+        this.message = ref<string>('')
+        this.showMessage = ref<boolean>(false)
+    }
 
     public getMessage(): string {
-        return this.message
+        return this.message.value
     }
 
     public shouldDisplayMessage(): boolean {
-        return this.showMessage
+        return this.showMessage.value
     }
 
     public setMessage(msg: string) {
-        this.message = msg
-        this.showMessage = true
+        this.message.value = msg
+        this.showMessage.value = true
     }
 
     public resetMessage() {
-        this.message = ''
-        this.showMessage = false
+        this.message.value = ''
+        this.showMessage.value = false
     }
 
     get hasMessage(): boolean {
-        return this.message !== ''
+        return this.message.value !== ''
     }
 
-    protected dispatchError(error: any) {
-        if (error.response) {
-            switch (error.response.status) {
-                case 400:
-                    this.onBadRequestResponse(error.response.data)
-                    break
-                case 401:
-                    this.onUnauthorisedResponse(error.response.data)
-                    break
-                case 403:
-                    this.onForbiddenResponse(error.response.data)
-                    break
-                case 422:
-                    this.onUnprocessableEntityResponse(error.response.data)
-                    break
-                case 500:
-                    this.onInternalServerError(error.response.data)
-                    break
-            }
+    public dispatchError(error: any) {
+        if (!(error instanceof FetchError)) {
+            return error
         }
 
-        return error
+        switch (error.statusCode) {
+        case 400:
+            this.onBadRequestResponse(error.data)
+            break
+        case 401:
+            this.onUnauthorisedResponse(error.data)
+            break
+        case 403:
+            this.onForbiddenResponse(error.data)
+            break
+        case 422:
+            this.onUnprocessableEntityResponse(error.data)
+            break
+        case 500:
+            this.onInternalServerError(error.data)
+            break
+        }
     }
 
     protected onBadRequestResponse(response: ErrorResponseInterface) {
@@ -70,10 +81,18 @@ export default class Messager extends Vue {
     protected onUnprocessableEntityResponse(
         _response: ValidationResponseInterface
     ) {
-        this.setMessage('One or more fields is not valid')
+        if (this.isUnprocessableEntityMessageDisabled) {
+            return
+        }
+
+        this.setMessage(this.t('error.validation'))
     }
 
     protected onInternalServerError(response: ErrorResponseInterface) {
         this.setMessage(response.message)
+    }
+
+    public disableUnprocessableEntityMessage() {
+        this.isUnprocessableEntityMessageDisabled = true
     }
 }

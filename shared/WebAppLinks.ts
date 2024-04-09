@@ -1,12 +1,15 @@
-import { Vue, Component } from 'vue-property-decorator'
+import { useRuntimeConfig } from '#app'
 
-@Component
-export default class WebAppLinks extends Vue {
-    get walletsLink() {
-        return `${this.$config.webAppUrl}/wallets`
-    }
+export interface WebAppLinksInterface {
+    walletsLink: string
+    profileLink: string
+}
 
-    get profileLink() {
-        return `${this.$config.webAppUrl}/profile`
+export function useWebAppLinks(): WebAppLinksInterface {
+    const config = useRuntimeConfig()
+
+    return {
+        walletsLink: `${config.public.webAppUrl}/wallets`,
+        profileLink: `${config.public.webAppUrl}/profile`
     }
 }

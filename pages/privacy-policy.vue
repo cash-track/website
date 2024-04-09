@@ -1,15 +1,16 @@
 <template>
-    <div class="privacy-policy">
-        <h1 class="display-4">{{ $t('privacyPolicy.privacyPolicy') }}</h1>
-        <hr />
+    <div class="info-page">
+        <h1>{{ $t('privacyPolicy.privacyPolicy') }}</h1>
+
+        <hr>
 
         <p>
             <b>{{ $t('privacyPolicy.effectiveDate') }}</b>
-            <br />
+            <br>
             <b>{{ $t('privacyPolicy.lastUpdated') }}</b>
         </p>
 
-        <p>{{ $t('privacyPolicy.intro[0]') }}</p>
+        <p>{{ t('privacyPolicy.intro[0]', {email: 'support@cash-track.app'}) }}</p>
 
         <p>{{ $t('privacyPolicy.intro[1]') }}</p>
 
@@ -54,33 +55,33 @@
         <p>{{ $t('privacyPolicy.retentionInfo[1]') }}</p>
 
         <h3>{{ $t('privacyPolicy.yourRights[0]') }}</h3>
-        <p>{{ $t('privacyPolicy.yourRights[1]') }}</p>
+        <p>{{ t('privacyPolicy.yourRights[1]', {email: 'support@cash-track.app'}) }}</p>
         <p>{{ $t('privacyPolicy.yourRights[2]') }}</p>
 
         <h3>{{ $t('privacyPolicy.cookies[0]') }}</h3>
         <p>
             {{ $t('privacyPolicy.cookies[1]') }}
-            <router-link to="cookie-policy">
+            <ULink class="link" :to="localePath('/cookie-policy')">
                 {{ $t('privacyPolicy.cookies[2]') }}
-            </router-link>
-            .
+            </ULink>.
         </p>
 
         <h3>{{ $t('privacyPolicy.security[0]') }}</h3>
         <p>{{ $t('privacyPolicy.security[1]') }}</p>
 
         <h3>{{ $t('privacyPolicy.dataProtection[0]') }}</h3>
-        <p>{{ $t('privacyPolicy.dataProtection[1]') }}</p>
+        <p>{{ t('privacyPolicy.dataProtection[1]', {email: 'support@cash-track.app'}) }}</p>
     </div>
 </template>
 
-<script lang="ts">
-import { Vue, Component } from 'vue-property-decorator'
+<script setup lang="ts">
+import { useHead, useI18n, useLocalePath } from '#imports'
 
-@Component({
-    head: {
-        title: 'Privacy Policy | Cash Track',
-    },
+const { t } = useI18n()
+const localePath = useLocalePath()
+
+useHead({
+    title: t('privacyPolicy.title'),
+    meta: [{ property: 'og:title', content: t('privacyPolicy.title') }]
 })
-export default class PrivacyPolicyPage extends Vue {}
 </script>

@@ -1,4 +1,4 @@
-import { NuxtAxiosInstance } from '@nuxtjs/axios'
+import { useApi } from '@/api/api'
 
 export interface LoginRequestInterface {
     email: string
@@ -11,33 +11,22 @@ export interface LoginResponseInterface {
 }
 
 export function login(
-    http: NuxtAxiosInstance,
     data: LoginRequestInterface,
     captchaChallenge: string
 ): Promise<LoginResponseInterface> {
-    return http.$post<LoginResponseInterface>(
-        '/api/auth/login',
-        {
-            email: data.email,
-            password: data.password,
+    return useApi<LoginResponseInterface>('/api/auth/login', {
+        method: 'POST',
+        body: data,
+        headers: {
+            'X-CT-Captcha-Challenge': captchaChallenge
         },
-        {
-            headers: {
-                'X-CT-Captcha-Challenge': captchaChallenge,
-            },
-            withCredentials: true,
-        }
-    )
+        credentials: 'include'
+    })
 }
 
-export function logout(
-    http: NuxtAxiosInstance
-): Promise<LoginResponseInterface> {
-    return http.$post(
-        '/api/auth/logout',
-        {},
-        {
-            withCredentials: true,
-        }
-    )
+export function logout(): Promise<LoginResponseInterface> {
+    return useApi<LoginResponseInterface>('/api/auth/logout', {
+        method: 'POST',
+        credentials: 'include'
+    })
 }

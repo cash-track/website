@@ -1,3 +1,8 @@
+export interface StorageItemInterface {
+    key: string
+    value: any
+}
+
 export interface StorageInterface {
     isSupported(): boolean
     has(key: string): boolean
@@ -5,11 +10,6 @@ export interface StorageInterface {
     get(key: string): StorageItemInterface | null
     remove(key: string): void
     clear(): void
-}
-
-export interface StorageItemInterface {
-    key: string
-    value: any
 }
 
 export class LocalStorageWorker implements StorageInterface {
@@ -51,7 +51,7 @@ export class LocalStorageWorker implements StorageInterface {
 
         return {
             key,
-            value: localStorage.getItem(key),
+            value: localStorage.getItem(key)
         }
     }
 

@@ -1,19 +1,20 @@
 <template>
-    <div class="help">
-        <h1 class="display-4">{{ $t('help.help') }}</h1>
-        <hr />
+    <section class="info-page">
+        <h1>{{ $t('help.help') }}</h1>
+
+        <hr>
 
         <p>{{ $t('help.notice') }}</p>
-    </div>
+    </section>
 </template>
 
-<script lang="ts">
-import { Vue, Component } from 'vue-property-decorator'
+<script setup lang="ts">
+import { useHead, useI18n } from '#imports'
 
-@Component({
-    head: {
-        title: 'Help | Cash Track',
-    },
+const { t } = useI18n()
+
+useHead({
+    title: t('help.title'),
+    meta: [{ property: 'og:title', content: t('help.title') }]
 })
-export default class HelpPage extends Vue {}
 </script>

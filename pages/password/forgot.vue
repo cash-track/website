@@ -1,22 +1,25 @@
 <template>
-    <div class="row">
-        <div class="col-md-8 ml-md-auto mr-md-auto">
-            <PasswordForgot></PasswordForgot>
+    <section class="flex justify-center">
+        <div class="auth-container mb-8">
+            <p class="text-2xl text-gray-400 text-center mt-14 mb-8">
+                {{ t('passwordForgot.passwordForgot') }}
+            </p>
+            <password-forgot />
         </div>
-    </div>
+    </section>
 </template>
 
-<script lang="ts">
-import { Mixins, Component } from 'vue-property-decorator'
-import PasswordForgot from '~/components/Auth/PasswordForgot.vue'
-import GuestOnly from '~/shared/GuestOnly'
+<script setup lang="ts">
+import { definePageMeta, useI18n, useHead } from '#imports'
+import PasswordForgot from '@/components/Auth/PasswordForgot.vue'
 
-@Component({
-    components: { PasswordForgot },
-    head: {
-        title: 'Restore Password | Cash Track',
-    },
-    nuxtI18n: false,
+const { t } = useI18n()
+
+definePageMeta({
+    title: 'passwordForgot.title'
 })
-export default class PasswordForgotPage extends Mixins(GuestOnly) {}
+
+useHead({
+    title: t('passwordForgot.title')
+})
 </script>

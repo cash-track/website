@@ -1,91 +1,110 @@
-<template>
-    <div>
-        <b-alert variant="primary" :show="isLoading">
-            <b-spinner small></b-spinner>
-            {{ $t('emailConfirmation.loading') }}
-        </b-alert>
-        <b-alert variant="success" :show="!isLoading && isSuccess">
-            <b-icon-check2-circle></b-icon-check2-circle>
-            <span v-if="isLogged">
-                {{ $t('emailConfirmation.successLogged[0]') }}
-                {{ $t('emailConfirmation.successLogged[1]') }}
-                {{ $t('emailConfirmation.successLogged[2]') }}
-                <a :href="profileLink">
-                    {{ $t('emailConfirmation.successLogged[3]') }}
-                </a>
-                .
-            </span>
-            <span v-else>
-                {{ $t('emailConfirmation.success[0]') }}
-                {{ $t('emailConfirmation.success[1]') }}
-                <nuxt-link to="/login">
-                    {{ $t('emailConfirmation.success[2]') }}
-                </nuxt-link>
-                {{ $t('emailConfirmation.success[3]') }}
-            </span>
-        </b-alert>
-        <b-alert variant="warning" :show="!isLoading && !isSuccess">
-            {{ $t('emailConfirmation.codeInvalid[0]') }}
-            {{ $t('emailConfirmation.codeInvalid[1]') }}
-            {{ $t('emailConfirmation.codeInvalid[2]') }}
-            <span v-if="!isLogged">
-                {{ $t('emailConfirmation.codeInvalid[3]') }}
-            </span>
-            {{ $t('emailConfirmation.codeInvalid[4]') }}
-        </b-alert>
-    </div>
-</template>
+<script setup lang="ts">
+import { onMounted, useLocalePath } from '#imports'
+import { useLoader } from '@/shared/Loader'
+import { confirmEmail } from '@/api/email'
+import { useAuthStore } from '@/store/auth'
+import { useWebAppLinks } from '@/shared/WebAppLinks'
 
-<script lang="ts">
-import { Mixins, Component, Prop } from 'vue-property-decorator'
-import Loader from '~/shared/Loader'
-import Messager from '~/shared/Messager'
-import WebAppLinks from '~/shared/WebAppLinks'
-import { confirmEmail } from '~/api/email'
+const loader = useLoader()
+const store = useAuthStore()
+const localePath = useLocalePath()
+const webAppLinks = useWebAppLinks()
+const props = defineProps<{
+    token: string
+}>()
 
-@Component
-export default class EmailConfirmation extends Mixins(
-    Loader,
-    Messager,
-    WebAppLinks
-) {
-    @Prop()
-    token!: string
+const isSuccess = ref<boolean|null>(null)
 
-    isSuccess = false
+onMounted(() => {
+    submit()
+})
 
-    get isLogged(): boolean {
-        return this.$store.state.auth.isLogged
+function submit() {
+    loader.setLoading()
+
+    if (props.token === undefined) {
+        onFailure()
+        return
     }
 
-    mounted() {
-        this.confirmEmail()
+    confirmEmail(props.token)
+        .then(onConfirmed)
+        .catch(onFailure)
+        .finally(() => loader.setLoaded())
+}
+
+function onConfirmed() {
+    isSuccess.value = true
+
+    if (store.isLogged) {
+        return
     }
 
-    confirmEmail() {
-        this.setLoading()
-        this.resetMessage()
+    setTimeout(() => {
+        window.location.href = webAppLinks.profileLink
+    }, 2000)
+}
 
-        confirmEmail(this.$axios, this.token)
-            .then(this.onConfirmed)
-            .catch(this.onFailure)
-            .finally(this.setLoaded)
-    }
-
-    onConfirmed() {
-        this.isSuccess = true
-
-        if (!this.isLogged) {
-            return
-        }
-
-        setTimeout(() => {
-            window.location.href = this.profileLink
-        }, 2000)
-    }
-
-    onFailure() {
-        this.isSuccess = false
-    }
+function onFailure() {
+    isSuccess.value = false
 }
 </script>
+
+<template>
+    <UCard :ui="{body: {padding: 'px-6 py-6 sm:p-10'}}">
+        <UAlert
+            v-show="loader.isLoading()"
+            color="primary"
+            variant="subtle"
+        >
+            <template #description>
+                <UIcon name="i-svg-spinners:180-ring-with-bg" dynamic class="w-4 h-4 mr-2" />
+                {{ $t('emailConfirmation.loading') }}
+            </template>
+        </UAlert>
+
+        <UAlert
+            v-if="!loader.isLoading() && isSuccess !== null && isSuccess"
+            color="primary"
+            variant="subtle"
+            icon="i-heroicons-check-badge-16-solid"
+        >
+            <template #description>
+                <span v-if="store.isLogged">
+                    {{ $t('emailConfirmation.successLogged[0]') }}
+                    {{ $t('emailConfirmation.successLogged[1]') }}
+                    {{ $t('emailConfirmation.successLogged[2]') }}
+                    <ULink :to="webAppLinks.profileLink" class="link underline">
+                        {{ $t('emailConfirmation.successLogged[3]') }}
+                    </ULink>
+                    .
+                </span>
+                <span v-else>
+                    {{ $t('emailConfirmation.success[0]') }}
+                    {{ $t('emailConfirmation.success[1]') }}
+                    <ULink :to="localePath('/login')" class="link underline">
+                        {{ $t('emailConfirmation.success[2]') }}
+                    </ULink>
+                    {{ $t('emailConfirmation.success[3]') }}
+                </span>
+            </template>
+        </UAlert>
+
+        <UAlert
+            v-if="!loader.isLoading() && isSuccess !== null && !isSuccess"
+            color="orange"
+            variant="subtle"
+            icon="i-heroicons-exclamation-triangle-16-solid"
+        >
+            <template #description>
+                {{ $t('emailConfirmation.codeInvalid[0]') }}
+                {{ $t('emailConfirmation.codeInvalid[1]') }}
+                {{ $t('emailConfirmation.codeInvalid[2]') }}
+                <span v-if="!store.isLogged">
+                    {{ $t('emailConfirmation.codeInvalid[3]') }}
+                </span>
+                {{ $t('emailConfirmation.codeInvalid[4]') }}
+            </template>
+        </UAlert>
+    </UCard>
+</template>

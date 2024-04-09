@@ -1,26 +1,23 @@
-import { ProfileInterface } from '~/api/profile'
+import { defineStore } from 'pinia'
+import type { ProfileInterface } from '@/api/profile'
+import { ref } from '#imports'
 
-export interface AuthState {
-    isLogged: boolean
-    profile: ProfileInterface | null
-    isProfileLoading: boolean
-}
+export const useAuthStore = defineStore('auth', () => {
+    const profile = ref<ProfileInterface|null>(null)
+    const isLogged = ref(false)
+    const isProfileLoading = ref(true)
 
-export const state = (): AuthState => ({
-    isLogged: false,
-    profile: null,
-    isProfileLoading: true,
+    function login(user: ProfileInterface) {
+        profile.value = user
+        isLogged.value = true
+        isProfileLoading.value = false
+    }
+
+    function logout() {
+        profile.value = null
+        isLogged.value = false
+        isProfileLoading.value = false
+    }
+
+    return { isLogged, isProfileLoading, profile, login, logout }
 })
-
-export const mutations = {
-    login(state: AuthState, user: ProfileInterface) {
-        state.profile = user
-        state.isLogged = true
-        state.isProfileLoading = false
-    },
-    logout(state: AuthState) {
-        state.profile = null
-        state.isLogged = false
-        state.isProfileLoading = false
-    },
-}
