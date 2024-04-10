@@ -1,4 +1,4 @@
-import { StorageInterface } from '~/services/LocalStorage'
+import type { StorageInterface } from '~/services/LocalStorage'
 import { CookieStorage } from '~/services/CookieStorage'
 
 export const PROFILE = 'ct-profile-cache'
@@ -27,7 +27,7 @@ export class CookieCache {
     public set<T>(key: string, data: T) {
         this.store.add({
             key,
-            value: JSON.stringify(data),
+            value: JSON.stringify(data)
         })
     }
 

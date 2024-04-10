@@ -1,4 +1,4 @@
-FROM node:14-alpine
+FROM node:20-alpine
 
 ENV APP_ROOT /web
 
@@ -11,6 +11,6 @@ RUN npm ci
 
 ADD . ${APP_ROOT}
 
-RUN npm run build
+RUN npm ci && npm run build
 
-CMD ["npm", "run", "start"]
+CMD ["node", "/web/.output/server/index.mjs"]

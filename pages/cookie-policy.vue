@@ -1,11 +1,12 @@
 <template>
-    <div class="cookie-policy">
-        <h1 class="display-4">{{ $t('cookiePolicy.cookiePolicy') }}</h1>
-        <hr />
+    <div class="info-page">
+        <h1>{{ $t('cookiePolicy.cookiePolicy') }}</h1>
+
+        <hr>
 
         <p>
             <b>{{ $t('cookiePolicy.effectiveDate') }}</b>
-            <br />
+            <br>
             <b>{{ $t('cookiePolicy.lastUpdated') }}</b>
         </p>
 
@@ -23,16 +24,17 @@
 
         <h3>{{ $t('cookiePolicy.typesOfCookiesWeUse') }}</h3>
 
-        <div class="cky-audit-table-element"></div>
+        <div class="cky-audit-table-element" />
 
         <h3 class="mb-2">
             {{ $t('cookiePolicy.manageCookiesPreferences[0]') }}
         </h3>
 
-        <a class="cky-banner-element btn btn-primary">
+        <UButton class="cky-banner-element mb-4">
             {{ $t('cookiePolicy.cookieSettings') }}
-        </a>
-        <br />
+        </UButton>
+
+        <br>
 
         <div>
             <p>{{ $t('cookiePolicy.manageCookiesPreferences[1]') }}</p>
@@ -80,13 +82,13 @@
     </div>
 </template>
 
-<script lang="ts">
-import { Vue, Component } from 'vue-property-decorator'
+<script setup lang="ts">
+import { useHead, useI18n } from '#imports'
 
-@Component({
-    head: {
-        title: 'Cookie Policy | Cash Track',
-    },
+const { t } = useI18n()
+
+useHead({
+    title: t('cookiePolicy.title'),
+    meta: [{ property: 'og:title', content: t('cookiePolicy.title') }]
 })
-export default class CookiePolicyPage extends Vue {}
 </script>

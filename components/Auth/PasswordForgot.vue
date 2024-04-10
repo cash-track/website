@@ -1,121 +1,116 @@
-<template>
-    <b-form novalidate @submit="onSubmit">
-        <b-card footer-tag="footer" header-tag="header">
-            <template v-slot:header>{{ $t('passwordForgot.title') }}</template>
+<script setup lang="ts">
+import type { Form } from '#ui/types'
+import { useReCaptcha } from 'vue-recaptcha-v3'
+import { useI18n } from '#imports'
+import { useLoader } from '@/shared/Loader'
+import { useValidationMessager } from '@/shared/ValidatorMessager'
+import { forgotPassword } from '@/api/password'
 
-            <b-form-group
-                v-show="!isSuccess"
-                label-align-md="right"
-                label-cols-md="4"
-                label-for="email"
-                :invalid-feedback="validationMessage('email')"
-                :state="validationState('email')"
-            >
-                <template v-slot:label>
-                    {{ $t('passwordForgot.email') }}
-                </template>
-                <b-form-input
-                    id="email"
-                    v-model="email"
-                    class="col-md-8"
-                    required
-                    type="email"
-                    :disabled="isLoading"
-                    :state="validationState('email')"
-                    @change="resetValidationMessage('email')"
-                ></b-form-input>
-            </b-form-group>
+interface PasswordForgot {
+    email: string
+}
 
-            <b-alert
-                variant="warning"
-                fade
-                dismissible
-                :show="hasMessage && !isSuccess"
-                @dismissed="resetMessage()"
-            >
-                <b-icon-exclamation-triangle-fill></b-icon-exclamation-triangle-fill>
-                {{ message }}
-            </b-alert>
+const { t } = useI18n()
+const loader = useLoader()
+const messager = useValidationMessager()
+const recaptchaInstance = useReCaptcha()
 
-            <b-alert variant="success" fade :show="isSuccess">
-                <b-icon-check2-circle></b-icon-check2-circle>
-                {{ $t('passwordForgot.success[0]') }}<br />
-                {{ $t('passwordForgot.success[1]') }}<br />
-                {{ $t('passwordForgot.success[2]') }}<br />
-                {{ $t('passwordForgot.success[3]') }}
-            </b-alert>
+const request = reactive<PasswordForgot>({
+    email: ''
+})
+const isSuccess = ref<boolean>(false)
+const form = ref<Form<PasswordForgot>>()
+const recaptcha = async () => {
+    await recaptchaInstance?.recaptchaLoaded()
+    return await recaptchaInstance?.executeRecaptcha('forgotPassword')
+}
 
-            <template v-if="!isSuccess" v-slot:footer>
-                <div class="form-row">
-                    <b-col md="8" offset-md="4">
-                        <b-button
-                            :disabled="isLoading"
-                            type="submit"
-                            variant="primary"
-                            @click="onSubmit"
-                        >
-                            {{ $t('passwordForgot.reset') }}
-                            <b-spinner v-show="isLoading" small></b-spinner>
-                        </b-button>
-                    </b-col>
-                </div>
-            </template>
-        </b-card>
-    </b-form>
-</template>
+messager.disableUnprocessableEntityMessage()
 
-<script lang="ts">
-import { Mixins, Component } from 'vue-property-decorator'
-import Loader from '~/shared/Loader'
-import Messager from '~/shared/Messager'
-import Validator from '~/shared/Validator'
-import { forgotPassword } from '~/api/password'
+async function onSubmit() {
+    form?.value?.clear()
+    loader.setLoading()
+    messager.resetMessage()
 
-@Component
-export default class PasswordForgot extends Mixins(
-    Loader,
-    Messager,
-    Validator
-) {
-    email: string = ''
+    let challenge: string | undefined
 
-    isSuccess: boolean = false
+    try {
+        challenge = await recaptcha()
 
-    async mounted() {
-        try {
-            await this.$recaptcha.init()
-        } catch (error) {
-            // eslint-disable-next-line no-console
-            console.error('Captcha init error: ', error)
+        if (challenge === undefined) {
+            throw new Error('empty challenge')
         }
+    } catch (error) {
+        console.log('Captcha error: ', error)
+        messager.setMessage(t('error.captcha'))
+        loader.setLoaded()
+        return
     }
 
-    beforeDestroy() {
-        this.$recaptcha.destroy()
+    try {
+        await forgotPassword(request.email, challenge)
+        isSuccess.value = true
+    } catch (error) {
+        loader.setLoaded()
+        messager.dispatchError(error)
+        return
     }
 
-    async onSubmit() {
-        this.resetMessage()
-        this.resetValidationMessages()
-        this.setLoading()
-
-        let challenge = ''
-
-        try {
-            challenge = await this.$recaptcha.execute('login')
-        } catch (error) {
-            // eslint-disable-next-line no-console
-            console.log('Captcha execute error: ', error)
-        }
-
-        forgotPassword(this.$axios, this.email, challenge)
-            .then(this.onSuccess)
-            .catch(this.dispatchError)
-            .finally(this.setLoaded)
-    }
-
-    onSuccess() {
-        this.isSuccess = true
-    }
+    loader.setLoaded()
 }
 </script>
+
+<template>
+    <UCard :ui="{body: {padding: 'px-6 py-6 sm:p-10'}}">
+        <UForm ref="form" :state="request" @submit="onSubmit">
+            <UFormGroup
+                class="mb-6"
+                size="xl"
+                :label="$t('passwordForgot.email')"
+                name="email"
+                :disabled="loader.isLoading() || isSuccess"
+                :ui="{label:{wrapper: 'flex content-center items-center justify-between mb-4'}}"
+                :error="messager.validationMessage('email')"
+                @change="messager.resetValidationMessage('email')"
+            >
+                <UInput v-model="request.email" />
+            </UFormGroup>
+
+            <UAlert
+                v-if="messager.hasMessage && !isSuccess"
+                class="mb-6"
+                icon="i-heroicons-exclamation-triangle-16-solid"
+                color="orange"
+                variant="subtle"
+                :description="messager.getMessage()"
+            />
+
+            <UAlert
+                v-if="isSuccess"
+                class="mb-6"
+                color="primary"
+                variant="subtle"
+                icon="i-heroicons-check-badge-16-solid"
+            >
+                <template #description>
+                    {{ $t('passwordForgot.success[0]') }} <br>
+                    {{ $t('passwordForgot.success[1]') }} <br>
+                    {{ $t('passwordForgot.success[2]') }} <br>
+                    {{ $t('passwordForgot.success[3]') }}
+                </template>
+            </UAlert>
+
+            <UButton
+                v-if="!isSuccess"
+                type="submit"
+                block
+                size="lg"
+                class="mb-6"
+                :loading="loader.isLoading()"
+                :disabled="loader.isLoading()"
+            >
+                {{ $t('passwordForgot.reset') }}
+            </UButton>
+        </UForm>
+    </UCard>
+</template>

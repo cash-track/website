@@ -1,22 +1,25 @@
 <template>
-    <div class="row">
-        <div class="col-md-8 ml-md-auto mr-md-auto">
-            <Register></Register>
+    <section class="flex justify-center">
+        <div class="auth-container mb-8">
+            <p class="text-2xl text-gray-400 text-center mt-14 mb-8">
+                {{ t('register.signUp') }}
+            </p>
+            <register />
         </div>
-    </div>
+    </section>
 </template>
 
-<script lang="ts">
-import { Mixins, Component } from 'vue-property-decorator'
-import Register from '~/components/Auth/Register.vue'
-import GuestOnly from '~/shared/GuestOnly'
+<script setup lang="ts">
+import { definePageMeta, useI18n, useHead } from '#imports'
+import Register from '@/components/Auth/Register.vue'
 
-@Component({
-    components: { Register },
-    head: {
-        title: 'Register | Cash Track',
-    },
-    nuxtI18n: false,
+const { t } = useI18n()
+
+definePageMeta({
+    title: 'register.title'
 })
-export default class RegisterPage extends Mixins(GuestOnly) {}
+
+useHead({
+    title: t('register.title')
+})
 </script>

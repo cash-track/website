@@ -4,7 +4,7 @@
         width="16"
         height="16"
         fill="currentColor"
-        class="b-icon bi bi-telegram"
+        class="tg-icon"
         viewBox="0 0 16 16"
     >
         <path
@@ -13,11 +13,8 @@
     </svg>
 </template>
 
-<script lang="ts">
-import { Vue, Component } from 'vue-property-decorator'
-
-@Component
-export default class TgIcon extends Vue {}
-</script>
-
-<style lang="scss" scoped></style>
+<style scoped lang="scss">
+.tg-icon {
+    @apply inline-block -mt-0.5;
+}
+</style>

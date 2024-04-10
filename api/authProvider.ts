@@ -1,25 +1,23 @@
-import { NuxtAxiosInstance } from '@nuxtjs/axios'
-import { LoginResponseInterface } from '~/api/login'
+import type { LoginResponseInterface } from '@/api/login'
+import { useApi } from '@/api/api'
 
 export interface GoogleAuthRequestInterface {
     token: string
 }
 
 export function googleAuthProvider(
-    http: NuxtAxiosInstance,
     data: GoogleAuthRequestInterface,
     captchaChallenge: string
 ): Promise<LoginResponseInterface> {
-    return http.$post<LoginResponseInterface>(
+    return useApi<LoginResponseInterface>(
         '/api/auth/provider/google',
         {
-            token: data.token,
-        },
-        {
+            method: 'POST',
+            body: data,
             headers: {
-                'X-CT-Captcha-Challenge': captchaChallenge,
+                'X-CT-Captcha-Challenge': captchaChallenge
             },
-            withCredentials: true,
+            credentials: 'include'
         }
     )
 }

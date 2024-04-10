@@ -1,22 +1,25 @@
 <template>
-    <div class="row">
-        <div class="col-md-8 ml-md-auto mr-md-auto">
-            <Login></Login>
+    <section class="flex justify-center">
+        <div class="auth-container mb-8">
+            <p class="text-2xl text-gray-400 text-center mt-14 mb-8">
+                {{ t('signIn.signIn') }}
+            </p>
+            <login />
         </div>
-    </div>
+    </section>
 </template>
 
-<script lang="ts">
-import { Component, Mixins } from 'vue-property-decorator'
-import Login from '~/components/Auth/Login.vue'
-import GuestOnly from '~/shared/GuestOnly'
+<script setup lang="ts">
+import { definePageMeta, useI18n, useHead } from '#imports'
+import Login from '@/components/Auth/Login.vue'
 
-@Component({
-    components: { Login },
-    head: {
-        title: 'Login | Cash Track',
-    },
-    nuxtI18n: false,
+const { t } = useI18n()
+
+definePageMeta({
+    title: 'signIn.title'
 })
-export default class LoginPage extends Mixins(GuestOnly) {}
+
+useHead({
+    title: t('signIn.title')
+})
 </script>

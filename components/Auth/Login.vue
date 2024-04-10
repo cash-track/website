@@ -1,252 +1,224 @@
-<template>
-    <b-form novalidate @submit="onSubmit">
-        <b-card footer-tag="footer" header-tag="header">
-            <template v-slot:header>{{ $t('signIn.signIn') }}</template>
+<script setup lang="ts">
+import type { Form, FormSubmitEvent } from '#ui/types'
+import { useReCaptcha } from 'vue-recaptcha-v3'
+import { onMounted, useI18n, useLocalePath, useRuntimeConfig } from '#imports'
+import { useLoader } from '@/shared/Loader'
+import { login, type LoginRequestInterface, type LoginResponseInterface } from '@/api/login'
+import { useValidationMessager } from '@/shared/ValidatorMessager'
+import { profileGet } from '@/api/profile'
+import { useAuthStore } from '@/store/auth'
+import { googleAuthProvider } from '@/api/authProvider'
 
-            <b-form-group
-                label-align-md="right"
-                label-cols-md="4"
-                label-for="email"
-                :invalid-feedback="validationMessage('email')"
-                :state="validationState('email')"
-            >
-                <template v-slot:label>{{ $t('signIn.email') }}</template>
-                <b-form-input
-                    id="email"
-                    v-model="form.email"
-                    class="col-md-8"
-                    required
-                    type="email"
-                    :disabled="isLoading"
-                    :state="validationState('email')"
-                    @change="resetValidationMessage('email')"
-                ></b-form-input>
-            </b-form-group>
+const { t } = useI18n()
+const loader = useLoader()
+const messager = useValidationMessager()
+const config = useRuntimeConfig()
+const recaptchaInstance = useReCaptcha()
+const store = useAuthStore()
+const localePath = useLocalePath()
 
-            <b-form-group
-                label-align-md="right"
-                label-cols-md="4"
-                label-for="password"
-                :invalid-feedback="validationMessage('password')"
-                :state="validationState('password')"
-            >
-                <template v-slot:label>{{ $t('signIn.password') }}</template>
-                <b-form-input
-                    id="password"
-                    v-model="form.password"
-                    class="col-md-8"
-                    required
-                    type="password"
-                    :disabled="isLoading"
-                    :state="validationState('password')"
-                    @change="resetValidationMessage('password')"
-                ></b-form-input>
-            </b-form-group>
+const request = reactive<LoginRequestInterface>({
+    email: '',
+    password: '',
+    remember: false
+})
+const form = ref<Form<LoginRequestInterface>>()
 
-            <b-alert
-                variant="warning"
-                fade
-                dismissible
-                :show="hasMessage"
-                @dismissed="resetMessage()"
-            >
-                <b-icon-exclamation-triangle-fill></b-icon-exclamation-triangle-fill>
-                {{ message }}
-            </b-alert>
+const recaptcha = async () => {
+    await recaptchaInstance?.recaptchaLoaded()
+    return await recaptchaInstance?.executeRecaptcha('login')
+}
 
-            <b-form-group label-align-md="right" label-cols-md="4">
-                <b-button to="/register" variant="link">
-                    {{ $t('signIn.dontHaveAccount') }}
-                </b-button>
-            </b-form-group>
+async function onSubmit(event: FormSubmitEvent<LoginRequestInterface>) {
+    form?.value?.clear()
+    loader.setLoading()
+    messager.resetMessage()
 
-            <b-form-group
-                label-align-md="right"
-                label-cols-md="4"
-                content-cols-md="5"
-            >
-                <div id="login-google-button"></div>
-            </b-form-group>
+    let challenge: string | undefined
 
-            <template v-slot:footer>
-                <div class="form-row">
-                    <b-col md="8" offset-md="4">
-                        <b-button
-                            :disabled="isLoading"
-                            type="submit"
-                            variant="primary"
-                            @click="onSubmit"
-                        >
-                            {{ $t('signIn.login') }}
-                            <b-spinner v-show="isLoading" small></b-spinner>
-                        </b-button>
-                        <b-button to="/password/forgot" variant="link">
-                            {{ $t('signIn.forgotPassword') }}
-                        </b-button>
-                    </b-col>
-                </div>
-            </template>
-        </b-card>
-    </b-form>
-</template>
+    try {
+        challenge = await recaptcha()
 
-<script lang="ts">
-import { Mixins, Component } from 'vue-property-decorator'
-import Loader from '~/shared/Loader'
-import Messager from '~/shared/Messager'
-import Validator from '~/shared/Validator'
-import {
-    login,
-    LoginRequestInterface,
-    LoginResponseInterface,
-} from '~/api/login'
-import { googleAuthProvider } from '~/api/authProvider'
-import { profileGet } from '~/api/profile'
-
-@Component
-export default class Login extends Mixins(Loader, Messager, Validator) {
-    form: LoginRequestInterface = {
-        email: '',
-        password: '',
-        remember: false,
+        if (challenge === undefined) {
+            throw new Error('empty challenge')
+        }
+    } catch (error) {
+        console.log('Captcha error: ', error)
+        messager.setMessage(t('error.captcha'))
+        loader.setLoaded()
+        return
     }
 
-    async mounted() {
-        try {
-            await this.$recaptcha.init()
-        } catch (error) {
-            // eslint-disable-next-line no-console
-            console.error('Captcha init error: ', error)
-        }
+    let loginResponse: LoginResponseInterface
 
-        this.initGoogleButton()
+    try {
+        loginResponse = await login(event.data, challenge)
+    } catch (error) {
+        loader.setLoaded()
+        messager.dispatchError(error)
+        return
     }
 
-    protected initGoogleButton() {
-        const btn = document.getElementById('login-google-button')
-
-        if (!btn) {
-            return
-        }
-
-        // eslint-disable-next-line no-undef
-        google.accounts.id.initialize({
-            client_id: this.$config.googleAuth.clientId,
-            context: 'signin',
-            callback: this.onLoggedByGoogle,
-            ux_mode: 'popup',
-        })
-
-        // eslint-disable-next-line no-undef
-        google.accounts.id.renderButton(btn, {
-            type: 'standard',
-            theme: 'outline',
-            size: 'large',
-            text: 'signin_with',
-        })
+    try {
+        const profileResponse = await profileGet()
+        store.login(profileResponse.data)
+    } catch (error) {
+        loader.setLoaded()
+        messager.dispatchError(error)
+        return
     }
 
-    beforeDestroy() {
-        this.$recaptcha.destroy()
+    onSuccess(loginResponse)
+}
+
+async function onLoggedByGoogle(response: any) {
+    form?.value?.clear()
+    loader.setLoading()
+    messager.resetMessage()
+
+    if (!response?.credential) {
+        console.log('Google auth error: ', response)
+        messager.setMessage(t('error.googleLogin'))
+        loader.setLoaded()
+        return
     }
 
-    protected async onLoggedByGoogle(response: any) {
-        this.resetValidationMessages()
-        this.resetMessage()
-        this.setLoading()
+    let challenge: string | undefined
 
-        if (!response.credential) {
-            // eslint-disable-next-line no-console
-            console.log('Google auth error: ', response)
-            this.setMessage(
-                'Unable to login by Google. Please try again later or refresh page.'
-            )
-            this.setLoaded()
-            return
+    try {
+        challenge = await recaptcha()
+
+        if (challenge === undefined) {
+            throw new Error('empty challenge')
         }
-
-        let challenge = ''
-
-        try {
-            challenge = await this.$recaptcha.execute('login')
-        } catch (error) {
-            // eslint-disable-next-line no-console
-            console.log('Captcha execute error: ', error)
-            this.setLoaded()
-            return
-        }
-
-        let loginResponse: LoginResponseInterface
-
-        try {
-            loginResponse = await googleAuthProvider(
-                this.$axios,
-                {
-                    token: response.credential,
-                },
-                challenge
-            )
-        } catch (error) {
-            this.dispatchError(error)
-            this.setLoaded()
-            return
-        }
-
-        try {
-            const profileResponse = await profileGet(this.$axios)
-            this.$store.commit('auth/login', profileResponse.data)
-        } catch (error) {
-            this.dispatchError(error)
-            this.setLoaded()
-            // return
-        }
-
-        this.onSuccess(loginResponse)
+    } catch (error) {
+        console.log('Captcha error: ', error)
+        messager.setMessage(t('error.captcha'))
+        loader.setLoaded()
+        return
     }
 
-    protected async onSubmit(event: Event) {
-        event.preventDefault()
-        event.stopPropagation()
+    let loginResponse: LoginResponseInterface
 
-        this.resetValidationMessages()
-        this.resetMessage()
-        this.setLoading()
-
-        let challenge = ''
-
-        try {
-            challenge = await this.$recaptcha.execute('login')
-        } catch (error) {
-            // eslint-disable-next-line no-console
-            console.log('Captcha execute error: ', error)
-            this.setLoaded()
-            return
-        }
-
-        let loginResponse: LoginResponseInterface
-
-        try {
-            loginResponse = await login(this.$axios, this.form, challenge)
-        } catch (error) {
-            this.dispatchError(error)
-            this.setLoaded()
-            return
-        }
-
-        try {
-            const profileResponse = await profileGet(this.$axios)
-            this.$store.commit('auth/login', profileResponse.data)
-        } catch (error) {
-            this.dispatchError(error)
-            this.setLoaded()
-            return
-        }
-
-        this.onSuccess(loginResponse)
+    try {
+        loginResponse = await googleAuthProvider({
+            token: response.credential
+        }, challenge)
+    } catch (error) {
+        loader.setLoaded()
+        messager.dispatchError(error)
+        return
     }
 
-    protected onSuccess(response: LoginResponseInterface) {
-        window.location.href = response.redirectUrl
+    try {
+        const profileResponse = await profileGet()
+        store.login(profileResponse.data)
+    } catch (error) {
+        loader.setLoaded()
+        messager.dispatchError(error)
+        return
     }
+
+    onSuccess(loginResponse)
+}
+
+function onSuccess(response: LoginResponseInterface) {
+    window.location.href = response.redirectUrl
+}
+
+onMounted(() => {
+    initGoogleAuthButton()
+})
+
+function initGoogleAuthButton() {
+    const btn = document.getElementById('login-google-button')
+
+    if (!btn) {
+        return
+    }
+
+    // @ts-ignore
+    google.accounts.id.initialize({
+        client_id: config.public.googleClientId,
+        context: 'signin',
+        callback: onLoggedByGoogle,
+        ux_mode: 'popup'
+    })
+
+    // @ts-ignore
+    google.accounts.id.renderButton(btn, {
+        type: 'standard',
+        theme: 'outline',
+        size: 'large',
+        text: 'signin_with'
+    })
 }
 </script>
+
+<template>
+    <UCard :ui="{body: {padding: 'px-6 py-6 sm:p-10'}}">
+        <UForm ref="form" :state="request" @submit="onSubmit">
+            <UFormGroup
+                class="mb-6"
+                size="xl"
+                :label="$t('signIn.email')"
+                name="email"
+                :disabled="loader.isLoading()"
+                :ui="{label:{wrapper: 'flex content-center items-center justify-between mb-4'}}"
+                :error="messager.validationMessage('email')"
+                @change="messager.resetValidationMessage('email')"
+            >
+                <UInput v-model="request.email" />
+            </UFormGroup>
+
+            <UFormGroup
+                class="mb-6"
+                size="xl"
+                :label="$t('signIn.password')"
+                name="password"
+                :disabled="loader.isLoading()"
+                :ui="{label:{wrapper: 'flex content-center items-center justify-between mb-4'}}"
+                :error="messager.validationMessage('password')"
+                @change="messager.resetValidationMessage('password')"
+            >
+                <UInput v-model="request.password" type="password" />
+            </UFormGroup>
+
+            <ULink :to="localePath('/password/forgot')" class="link block mb-6">
+                {{ $t('signIn.forgotPassword') }}
+            </ULink>
+
+            <UAlert
+                v-if="messager.hasMessage"
+                class="mb-6"
+                icon="i-heroicons-exclamation-triangle-16-solid"
+                color="orange"
+                variant="subtle"
+                :description="messager.getMessage()"
+            />
+
+            <UButton
+                type="submit"
+                block
+                size="lg"
+                class="mb-6"
+                :loading="loader.isLoading()"
+                :disabled="loader.isLoading()"
+            >
+                {{ $t('signIn.login') }}
+            </UButton>
+
+            <UDivider :label="$t('signIn.or')" class="mb-6" />
+
+            <div id="login-google-button" class="mb-6" />
+
+            <ULink :to="localePath('/register')" class="link">
+                {{ $t('signIn.dontHaveAccount') }}
+            </ULink>
+        </UForm>
+    </UCard>
+</template>
+
+<style scoped lang="scss">
+
+</style>

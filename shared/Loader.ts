@@ -1,18 +1,26 @@
-import { Vue, Component } from 'vue-property-decorator'
+import type { Ref } from 'vue'
+import { ref } from '#imports'
 
-@Component
-export default class Loader extends Vue {
-    public loading = false
+export function useLoader(): Loader {
+    return new Loader()
+}
+
+class Loader {
+    public loading: Ref<boolean>
+
+    constructor() {
+        this.loading = ref<boolean>(false)
+    }
 
     public setLoading() {
-        this.loading = true
+        this.loading.value = true
     }
 
     public setLoaded() {
-        this.loading = false
+        this.loading.value = false
     }
 
-    get isLoading(): boolean {
-        return this.loading
+    public isLoading(): boolean {
+        return this.loading.value
     }
 }

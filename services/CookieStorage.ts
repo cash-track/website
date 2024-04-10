@@ -1,12 +1,12 @@
-import Cookies, { CookieAttributes } from 'js-cookie'
-import { StorageInterface, StorageItemInterface } from '~/services/LocalStorage'
+import Cookies from 'js-cookie'
+import type { StorageInterface, StorageItemInterface } from '@/services/LocalStorage'
 
 export class CookieStorage implements StorageInterface {
-    protected options: CookieAttributes = {
+    protected options: Cookies.CookieAttributes = {
         expires: 7,
         path: '',
         secure: true,
-        sameSite: 'strict',
+        sameSite: 'strict'
     }
 
     has(key: string): boolean {
@@ -32,7 +32,7 @@ export class CookieStorage implements StorageInterface {
 
         return {
             key,
-            value: cookie,
+            value: cookie
         }
     }
 

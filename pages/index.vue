@@ -1,92 +1,106 @@
 <template>
-    <div class="landing-page">
-        <b-jumbotron
-            class="welcome"
-            :header="$t('home.header')"
-            :lead="$t('home.lead')"
-        >
+    <div>
+        <div class="jumbotron welcome">
+            <h2>{{ $t('home.header') }}</h2>
+            <p class="lead">
+                {{ $t('home.lead') }}
+            </p>
             <p>{{ $t('home.banner') }}</p>
             <span v-if="isProfileLoading || !isLogged">
-                <b-button
-                    variant="primary"
+                <UButton
+                    variant="solid"
+                    color="primary"
+                    size="lg"
                     :disabled="isProfileLoading"
-                    :to="{ name: 'login' }"
-                    >{{ $t('home.login') }}</b-button
+                    :to="localePath('login')"
                 >
+                    {{ $t('home.login') }}
+                </UButton>
                 {{ $t('home.or') }}
-                <b-button
-                    variant="primary"
+                <UButton
+                    variant="solid"
+                    color="primary"
+                    size="lg"
                     :disabled="isProfileLoading"
-                    :to="{ name: 'register' }"
-                    >{{ $t('home.register') }}</b-button
+                    :to="localePath('register')"
                 >
+                    {{ $t('home.register') }}
+                </UButton>
             </span>
             <span v-if="isLogged">
-                <b-button variant="primary" :href="walletsLink">
+                <UButton
+                    variant="solid"
+                    color="primary"
+                    size="lg"
+                    :disabled="isProfileLoading"
+                    :to="webAppLinks.walletsLink"
+                >
                     {{ $t('home.wallets') }}
-                </b-button>
+                </UButton>
             </span>
-        </b-jumbotron>
-        <b-row>
-            <b-col md="4">
+        </div>
+
+        <div class="row mb-4">
+            <div class="col mb-4 sm:basis-1/3">
                 <h3>🤌 {{ $t('home.easy') }}</h3>
                 <p>{{ $t('home.easyDescription') }}</p>
-            </b-col>
-            <b-col md="4">
+            </div>
+            <div class="col mb-4 sm:basis-1/3">
                 <h3>💫 {{ $t('home.fast') }}</h3>
                 <p>{{ $t('home.fastDescription') }}</p>
-            </b-col>
-            <b-col md="4">
+            </div>
+            <div class="col mb-4 sm:basis-1/3">
                 <h3>☔️ {{ $t('home.secure') }}</h3>
                 <p>{{ $t('home.secureDescription') }}</p>
-            </b-col>
-        </b-row>
-        <b-jumbotron
-            class="telegram"
-            header-level="4"
-            :header="$t('home.telegram.header')"
-            :lead="$t('home.telegram.lead')"
-        >
+            </div>
+        </div>
+
+        <div class="jumbotron telegram">
+            <h3>{{ $t('home.telegram.header') }}</h3>
+            <p class="lead">
+                {{ $t('home.telegram.lead') }}
+            </p>
             <span>
-                <b-button
-                    href="https://t.me/cash_track"
+                <UButton
+                    color="primary"
+                    variant="outline"
+                    size="lg"
+                    to="https://t.me/cash_track"
                     target="_blank"
-                    variant="outline-primary"
+                    class="hover:bg-primary-500 hover:text-white transition-colors"
                 >
-                    {{ $t('home.telegram.subscribe') }} <tg-icon></tg-icon>
-                </b-button>
+                    {{ $t('home.telegram.subscribe') }} <TgIcon />
+                </UButton>
             </span>
-        </b-jumbotron>
+        </div>
     </div>
 </template>
 
-<script lang="ts">
-import { Component, Mixins } from 'vue-property-decorator'
+<script setup lang="ts">
+import { useHead, defineI18nRoute, useLocalePath, useI18n, computed } from '#imports'
+import { useWebAppLinks } from '@/shared/WebAppLinks'
+import { useAuthStore } from '@/store/auth'
 import TgIcon from '@/components/Shared/TgIcon.vue'
-import WebAppLinks from '~/shared/WebAppLinks'
 
-@Component({
-    head: {
-        title: 'Cash Track',
-    },
-    nuxtI18n: false,
-    components: { TgIcon },
+const { t } = useI18n()
+const localePath = useLocalePath()
+const webAppLinks = useWebAppLinks()
+const auth = useAuthStore()
+
+useHead({
+    title: t('home.title'),
+    meta: [{ property: 'og:title', content: t('home.title') }]
 })
-export default class IndexPage extends Mixins(WebAppLinks) {
-    get isLogged(): boolean {
-        return this.$store.state.auth.isLogged
-    }
+defineI18nRoute(false)
 
-    get isProfileLoading(): boolean {
-        return this.$store.state.auth.isProfileLoading
-    }
-}
+const isLogged = computed(() => auth.isLogged)
+const isProfileLoading = computed(() => auth.isProfileLoading)
 </script>
 
 <style scoped lang="scss">
-@import 'node_modules/bootstrap/scss/functions';
-@import 'node_modules/bootstrap/scss/variables';
-@import 'node_modules/bootstrap/scss/mixins/_breakpoints';
+h3 {
+    @apply text-3xl;
+}
 
 .telegram {
     background-image: url('/img/tg-logo.png');
@@ -98,12 +112,12 @@ export default class IndexPage extends Mixins(WebAppLinks) {
 
 .welcome {
     background: linear-gradient(
-        -45deg,
-        #ee7752,
-        #e73c7e,
-        #23a6d5,
-        #23d5ab,
-        #5ccb80
+            -45deg,
+            #ee7752,
+            #e73c7e,
+            #23a6d5,
+            #23d5ab,
+            #5ccb80
     );
     background-size: 400% 400%;
     animation: gradient 60s ease infinite;
@@ -112,19 +126,13 @@ export default class IndexPage extends Mixins(WebAppLinks) {
 
 @keyframes gradient {
     0% {
-        background-position: 0% 50%;
+        background-position: 0 50%;
     }
     50% {
         background-position: 100% 50%;
     }
     100% {
-        background-position: 0% 50%;
-    }
-}
-
-@include media-breakpoint-down(sm) {
-    .welcome .display-3 {
-        font-size: 3rem;
+        background-position: 0 50%;
     }
 }
 </style>

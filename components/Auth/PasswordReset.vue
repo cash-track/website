@@ -1,178 +1,161 @@
-<template>
-    <b-form novalidate @submit="onSubmit">
-        <b-card footer-tag="footer" header-tag="header">
-            <template v-slot:header>
-                {{ $t('passwordReset.title') }}
-            </template>
+<script setup lang="ts">
+import type { Form } from '#ui/types'
+import { useReCaptcha } from 'vue-recaptcha-v3'
+import { useI18n, useLocalePath } from '#imports'
+import { useLoader } from '@/shared/Loader'
+import { useValidationMessager } from '@/shared/ValidatorMessager'
+import { resetPassword, type ResetPasswordRequestInterface } from '@/api/password'
 
-            <b-form-group
-                v-if="!isCodeInvalid && !isSuccess"
-                label-align-md="right"
-                label-cols-md="4"
-                label-for="password"
-                :invalid-feedback="validationMessage('password')"
-                :state="validationState('password')"
-            >
-                <template v-slot:label>
-                    {{ $t('passwordReset.newPassword') }}
-                    <span class="text-danger">*</span>
-                </template>
-                <b-form-input
-                    id="password"
-                    v-model="form.password"
-                    class="col-md-8"
-                    required
-                    type="password"
-                    :disabled="isLoading"
-                    :state="validationState('password')"
-                    @input="resetValidationMessage('password')"
-                ></b-form-input>
-            </b-form-group>
+const { t } = useI18n()
+const loader = useLoader()
+const messager = useValidationMessager()
+const localePath = useLocalePath()
+const recaptchaInstance = useReCaptcha()
+const props = defineProps<{
+    code: string
+}>()
 
-            <b-form-group
-                v-if="!isCodeInvalid && !isSuccess"
-                label-cols-md="4"
-                label-align-md="right"
-                label-for="password-confirmation"
-                :invalid-feedback="validationMessage('passwordConfirmation')"
-                :state="validationState('passwordConfirmation')"
-            >
-                <template v-slot:label>
-                    {{ $t('passwordReset.newPasswordConfirmation') }}
-                    <span class="text-danger">*</span>
-                </template>
-                <b-form-input
-                    id="password-confirmation"
-                    v-model="form.passwordConfirmation"
-                    class="col-md-8"
-                    type="password"
-                    required
-                    :state="validationState('passwordConfirmation')"
-                    :disabled="isLoading"
-                    @input="resetValidationMessage('passwordConfirmation')"
-                ></b-form-input>
-            </b-form-group>
+const request = reactive<ResetPasswordRequestInterface>({
+    code: '',
+    password: '',
+    passwordConfirmation: ''
+})
+const isSuccess = ref<boolean>(false)
+const isCodeInvalid = ref<boolean>(false)
+const form = ref<Form<ResetPasswordRequestInterface>>()
+const recaptcha = async () => {
+    await recaptchaInstance?.recaptchaLoaded()
+    return await recaptchaInstance?.executeRecaptcha('resetPassword')
+}
 
-            <b-alert
-                variant="warning"
-                fade
-                dismissible
-                :show="hasMessage && !isSuccess"
-                @dismissed="resetMessage()"
-            >
-                <b-icon-exclamation-triangle-fill></b-icon-exclamation-triangle-fill>
-                {{ message }}
-            </b-alert>
+messager.disableUnprocessableEntityMessage()
 
-            <b-alert variant="success" fade :show="isSuccess">
-                <b-icon-check2-circle></b-icon-check2-circle>
-                {{ $t('passwordReset.success[0]') }}
-                {{ $t('passwordReset.success[1]') }}
-                <nuxt-link to="/login">
-                    {{ $t('passwordReset.success[2]') }}
-                </nuxt-link>
-                {{ $t('passwordReset.success[3]') }}
-            </b-alert>
+async function onSubmit() {
+    form?.value?.clear()
+    loader.setLoading()
+    messager.resetMessage()
 
-            <b-alert variant="warning" fade :show="isCodeInvalid">
-                <b-icon-exclamation-triangle-fill></b-icon-exclamation-triangle-fill>
-                {{ $t('passwordReset.codeInvalid[0]') }}
-                {{ $t('passwordReset.codeInvalid[1]') }}
-                <nuxt-link to="/password/forgot">
-                    {{ $t('passwordReset.codeInvalid[2]') }}
-                </nuxt-link>
-                {{ $t('passwordReset.codeInvalid[3]') }}
-            </b-alert>
-
-            <template v-if="!isSuccess && !isCodeInvalid" v-slot:footer>
-                <div class="form-row">
-                    <b-col md="8" offset-md="4">
-                        <b-button
-                            :disabled="isLoading"
-                            type="submit"
-                            variant="primary"
-                            @click="onSubmit"
-                        >
-                            {{ $t('passwordReset.reset') }}
-                            <b-spinner v-show="isLoading" small></b-spinner>
-                        </b-button>
-                    </b-col>
-                </div>
-            </template>
-        </b-card>
-    </b-form>
-</template>
-
-<script lang="ts">
-import { Mixins, Component, Prop } from 'vue-property-decorator'
-import Loader from '~/shared/Loader'
-import Messager from '~/shared/Messager'
-import Validator from '~/shared/Validator'
-import { resetPassword, ResetPasswordRequestInterface } from '~/api/password'
-import { ValidationResponseInterface } from '~/api/response'
-
-@Component
-export default class PasswordReset extends Mixins(Loader, Messager, Validator) {
-    @Prop()
-    resetCode!: string
-
-    form: ResetPasswordRequestInterface = {
-        code: '',
-        password: '',
-        passwordConfirmation: '',
+    if (props.code === undefined) {
+        isCodeInvalid.value = true
+        return
     }
 
-    isSuccess: boolean = false
+    request.code = props.code
 
-    isCodeInvalid: boolean = false
+    let challenge: string | undefined
 
-    async mounted() {
-        this.form.code = this.resetCode
+    try {
+        challenge = await recaptcha()
 
-        try {
-            await this.$recaptcha.init()
-        } catch (error) {
-            // eslint-disable-next-line no-console
-            console.error('Captcha init error: ', error)
+        if (challenge === undefined) {
+            throw new Error('empty challenge')
         }
+    } catch (error) {
+        console.log('Captcha error: ', error)
+        messager.setMessage(t('error.captcha'))
+        loader.setLoaded()
+        return
     }
 
-    beforeDestroy() {
-        this.$recaptcha.destroy()
+    try {
+        await resetPassword(request, challenge)
+        isSuccess.value = true
+    } catch (error) {
+        loader.setLoaded()
+        messager.dispatchError(error)
+        isCodeInvalid.value = messager.hasValidationMessage('code')
+        return
     }
 
-    async onSubmit() {
-        this.resetMessage()
-        this.resetValidationMessages()
-        this.setLoading()
-
-        let challenge = ''
-
-        try {
-            challenge = await this.$recaptcha.execute('login')
-        } catch (error) {
-            // eslint-disable-next-line no-console
-            console.log('Captcha execute error: ', error)
-        }
-
-        resetPassword(this.$axios, this.form, challenge)
-            .then(this.onSuccess)
-            .catch(this.dispatchError)
-            .finally(this.setLoaded)
-    }
-
-    onSuccess() {
-        this.isSuccess = true
-    }
-
-    protected onUnprocessableEntityResponse(
-        response: ValidationResponseInterface
-    ) {
-        this.setValidationMessages(response.errors)
-
-        if (this.hasValidationMessage('code')) {
-            this.isCodeInvalid = true
-        }
-    }
+    loader.setLoaded()
 }
 </script>
+
+<template>
+    <UCard :ui="{body: {padding: 'px-6 py-6 sm:p-10'}}">
+        <UForm ref="form" :state="request" @submit="onSubmit">
+            <UFormGroup
+                v-if="!isCodeInvalid && !isSuccess"
+                class="mb-6"
+                size="xl"
+                :label="$t('passwordReset.newPassword')"
+                name="password"
+                :disabled="loader.isLoading()"
+                :ui="{label:{wrapper: 'flex content-center items-center justify-between mb-4'}}"
+                :error="messager.validationMessage('password')"
+                @change="messager.resetValidationMessage('password')"
+            >
+                <UInput v-model="request.password" type="password" />
+            </UFormGroup>
+
+            <UFormGroup
+                v-if="!isCodeInvalid && !isSuccess"
+                class="mb-6"
+                size="xl"
+                :label="$t('passwordReset.newPasswordConfirmation')"
+                name="password-confirmation"
+                :disabled="loader.isLoading()"
+                :ui="{label:{wrapper: 'flex content-center items-center justify-between mb-4'}}"
+                :error="messager.validationMessage('passwordConfirmation')"
+                @change="messager.resetValidationMessage('passwordConfirmation')"
+            >
+                <UInput v-model="request.passwordConfirmation" type="password" />
+            </UFormGroup>
+
+            <UAlert
+                v-if="messager.hasMessage && !isSuccess"
+                class="mb-6"
+                icon="i-heroicons-exclamation-triangle-16-solid"
+                color="orange"
+                variant="subtle"
+                :description="messager.getMessage()"
+            />
+
+            <UAlert
+                v-if="isCodeInvalid"
+                class="mb-6"
+                icon="i-heroicons-exclamation-triangle-16-solid"
+                color="orange"
+                variant="subtle"
+            >
+                <template #description>
+                    {{ $t('passwordReset.codeInvalid[0]') }}
+                    {{ $t('passwordReset.codeInvalid[1]') }}
+                    <ULink :to="localePath('/password/forgot')" class="link">
+                        {{ $t('passwordReset.codeInvalid[2]') }}
+                    </ULink>
+                    {{ $t('passwordReset.codeInvalid[3]') }}
+                </template>
+            </UAlert>
+
+            <UAlert
+                v-if="isSuccess"
+                class="mb-6"
+                color="primary"
+                variant="subtle"
+                icon="i-heroicons-check-badge-16-solid"
+            >
+                <template #description>
+                    {{ $t('passwordReset.success[0]') }}
+                    {{ $t('passwordReset.success[1]') }}
+                    <ULink :to="localePath('/login')" class="link">
+                        {{ $t('passwordReset.success[2]') }}
+                    </ULink>
+                    {{ $t('passwordReset.success[3]') }}
+                </template>
+            </UAlert>
+
+            <UButton
+                v-if="!isSuccess && !isCodeInvalid"
+                type="submit"
+                block
+                size="lg"
+                class="mb-6"
+                :loading="loader.isLoading()"
+                :disabled="loader.isLoading()"
+            >
+                {{ $t('passwordReset.reset') }}
+            </UButton>
+        </UForm>
+    </UCard>
+</template>

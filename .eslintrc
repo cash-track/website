@@ -1,0 +1,17 @@
+{
+    "root": true,
+    "extends": [
+        "@nuxtjs/eslint-config-typescript"
+    ],
+    "rules": {
+        "indent": ["error", 4],
+        "space-before-function-paren": "off",
+        "no-console": "off",
+        "vue/html-indent": ["error", 4],
+        "vue/multi-word-component-names": "off",
+        "vue/no-v-html": "off"
+    },
+    "ignorePatterns": [
+        "./.nuxt", "./node_modules"
+    ]
+}
