@@ -4,7 +4,7 @@
             <p class="text-2xl text-gray-400 text-center mt-14 mb-8">
                 {{ t('passwordReset.passwordReset') }}
             </p>
-            <password-reset :code="route.params?.code?.toString" />
+            <password-reset :code="route.params?.code?.toString()" />
         </div>
     </section>
 </template>
