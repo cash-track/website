@@ -22,6 +22,7 @@ export default {
         email: 'Email',
         password: 'Пароль',
         login: 'Увійти',
+        loginWithPasskey: 'Увійти Ключем Доступу',
         forgotPassword: 'Забули пароль?',
         dontHaveAccount: 'Досі не маєте аккаунту?',
         or: 'АБО'

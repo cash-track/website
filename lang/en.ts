@@ -22,6 +22,7 @@ export default {
         email: 'Email',
         password: 'Password',
         login: 'Login',
+        loginWithPasskey: 'Login with Passkey',
         forgotPassword: 'Forgot Your Password?',
         dontHaveAccount: 'Don\'t have an account?',
         or: 'OR'
