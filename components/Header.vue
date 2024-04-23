@@ -222,12 +222,22 @@ function onMobileHeaderClick() {
 </script>
 
 <style lang="scss">
-html, .footer, .header {
-    background: #f5f5f5;
+html.dark {
+    &, .footer, .header {
+        @apply bg-gray-800;
+
+        body {
+            @apply bg-gray-700;
+        }
+    }
 }
 
-body {
-    background: #fff;
+html, .footer, .header {
+    @apply bg-gray-100;
+
+    body {
+        @apply bg-white;
+    }
 }
 
 @media (min-width: 768px) {
@@ -238,7 +248,7 @@ body {
 }
 
 .header {
-    @apply mb-5 py-2 px-4;
+    @apply mb-5 py-2 px-4 dark:border-gray-600;
 
     border-bottom: 1px solid #e5e5e5;
 
@@ -278,13 +288,13 @@ body {
                 }
 
                 & > span:last-child {
-                    @apply text-black/50 hover:text-black/70 active:text-black/70;
+                    @apply text-black/50 hover:text-black/70 active:text-black/70 dark:text-white/80 dark:hover:text-green-500/100 dark:active:text-green-500/100;
                 }
             }
         }
 
         .navbar-link {
-            @apply text-black/50 hover:text-black/70 active:text-black/70;
+            @apply text-black/50 hover:text-black/70 active:text-black/70 dark:text-white/80 dark:hover:text-green-500/100 dark:active:text-green-500/100;
         }
 
         ul {
@@ -292,10 +302,10 @@ body {
 
             li {
                 a {
-                    @apply block px-2 py-2 text-black/50 hover:text-black/70 active:text-black/70;
+                    @apply block px-2 py-2 text-black/50 hover:text-black/70 active:text-black/70 dark:text-white/80 dark:hover:text-green-500/100 dark:active:text-green-500/100;
 
                     &.active {
-                        @apply text-black/90;
+                        @apply text-black/90 dark:text-green-500/80;
                     }
                 }
             }
