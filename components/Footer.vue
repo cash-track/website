@@ -38,7 +38,7 @@ const localePath = useLocalePath()
 
 <style lang="scss">
 .footer {
-    @apply py-5 px-0 w-full h-14 bottom-0 mt-4 text-sm border-t border-t-gray-200;
+    @apply py-5 px-0 w-full h-14 bottom-0 mt-4 text-sm border-t border-t-gray-200 dark:border-gray-600;
 
     .nav {
         li {

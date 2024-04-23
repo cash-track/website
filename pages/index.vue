@@ -108,6 +108,8 @@ h3 {
     background-repeat: no-repeat;
     background-position: calc(100% + 120px) 40px;
     background-color: #f5fff5;
+
+    @apply dark:bg-gray-900;
 }
 
 .welcome {
@@ -122,6 +124,19 @@ h3 {
     background-size: 400% 400%;
     animation: gradient 60s ease infinite;
     color: #f5fff5;
+}
+
+.dark .welcome {
+    background: linear-gradient(
+            -45deg,
+            #4d261a,
+            #671a38,
+            #155369,
+            #156552,
+            #235633
+    );
+    background-size: 400% 400%;
+    animation: gradient 60s ease infinite;
 }
 
 @keyframes gradient {
