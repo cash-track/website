@@ -55,6 +55,29 @@
             </div>
         </div>
 
+        <div class="jumbotron support">
+            <h3>
+                <span>
+                    {{ $t('home.support.header') }}
+                </span>
+            </h3>
+            <p class="lead">
+                <span>{{ $t('home.support.lead') }}</span>
+            </p>
+            <span>
+                <UButton
+                    color="primary"
+                    variant="soft"
+                    size="lg"
+                    to="https://supportukrainenow.org/"
+                    target="_blank"
+                    class="hover:bg-primary-500 hover:text-white transition-colors"
+                >
+                    {{ $t('home.support.help') }}
+                </UButton>
+            </span>
+        </div>
+
         <div class="jumbotron telegram">
             <h3>{{ $t('home.telegram.header') }}</h3>
             <p class="lead">
@@ -104,12 +127,28 @@ h3 {
 
 .telegram {
     background-image: url('/img/tg-logo.png');
-    background-size: contain;
-    background-repeat: no-repeat;
     background-position: calc(100% + 120px) 40px;
     background-color: #f5fff5;
 
-    @apply dark:bg-gray-900;
+    @apply bg-contain bg-no-repeat dark:bg-gray-900;
+}
+
+.support {
+    @apply z-0 relative overflow-hidden pb-24 dark:bg-gray-900;
+
+    h3 > span, p > span {
+        box-decoration-break: clone;
+        -webkit-box-decoration-break: clone;
+
+        @apply bg-cash-200 py-1 px-2 dark:bg-cash-950;
+    }
+
+    &:before {
+        background-image: url('/img/podarunok.jpg');
+        content: '';
+
+        @apply -z-10 absolute left-0 top-0 h-full w-full bg-bottom bg-no-repeat bg-cover;
+    }
 }
 
 .welcome {

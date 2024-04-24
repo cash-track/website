@@ -121,6 +121,12 @@ export default {
         secure: 'Secure',
         secureDescription: 'We\'re keeping your data protected. Sensitive personal data is encrypted using cryptographically strong algorithms',
 
+        support: {
+            header: 'Support Ukraine',
+            lead: 'Cash Track team supports Ukraine by making donation to various fundraising initiatives. As ukrainians it is our responsibility to work hard and make everything depends on us to help our country survive. Join us.',
+            help: 'How to help?'
+        },
+
         telegram: {
             header: 'Telegram',
             lead:
