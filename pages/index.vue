@@ -56,6 +56,9 @@
         </div>
 
         <div class="jumbotron support">
+            <video class="background-video" autoplay loop muted poster="/img/podarunok.jpg">
+                <source src="/img/bg.webm" type="video/webm">
+            </video>
             <h3>
                 <span>
                     {{ $t('home.support.header') }}
@@ -146,6 +149,13 @@ h3 {
     &:before {
         background-image: url('/img/podarunok.jpg');
         content: '';
+
+        @apply -z-10 absolute left-0 top-0 h-full w-full bg-bottom bg-no-repeat bg-cover;
+    }
+
+    .background-video {
+        object-fit: cover;
+        position: fixed;
 
         @apply -z-10 absolute left-0 top-0 h-full w-full bg-bottom bg-no-repeat bg-cover;
     }
