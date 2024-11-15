@@ -1,6 +1,6 @@
 FROM node:20-alpine
 
-ENV APP_ROOT /web
+ENV APP_ROOT=/web
 
 WORKDIR ${APP_ROOT}
 
