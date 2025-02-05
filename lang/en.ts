@@ -123,7 +123,7 @@ export default {
 
         support: {
             header: 'Support Ukraine',
-            lead: 'Cash Track team supports Ukraine by making donation to various fundraising initiatives. As ukrainians it is our responsibility to work hard and make everything depends on us to help our country survive. Join us.',
+            lead: 'Cash Track team contributes to various fundraising initiatives. As ukrainians it is our responsibility to work hard and make everything depends on us to help our country survive. Join us.',
             help: 'How to help?'
         },
 
