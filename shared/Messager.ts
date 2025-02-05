@@ -57,6 +57,9 @@ export class Messager {
         case 403:
             this.onForbiddenResponse(error.data)
             break
+        case 417:
+            this.onCsrfErrorResponse()
+            break
         case 422:
             this.onUnprocessableEntityResponse(error.data)
             break
@@ -76,6 +79,10 @@ export class Messager {
 
     protected onForbiddenResponse(response: ErrorResponseInterface) {
         this.setMessage(response.message)
+    }
+
+    protected onCsrfErrorResponse() {
+        window.location.reload()
     }
 
     protected onUnprocessableEntityResponse(
