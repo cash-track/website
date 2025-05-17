@@ -282,7 +282,7 @@ export default {
         },
         researchers: {
             0: 'Below is a list of researchers who have made significant contributions, along with the dates when they reported the vulnerabilities.',
-            1: 'As of today we are waiting for the first security report. We are open to any security issues and will be happy to acknowledge your contribution.',
+            1: 'As of today we are waiting for the first security report. We are open to any security issues and will be happy to acknowledge your contribution.'
         }
     },
 
@@ -317,7 +317,7 @@ export default {
             1: 'If you report a vulnerability to us and do not receive a response within 14 days, or if we do not address the vulnerability within 90 days of your report, you may publicly disclose the vulnerability. However, we kindly request that you:',
             2: 'Provide us with a reasonable opportunity to address the issue before public disclosure.',
             3: 'Redact any sensitive information in your public disclosure to minimize potential harm.',
-            4: 'We believe that 90 days is a reasonable timeframe for us to investigate and address most vulnerabilities. If we need more time, we will communicate this to you and provide regular updates on our progress.',
+            4: 'We believe that 90 days is a reasonable timeframe for us to investigate and address most vulnerabilities. If we need more time, we will communicate this to you and provide regular updates on our progress.'
         },
         reward: {
             0: 'Rewards for Reporting Vulnerabilities',
@@ -328,7 +328,7 @@ export default {
             5: 'The vulnerability must be in scope (i.e., affecting our systems or data).',
             6: 'The reporter must have followed our disclosure policy.',
             7: 'The vulnerability must be of sufficient severity.',
-            8: 'The decision to award a reward is at our sole discretion.',
+            8: 'The decision to award a reward is at our sole discretion.'
         },
         thanks: {
             0: 'Thank You',

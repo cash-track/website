@@ -17,7 +17,8 @@
                 color="blue"
                 variant="subtle"
                 icon="i-lucide-terminal"
-                :description="$t('securityAcknowledgement.researchers[1]')"></UAlert>
+                :description="$t('securityAcknowledgement.researchers[1]')"
+            />
         </div>
 
         <br>
