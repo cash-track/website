@@ -269,5 +269,21 @@ export default {
             0: '9. Grievance / Data Protection Officer:',
             1: 'If you have any queries or concerns about the processing of your information that is available with us, you may email our Grievance Officer at Cash Track, Vinnytsia, email: {email}. We will address your concerns in accordance with applicable law.'
         }
+    },
+
+    securityAcknowledgement: {
+        title: 'Security Acknowledgement - Cash Track',
+        link: 'Security Acknowledgement',
+        securityAcknowledgement: 'Security Acknowledgement',
+        effectiveDate: 'Effective Date 17-May-2025',
+        lastUpdated: 'Last Updated On 17-May-2025',
+
+        about: {
+            0: 'This page serves to acknowledge and thank the security researchers who have responsibly disclosed security vulnerabilities to us. Their contributions are invaluable in helping us maintain the security and integrity of our systems.'
+        },
+        researchers: {
+            0: 'Below is a list of researchers who have made significant contributions, along with the dates when they reported the vulnerabilities.',
+            1: 'As of today we are waiting for the first security report. We are open to any security issues and will be happy to acknowledge your contribution.',
+        }
     }
 }

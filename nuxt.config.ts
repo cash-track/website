@@ -116,21 +116,22 @@ export default defineNuxtConfig({
             {
                 code: 'en',
                 file: 'en.ts',
-                iso: 'en-US',
+                language: 'en-US',
                 name: '🇺🇸 English',
                 flag: '🇺🇸'
             },
             {
                 code: 'uk',
                 file: 'uk.ts',
-                iso: 'uk-UA',
+                language: 'uk-UA',
                 name: '🇺🇦 Українська',
                 flag: '🇺🇦'
             }
         ],
         defaultLocale: 'en',
         strategy: 'prefix_except_default',
-        langDir: 'lang/',
+        langDir: 'lang',
+        restructureDir: '',
 
         detectBrowserLanguage: {
             useCookie: true,
