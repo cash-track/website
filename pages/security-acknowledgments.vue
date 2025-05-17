@@ -16,7 +16,7 @@
             <UAlert
                 color="blue"
                 variant="subtle"
-                icon="i-lucide-terminal"
+                icon="i-heroicons-command-line"
                 :description="$t('securityAcknowledgement.researchers[1]')"
             />
         </div>

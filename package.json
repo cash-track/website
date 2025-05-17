@@ -27,10 +27,9 @@
     },
     "devDependencies": {
         "@nuxtjs/eslint-config-typescript": "^12.1.0",
-        "@nuxtjs/i18n": "^9.5.4",
+        "@nuxtjs/i18n": "^8.1.1",
         "@simplewebauthn/types": "^9.0.1",
         "eslint": "latest",
-        "nuxt-gtag": "^1.2.1",
-        "sass-embedded": "^1.89.0"
+        "nuxt-gtag": "^1.2.1"
     }
 }
