@@ -269,5 +269,70 @@ export default {
             0: '9. Grievance / Data Protection Officer:',
             1: 'If you have any queries or concerns about the processing of your information that is available with us, you may email our Grievance Officer at Cash Track, Vinnytsia, email: {email}. We will address your concerns in accordance with applicable law.'
         }
+    },
+
+    securityAcknowledgement: {
+        title: 'Security Acknowledgement - Cash Track',
+        link: 'Security Acknowledgement',
+        securityAcknowledgement: 'Security Acknowledgement',
+        effectiveDate: 'Effective Date 17-May-2025',
+        lastUpdated: 'Last Updated On 17-May-2025',
+        about: {
+            0: 'This page serves to acknowledge and thank the security researchers who have responsibly disclosed security vulnerabilities to us. Their contributions are invaluable in helping us maintain the security and integrity of our systems.'
+        },
+        researchers: {
+            0: 'Below is a list of researchers who have made significant contributions, along with the dates when they reported the vulnerabilities.',
+            1: 'As of today we are waiting for the first security report. We are open to any security issues and will be happy to acknowledge your contribution.'
+        }
+    },
+
+    securityPolicy: {
+        title: 'Security Policy - Cash Track',
+        link: 'Security Policy',
+        securityAcknowledgement: 'Security Policy',
+        effectiveDate: 'Effective Date 17-May-2025',
+        lastUpdated: 'Last Updated On 17-May-2025',
+        intro: {
+            0: 'We take the security of our web service seriously and appreciate the efforts of security researchers and users in helping us maintain a secure environment. This Security Policy outlines the procedures for reporting vulnerabilities, the legal terms associated with not reporting them, and the timeline for public disclosure if we do not respond.'
+        },
+        reporting: {
+            0: 'Reporting Vulnerabilities',
+            1: 'If you discover a security vulnerability in our web service, please report it to us immediately. You can report vulnerabilities by sending an email to {email}. Please include the following information in your report:',
+            2: 'A detailed description of the vulnerability',
+            3: 'Steps to reproduce the vulnerability',
+            4: 'Any potential impact of the vulnerability',
+            5: 'Your contact information (optional, but helpful for follow-up)',
+            6: 'We will acknowledge receipt of your report as soon as possible and work to address the issue as quickly as possible.'
+        },
+        legal: {
+            0: 'Legal Terms for Not Reporting Vulnerabilities',
+            1: 'While we encourage responsible disclosure of security vulnerabilities, we also understand that there may be legal implications for not reporting them appropriately. By not reporting a vulnerability and instead exploiting it or disclosing it publicly without giving us a chance to address it, you may be violating applicable laws and regulations, including but not limited to:',
+            2: 'Computer Fraud and Abuse Act (CFAA)',
+            3: 'General Data Protection Regulation (GDPR)',
+            4: 'Other local, state, or federal laws',
+            5: 'We reserve the right to take legal action against individuals or entities that exploit vulnerabilities without reporting them or that publicly disclose vulnerabilities without following the procedures outlined in this policy.'
+        },
+        timeline: {
+            0: 'Disclosure Timeline',
+            1: 'If you report a vulnerability to us and do not receive a response within 14 days, or if we do not address the vulnerability within 90 days of your report, you may publicly disclose the vulnerability. However, we kindly request that you:',
+            2: 'Provide us with a reasonable opportunity to address the issue before public disclosure.',
+            3: 'Redact any sensitive information in your public disclosure to minimize potential harm.',
+            4: 'We believe that 90 days is a reasonable timeframe for us to investigate and address most vulnerabilities. If we need more time, we will communicate this to you and provide regular updates on our progress.'
+        },
+        reward: {
+            0: 'Rewards for Reporting Vulnerabilities',
+            1: 'We appreciate the efforts of security researchers who help us improve our security. To show our gratitude, we may offer monetary rewards for reports of valid, previously unknown vulnerabilities that are disclosed responsibly.',
+            2: 'Reward Criteria',
+            3: 'The vulnerability must be previously unknown to us.',
+            4: 'The report must provide sufficient detail to reproduce the issue.',
+            5: 'The vulnerability must be in scope (i.e., affecting our systems or data).',
+            6: 'The reporter must have followed our disclosure policy.',
+            7: 'The vulnerability must be of sufficient severity.',
+            8: 'The decision to award a reward is at our sole discretion.'
+        },
+        thanks: {
+            0: 'Thank You',
+            1: 'We appreciate your help in keeping our web service secure. If you have any questions about this Security Policy or need further assistance, please contact us at {email}.'
+        }
     }
 }

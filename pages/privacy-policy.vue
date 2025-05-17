@@ -10,7 +10,7 @@
             <b>{{ $t('privacyPolicy.lastUpdated') }}</b>
         </p>
 
-        <p>{{ t('privacyPolicy.intro[0]', {email: 'support@cash-track.app'}) }}</p>
+        <p>{{ t('privacyPolicy.intro[0]', {email: 'support@mail.cash-track.app'}) }}</p>
 
         <p>{{ $t('privacyPolicy.intro[1]') }}</p>
 
@@ -55,7 +55,7 @@
         <p>{{ $t('privacyPolicy.retentionInfo[1]') }}</p>
 
         <h3>{{ $t('privacyPolicy.yourRights[0]') }}</h3>
-        <p>{{ t('privacyPolicy.yourRights[1]', {email: 'support@cash-track.app'}) }}</p>
+        <p>{{ t('privacyPolicy.yourRights[1]', {email: 'support@mail.cash-track.app'}) }}</p>
         <p>{{ $t('privacyPolicy.yourRights[2]') }}</p>
 
         <h3>{{ $t('privacyPolicy.cookies[0]') }}</h3>
@@ -70,7 +70,7 @@
         <p>{{ $t('privacyPolicy.security[1]') }}</p>
 
         <h3>{{ $t('privacyPolicy.dataProtection[0]') }}</h3>
-        <p>{{ t('privacyPolicy.dataProtection[1]', {email: 'support@cash-track.app'}) }}</p>
+        <p>{{ t('privacyPolicy.dataProtection[1]', {email: 'support@mail.cash-track.app'}) }}</p>
     </div>
 </template>
 

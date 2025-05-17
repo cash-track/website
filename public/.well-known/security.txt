@@ -1,0 +1,26 @@
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA256
+
+Contact: mailto:security@mail.cash-track.app
+Expires: 2029-12-31T21:59:00.000Z
+Encryption: https://cash-track.app/.well-known/pgp-key.txt
+Acknowledgments: https://cash-track.app/security-acknowledgments
+Preferred-Languages: en
+Canonical: https://cash-track.app/.well-known/security.txt
+Policy: https://cash-track.app/security-policy
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCAAdFiEELYMjGBYQl46MvPcV8N6Qz9VqlG8FAmgnpJgACgkQ8N6Qz9Vq
+lG9E3A//ULlqOFdVYqwo0dCHhP0aE1mE4UA+5x8fOwCNSI/nQ7hHROwppur6acVu
+Ph+v5DAmgNlldWXkh6ZLe4Alnvi2qr9UItnl66d1ITPj0CdDbeT9f6UwJhHKXy8f
+/DH6y/XxCPfuXm8WyFkD+tJidAaJFW3FrpRA30WVHWK2fGKRoLRiuMTDYOk32UsU
+r66guAyy+dls9SShBKu6fiwaDQdLTHf01y3LN7oxYrKzI/spb5IRFRaFcDdwh/yo
+NwRbjLbQkf2Ero24fdquDK+rD0QTFHjwVHOvOZuxqtJCgHAajroEg9xfoZE6sGVX
+CfI092FkSlFTTnq+xiYKtSJ+QDxUf3Yvf5fUMsGmHlUpKlJvWDiuMDsp0XLqWbx5
+rxPSbn2s7prLi8OhD0eEsbT7t93KgEt8Y6spydzaF4D7ZMNwjqpOqbvFnCZB4NZE
+vfD7FrpNjlJGlkKwN+52vUDjo/s6u/NUbqiPlAwxFBzZpiGGtNNVt3qy+NkT/v1Q
+RAw0re2Pp6FTV02qTS2DY599RpS7oHK9ErOU6Us2LjEYNtbUAyyXPgnQ3XYvSokP
+suaT3Llmji0T4/gIgFXNIRxzivJEYuKaklarwlOz9ByWQTCM3ZKxt7F5LBSPWQiD
+A00urb9EAZMjcYdBe0LW4QTl0s+/xHACm7sUuDL5lVS4AypYmoQ=
+=zOzz
+-----END PGP SIGNATURE-----
