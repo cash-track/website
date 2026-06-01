@@ -1,7 +1,8 @@
 # Nuxt Security Upgrade Plan — `website`
 
 **Created:** 2026-06-01
-**Status:** ✅ Done (2026-06-01) — executed on branch `chore/nuxt-security-upgrade-20260601`.
+**Status:** ✅ Done (2026-06-01) — executed on branch `chore/nuxt-security-upgrade-20260601`
+([PR #75](https://github.com/cash-track/website/pull/75)).
 **Scope:** Clear the 31 security advisories that are gated behind a major Nuxt 3 framework
 upgrade. These were intentionally **not** fixed in the override-only security PR because each
 requires a cross-major dependency bump or a breaking framework migration.
