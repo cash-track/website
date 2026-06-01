@@ -1,10 +1,43 @@
 # Nuxt Security Upgrade Plan — `website`
 
 **Created:** 2026-06-01
-**Status:** Planned (deferred from the 2026-06-01 dependency security PR)
+**Status:** ✅ Done (2026-06-01) — executed on branch `chore/nuxt-security-upgrade-20260601`
+([PR #75](https://github.com/cash-track/website/pull/75)).
 **Scope:** Clear the 31 security advisories that are gated behind a major Nuxt 3 framework
 upgrade. These were intentionally **not** fixed in the override-only security PR because each
 requires a cross-major dependency bump or a breaking framework migration.
+
+## Outcome
+
+`npm audit` → **0 vulnerabilities** (was 31 deferred + 0 from the override PR). All 31
+deferred advisories cleared by the framework upgrade. Final state:
+
+- `nuxt` 3.10.3 → **3.21.6**, `@nuxt/ui` 2.14.1 → **2.22.3**, `@nuxtjs/i18n` 8.1.1 → **9.5.6**
+  (pulls `vue-i18n` 10, `unhead` 2, `vite` 7, patched `@nuxt/devtools`/`pacote`/`tar` chain).
+- Every override from the security PR was **removed** (the upgrade resolves patched versions
+  natively). Only **two** overrides remain, both necessary and documented below.
+- Node pinned to ≥ 22.12: `.nvmrc` added, `Dockerfile` `node:20-alpine` → `node:22-alpine`,
+  CI `node-version: "22"` in `.github/workflows/quality.yml`.
+- `sass-embedded` declared as a devDependency (fixes the pre-existing `.scss` build gap).
+- i18n v9 code migration: `iso` → `language`, `useLocaleHead` options (`dir`/`seo`/`key`),
+  `restructureDir: false` (keeps the `lang/` layout), `bundle.optimizeTranslationDirective: false`.
+- Renamed the `shared/` directory to `lib/` — Nuxt 3.14+ reserves `shared/` for
+  framework-agnostic code with no `#imports`/composable access, which broke the build.
+
+**Remaining overrides (both required, neither is a security pin):**
+- `svgo > commander: ^13.1.0` — `svgo@4` needs `commander@^11` but `@nuxt/cli`'s
+  `@bomb.sh/tab` optionally peers `commander@^13`; without this the hoisted `commander@11`
+  makes `npm ci` fail the optional-peer consistency check. Forces a single `commander@13`
+  (svgo only loads commander in its CLI, not the build-time programmatic path).
+- `@typescript-eslint/typescript-estree > minimatch: ^9.0.7` — the eslint 6.x toolchain
+  pulls vulnerable `minimatch@9.0.3` (3× ReDoS, dev-only); this is the **one** security pin
+  the framework upgrade didn't resolve. Nested form is used because npm range-key overrides
+  (`minimatch@>=9.0.0 <9.0.7`) silently fail to apply and break `npm ci`.
+
+**Verified:** `npm audit` = 0 · `npm ci --dry-run` consistent · `npm run build` ✓ ·
+`npm run lint:js` ✓ · production `docker build` on `node:22-alpine` ✓ · container SSR renders
+EN (`lang="en-US"`) and UK (`/uk/about` → `lang="uk-UA"`, localized content) with hreflang SEO
+tags. Full-stack `agent-browser` smoke test (auth flows via gateway) remains a manual gate.
 
 ---
 

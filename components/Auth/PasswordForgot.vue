@@ -2,8 +2,8 @@
 import type { Form } from '#ui/types'
 import { useReCaptcha } from 'vue-recaptcha-v3'
 import { useI18n } from '#imports'
-import { useLoader } from '@/shared/Loader'
-import { useValidationMessager } from '@/shared/ValidatorMessager'
+import { useLoader } from '@/lib/Loader'
+import { useValidationMessager } from '@/lib/ValidatorMessager'
 import { forgotPassword } from '@/api/password'
 
 interface PasswordForgot {

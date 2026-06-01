@@ -1,5 +1,7 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
+    compatibilityDate: '2026-06-01',
+
     $production: {
         app: {
             head: {
@@ -111,19 +113,26 @@ export default defineNuxtConfig({
         })()
     },
     i18n: {
+        // v9 moves i18n files under <rootDir>/i18n/ by default; keep the existing
+        // root-level lang/ layout to avoid relocating locale files.
+        restructureDir: false,
+        // Upstream recommends disabling this; it causes issues and is deprecated in v10.
+        bundle: {
+            optimizeTranslationDirective: false
+        },
         baseUrl: process.env.NUXT_PUBLIC_BASE_URL,
         locales: [
             {
                 code: 'en',
                 file: 'en.ts',
-                iso: 'en-US',
+                language: 'en-US',
                 name: '🇺🇸 English',
                 flag: '🇺🇸'
             },
             {
                 code: 'uk',
                 file: 'uk.ts',
-                iso: 'uk-UA',
+                language: 'uk-UA',
                 name: '🇺🇦 Українська',
                 flag: '🇺🇦'
             }

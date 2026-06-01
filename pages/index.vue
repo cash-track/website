@@ -104,7 +104,7 @@
 
 <script setup lang="ts">
 import { useHead, defineI18nRoute, useLocalePath, useI18n, computed } from '#imports'
-import { useWebAppLinks } from '@/shared/WebAppLinks'
+import { useWebAppLinks } from '@/lib/WebAppLinks'
 import { useAuthStore } from '@/store/auth'
 import TgIcon from '@/components/Shared/TgIcon.vue'
 
