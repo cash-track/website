@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { onMounted, useLocalePath } from '#imports'
-import { useLoader } from '@/shared/Loader'
+import { useLoader } from '@/lib/Loader'
 import { confirmEmail } from '@/api/email'
 import { useAuthStore } from '@/store/auth'
-import { useWebAppLinks } from '@/shared/WebAppLinks'
+import { useWebAppLinks } from '@/lib/WebAppLinks'
 
 const loader = useLoader()
 const store = useAuthStore()

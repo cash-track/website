@@ -1,7 +1,7 @@
 import type { Ref } from 'vue'
 import type { ValidationResponseInterface } from '@/api/response'
 import { ref } from '#imports'
-import { Messager } from '@/shared/Messager'
+import { Messager } from '@/lib/Messager'
 
 export function useValidationMessager(): ValidatorMessager {
     return new ValidatorMessager()

@@ -141,7 +141,7 @@
 import type { DropdownItem } from '#ui/types'
 import type { LocaleObject } from '@nuxtjs/i18n'
 import { useLocalePath, useI18n, onMounted, useRouter, computed, ref } from '#imports'
-import { useWebAppLinks } from '@/shared/WebAppLinks'
+import { useWebAppLinks } from '@/lib/WebAppLinks'
 import { useAuthStore } from '@/store/auth'
 import { profileGet, profilePutLocale, type ProfileInterface } from '@/api/profile'
 import { logout } from '@/api/login'
