@@ -21,7 +21,7 @@ export function passkeyInit(
             credentials: 'include'
         }
     ).then((res) => {
-        res.dataDecoded = decode<PublicKeyCredentialRequestOptions>(
+        res.dataDecoded = decode<PublicKeyCredentialRequestOptionsJSON>(
             res.data
         )
         return res
