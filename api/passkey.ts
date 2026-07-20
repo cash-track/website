@@ -1,11 +1,11 @@
-import type { PublicKeyCredentialRequestOptions } from '@simplewebauthn/types'
+import type { AuthenticationResponseJSON, PublicKeyCredentialRequestOptionsJSON } from '@simplewebauthn/browser'
 import type { LoginResponseInterface } from '@/api/login'
 import { useApi } from '@/api/api'
 
 export interface PasskeyInitResponseInterface {
     challenge: string
     data: string
-    dataDecoded: PublicKeyCredentialRequestOptions
+    dataDecoded: PublicKeyCredentialRequestOptionsJSON
 }
 
 export function passkeyInit(
@@ -30,7 +30,7 @@ export function passkeyInit(
 
 export function passkeyLogin(
     challenge: string,
-    data: object,
+    data: AuthenticationResponseJSON,
     captchaChallenge: string
 ): Promise<LoginResponseInterface> {
     return useApi<LoginResponseInterface>(

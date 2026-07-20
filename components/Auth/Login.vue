@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { Form, FormSubmitEvent } from '#ui/types'
-import type { AuthenticationResponseJSON } from '@simplewebauthn/types'
+import type { AuthenticationResponseJSON } from '@simplewebauthn/browser'
 import { useReCaptcha } from 'vue-recaptcha-v3'
 import { startAuthentication, browserSupportsWebAuthn } from '@simplewebauthn/browser'
 import { onMounted, ref, useI18n, useLocalePath, useRuntimeConfig } from '#imports'
@@ -198,7 +198,7 @@ async function loginWithPasskey() {
     let authResponse: AuthenticationResponseJSON
 
     try {
-        authResponse = await startAuthentication(initResponse)
+        authResponse = await startAuthentication({ optionsJSON: initResponse.dataDecoded })
     } catch (error) {
         passkeyLoader.setLoaded()
         messager.dispatchError(error)
