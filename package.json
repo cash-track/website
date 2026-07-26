@@ -42,6 +42,10 @@
         "@unhead/vue": "^3.2.1",
         "fontless": {
             "esbuild": "^0.28.1"
+        },
+        "@bomb.sh/tab": {
+            "cac": "^7.0.0",
+            "commander": "^11.1.0"
         }
     }
 }
