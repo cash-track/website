@@ -1,6 +1,15 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-    compatibilityDate: '2026-06-01',
+    modules: [
+        '@nuxt/eslint',
+        '@nuxt/ui',
+        '@nuxtjs/i18n',
+        'nuxt-gtag',
+        '@pinia/nuxt'
+    ],
+    $development: {
+        devtools: { enabled: true }
+    },
 
     $production: {
         app: {
@@ -14,9 +23,6 @@ export default defineNuxtConfig({
                 ]
             }
         }
-    },
-    $development: {
-        devtools: { enabled: true }
     },
 
     app: {
@@ -85,17 +91,19 @@ export default defineNuxtConfig({
             ]
         }
     },
-    modules: [
-        '@nuxt/devtools',
-        '@nuxt/telemetry',
-        '@nuxt/ui',
-        '@nuxtjs/i18n',
-        'nuxt-gtag',
-        '@pinia/nuxt'
-    ],
     css: [
-        'assets/main.scss'
+        '~/assets/css/main.css'
     ],
+
+    runtimeConfig: {
+        public: {
+            baseUrl: process.env.NUXT_PUBLIC_BASE_URL,
+            webAppUrl: process.env.NUXT_PUBLIC_WEB_APP_URL,
+            gatewayUrl: process.env.NUXT_PUBLIC_GATEWAY_URL,
+            googleClientId: process.env.NUXT_PUBLIC_GOOGLE_CLIENT_ID,
+            captchaClientKey: process.env.NUXT_PUBLIC_CAPTCHA_CLIENT_KEY
+        }
+    },
     devServer: {
         host: (() => {
             return process.env.HTTPS_ENABLED === 'true'
@@ -107,19 +115,44 @@ export default defineNuxtConfig({
             return process.env.HTTPS_ENABLED !== 'true'
                 ? false
                 : {
-                    key: process.env.HTTPS_KEY_PATH,
-                    cert: process.env.HTTPS_CRT_PATH
-                }
+                        key: process.env.HTTPS_KEY_PATH,
+                        cert: process.env.HTTPS_CRT_PATH
+                    }
         })()
     },
-    i18n: {
-        // v9 moves i18n files under <rootDir>/i18n/ by default; keep the existing
-        // root-level lang/ layout to avoid relocating locale files.
-        restructureDir: false,
-        // Upstream recommends disabling this; it causes issues and is deprecated in v10.
-        bundle: {
-            optimizeTranslationDirective: false
+    compatibilityDate: '2026-07-26',
+
+    typescript: {
+        tsConfig: {
+            compilerOptions: {
+                // Nuxt pins `types`, so @types packages must be opted in by name.
+                types: ['google.accounts']
+            }
         },
+        nodeTsConfig: {
+            compilerOptions: {
+                // `process.env` is read throughout this file.
+                types: ['node']
+            }
+        }
+    },
+
+    eslint: {
+        config: {
+            stylistic: {
+                indent: 4,
+                quotes: 'single',
+                semi: false,
+                commaDangle: 'never'
+            }
+        }
+    },
+
+    gtag: {
+        id: process.env.NUXT_PUBLIC_GOOGLE_ANALYTICS_ID
+    },
+    i18n: {
+        // Locale files live in i18n/locales/ — langDir's default, and no longer overridable.
         baseUrl: process.env.NUXT_PUBLIC_BASE_URL,
         locales: [
             {
@@ -139,25 +172,10 @@ export default defineNuxtConfig({
         ],
         defaultLocale: 'en',
         strategy: 'prefix_except_default',
-        langDir: 'lang/',
 
         detectBrowserLanguage: {
             useCookie: true,
             cookieKey: 'cshtrkl'
         }
-    },
-
-    runtimeConfig: {
-        public: {
-            baseUrl: process.env.NUXT_PUBLIC_BASE_URL,
-            webAppUrl: process.env.NUXT_PUBLIC_WEB_APP_URL,
-            gatewayUrl: process.env.NUXT_PUBLIC_GATEWAY_URL,
-            googleClientId: process.env.NUXT_PUBLIC_GOOGLE_CLIENT_ID,
-            captchaClientKey: process.env.NUXT_PUBLIC_CAPTCHA_CLIENT_KEY
-        }
-    },
-
-    gtag: {
-        id: process.env.NUXT_PUBLIC_GOOGLE_ANALYTICS_ID
     }
 })

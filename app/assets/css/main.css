@@ -1,0 +1,118 @@
+@import "tailwindcss";
+@import "@nuxt/ui";
+
+/* `static` so every shade is emitted, not just the ones used literally. */
+@theme static {
+    --color-cash-50: #f5fbf3;
+    --color-cash-100: #e4f8e2;
+    --color-cash-200: #c3efc4;
+    --color-cash-300: #92e2a2;
+    --color-cash-400: #5ccc7f;
+    --color-cash-500: #37ae6d;
+    --color-cash-600: #279066;
+    --color-cash-700: #23715c;
+    --color-cash-800: #205b53;
+    --color-cash-900: #1c494a;
+    --color-cash-950: #0a2329;
+}
+
+.page-enter-active,
+.page-leave-active {
+    transition: opacity 0.2s;
+}
+
+.page-enter,
+.page-leave-to {
+    opacity: 0;
+}
+
+.link {
+    @apply text-primary-500 hover:text-primary-700;
+}
+
+button, a {
+    @apply transition-colors;
+}
+
+.row {
+    @apply sm:flex -mx-3.5;
+}
+
+.col {
+    @apply px-3.5;
+}
+
+.jumbotron {
+    @apply sm:py-16 sm:px-8 py-8 px-4 rounded-md mb-8;
+
+    h2 {
+        @apply text-6xl font-light leading-tight mb-2;
+    }
+
+    h3 {
+        @apply text-5xl font-light leading-tight mb-2;
+    }
+
+    p {
+        @apply mb-4;
+    }
+
+    p.lead {
+        @apply text-2xl font-extralight leading-8 mt-0 mb-4;
+    }
+}
+
+.auth-container {
+    @apply w-full max-w-lg;
+}
+
+.info-page {
+    h1 {
+        @apply text-3xl mt-5 mb-4;
+    }
+
+    h3 {
+        @apply text-2xl mt-5 mb-4;
+    }
+
+    p {
+        @apply mb-4;
+    }
+
+    hr {
+        @apply mb-4 mt-4;
+    }
+
+    ol {
+        @apply list-decimal pl-10 mb-4;
+    }
+
+    ul {
+        @apply list-disc pl-10 mb-4;
+    }
+
+    /* Prose links only — Nuxt UI anchors carry `data-slot` and bring their own colours. */
+    a:not([data-slot]) {
+        @apply text-primary-500 hover:text-primary-700;
+    }
+
+    p.lead {
+        @apply text-xl font-light;
+    }
+
+    blockquote {
+        @apply mb-4;
+
+        p {
+            @apply mb-0 text-xl;
+        }
+
+        footer cite {
+            @apply text-gray-500;
+
+            &::before {
+                content: '\2014\00A0';
+            }
+        }
+    }
+}
