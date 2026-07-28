@@ -95,6 +95,20 @@ export default defineNuxtConfig({
         '~/assets/css/main.css'
     ],
 
+    // Shared with the frontend SPA via `cshtrkt`; domain scoping happens at runtime in shared-cookies.client.ts.
+    colorMode: {
+        preference: 'system',
+        fallback: 'light',
+        storage: 'cookie',
+        storageKey: 'cshtrkt',
+        cookieAttrs: {
+            path: '/',
+            maxAge: 60 * 60 * 24 * 365,
+            sameSite: 'lax',
+            secure: true
+        }
+    },
+
     runtimeConfig: {
         public: {
             baseUrl: process.env.NUXT_PUBLIC_BASE_URL,
@@ -173,6 +187,7 @@ export default defineNuxtConfig({
         defaultLocale: 'en',
         strategy: 'prefix_except_default',
 
+        // Shared with the frontend SPA via `cshtrkl`; domain scoping happens at runtime in shared-cookies.client.ts.
         detectBrowserLanguage: {
             useCookie: true,
             cookieKey: 'cshtrkl'

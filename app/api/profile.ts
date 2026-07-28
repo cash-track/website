@@ -8,6 +8,7 @@ export interface ProfileInterface {
     nickName: string
     isEmailConfirmed: boolean
     photoUrl: string | null
+    locale: string
 }
 
 export interface ProfileResponseInterface {
