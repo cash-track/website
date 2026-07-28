@@ -11,8 +11,8 @@
                     </ULink>
 
                     <UButton
-                        class="text-xl border"
-                        variant="soft"
+                        class="text-xl cursor-pointer"
+                        variant="subtle"
                         color="neutral"
                         @click="onMobileHeaderClick"
                     >
@@ -72,13 +72,51 @@
                         </div>
                         <div class="navbar-right">
                             <UDropdownMenu
+                                class="mr-4 ring-0"
+                                :items="themeMenuItems"
+                                :content="{ align: 'start', side: 'bottom' }"
+                            >
+                                <UButton
+                                    class="cursor-pointer"
+                                    color="neutral"
+                                    variant="subtle"
+                                    :square="true"
+                                    :aria-label="t('theme.theme')"
+                                >
+                                    <span class="relative inline-flex size-5">
+                                        <!--
+                                            Binding the glyph to colorMode.value would hydrate-mismatch
+                                            (SSR can't resolve it) and Vue leaves class mismatches
+                                            unpatched. Static dark: classes key off html.dark, set
+                                            pre-paint.
+                                        -->
+                                        <UIcon
+                                            name="i-lucide-sun"
+                                            class="size-5 dark:hidden"
+                                        />
+                                        <UIcon
+                                            name="i-lucide-moon"
+                                            class="hidden size-5 dark:block"
+                                        />
+                                        <UIcon
+                                            v-if="isSystemTheme"
+                                            name="i-lucide-monitor"
+                                            mode="svg"
+                                            class="absolute -right-[3px] -bottom-[3px] size-2.5 bg-gray-100 dark:bg-gray-800"
+                                        />
+                                    </span>
+                                </UButton>
+                            </UDropdownMenu>
+
+                            <UDropdownMenu
+                                class="ring-0"
                                 :items="availableLocales"
                                 :content="{ align: 'start', side: 'bottom' }"
                             >
                                 <UButton
-                                    class="lang-selector navbar-link"
+                                    class="lang-selector cursor-pointer"
                                     color="neutral"
-                                    variant="ghost"
+                                    variant="subtle"
                                     :label="currentFlag"
                                     trailing-icon="i-lucide-chevron-down"
                                     :ui="{ label: 'mt-0.5 text-lg' }"
@@ -110,21 +148,21 @@
 
                             <UDropdownMenu
                                 v-if="isLogged"
-                                class="profile-selector"
+                                class="profile-selector ring-0"
                                 :items="profileDropdownLinks"
                                 :content="{ align: 'start', side: 'bottom' }"
                             >
                                 <UButton
                                     color="neutral"
-                                    :label="profile?.name"
-                                    variant="ghost"
-                                    class="navbar-link"
+                                    :label="profileDisplayName"
+                                    variant="subtle"
+                                    class="cursor-pointer"
                                     trailing-icon="i-lucide-chevron-down"
                                 >
                                     <template #leading>
                                         <UAvatar
                                             :src="profile?.photoUrl || undefined"
-                                            :alt="profile?.name"
+                                            :alt="profileDisplayName"
                                             size="xs"
                                         />
                                     </template>
@@ -158,7 +196,8 @@
 <script setup lang="ts">
 import type { DropdownMenuItem } from '@nuxt/ui'
 import type { LocaleObject } from '@nuxtjs/i18n'
-import { useLocalePath, useI18n, onMounted, useRouter, computed, ref } from '#imports'
+import { useLocalePath, useI18n, useColorMode, onMounted, useRouter, useRequestHeaders, useState, computed, ref } from '#imports'
+import { readCookieValue } from '@/utils/cookies'
 import { useWebAppLinks } from '@/lib/WebAppLinks'
 import { useAuthStore } from '@/store/auth'
 import { profileGet, profilePutLocale, type ProfileInterface } from '@/api/profile'
@@ -171,11 +210,17 @@ const localePath = useLocalePath()
 const webAppLinks = useWebAppLinks()
 const authStore = useAuthStore()
 const router = useRouter()
+const colorMode = useColorMode()
 
 const isHeaderOpened = ref(false)
 const isProfileLoading = computed(() => authStore.isProfileLoading)
 const isLogged = computed(() => authStore.isLogged)
 const profile = computed<ProfileInterface | null>(() => authStore.profile)
+const profileDisplayName = computed(() => {
+    return profile.value?.lastName
+        ? `${profile.value.name} ${profile.value.lastName}`
+        : profile.value?.name
+})
 const currentLocale = computed(() => {
     return locales.value.filter(i => i.code === locale.value).pop()
 })
@@ -186,6 +231,7 @@ const availableLocales = computed<DropdownMenuItem[][]>(() => {
         return {
             label: item.name ?? '',
             disabled: item.code === locale.value,
+            class: 'cursor-pointer',
             onSelect: () => onLocaleChange(item)
         }
     })]
@@ -200,13 +246,47 @@ const profileDropdownLinks = computed<DropdownMenuItem[][]>(function (): Dropdow
         [{
             label: t('dashboard'),
             href: webAppLinks.walletsLink,
-            icon: 'i-lucide-sparkles'
+            icon: 'i-lucide-sparkles',
+            class: 'cursor-pointer'
         }, {
             label: t('signOut'),
             icon: 'i-lucide-log-out',
+            class: 'cursor-pointer',
             onSelect: () => onLogout()
         }]
     ]
+})
+
+type ThemeChoice = 'light' | 'dark' | 'system'
+const themeChoices: { value: ThemeChoice, labelKey: string, icon: string }[] = [
+    { value: 'light', labelKey: 'theme.light', icon: 'i-lucide-sun' },
+    { value: 'dark', labelKey: 'theme.dark', icon: 'i-lucide-moon' },
+    { value: 'system', labelKey: 'theme.system', icon: 'i-lucide-monitor' }
+]
+const isSystemTheme = computed(() => colorMode.preference === 'system')
+const themeMenuItems = computed<DropdownMenuItem[][]>(() => {
+    return [themeChoices.map<DropdownMenuItem>(choice => ({
+        label: t(choice.labelKey),
+        icon: choice.icon,
+        type: 'checkbox',
+        checked: colorMode.preference === choice.value,
+        class: 'cursor-pointer',
+        onSelect() {
+            onThemeChange(choice.value)
+        }
+    }))]
+})
+
+function onThemeChange(choice: ThemeChoice) {
+    colorMode.preference = choice
+}
+
+// Must read the incoming Cookie header, not document.cookie: @nuxtjs/i18n writes `cshtrkl`
+// on the first load too, so client-side one always exists and the check would never fire.
+// useState resolves it once server-side and hydrates the result.
+const isFreshVisitor = useState('ct-fresh-visitor-locale', () => {
+    const cookieHeader = useRequestHeaders(['cookie']).cookie ?? ''
+    return readCookieValue(cookieHeader, 'cshtrkl') === null
 })
 
 onMounted(() => {
@@ -216,9 +296,24 @@ onMounted(() => {
 function loadProfile() {
     profileGet().then((response) => {
         authStore.login(response.data)
+        applyProfileLocale(response.data.locale)
     }).catch(() => {
         authStore.logout()
     })
+}
+
+// Fresh visitors only — a returning visitor's cshtrkl is the newer, explicit signal and
+// must not be pulled back to the account's stored locale on reload.
+// setLocale() is i18n's routing-aware setter: under prefix_except_default it navigates.
+function applyProfileLocale(profileLocale: string) {
+    if (!isFreshVisitor.value) {
+        return
+    }
+
+    const isSupported = locales.value.some(l => l.code === profileLocale)
+    if (isSupported && profileLocale !== locale.value) {
+        setLocale(profileLocale as 'en' | 'uk')
+    }
 }
 
 function onLogout() {
@@ -270,9 +365,7 @@ html, .footer, .header {
 }
 
 .header {
-    @apply mb-5 py-2 px-4 dark:border-gray-600;
-
-    border-bottom: 1px solid #e5e5e5;
+    @apply mb-5 py-2 px-4 border-b border-gray-200 dark:border-gray-600;
 
     .navbar {
         .navbar-root {

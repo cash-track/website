@@ -9,6 +9,13 @@ export default {
     signedAs: 'Signed in as',
     optional: 'optional',
 
+    theme: {
+        theme: 'Theme',
+        light: 'Light',
+        dark: 'Dark',
+        system: 'System'
+    },
+
     error: {
         captcha: 'Captcha validation error, please refresh your page and try again.',
         validation: 'One or more fields is not valid.',
