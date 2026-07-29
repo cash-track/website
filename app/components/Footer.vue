@@ -4,6 +4,28 @@
             <div class="sm:flex items-start">
                 <div class="sm:basis-1/3 sm:text-left text-center">
                     © {{ year }} Cash Track
+                    <template v-if="release.hasReleaseTag">
+                        ·
+                        <ULink
+                            class="link"
+                            :to="release.versionHref"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            {{ release.version }}
+                        </ULink>
+                    </template>
+                    <template v-if="release.hasCommit">
+                        ·
+                        <ULink
+                            class="link"
+                            :to="release.commitHref"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            {{ release.shortCommit }}
+                        </ULink>
+                    </template>
                 </div>
                 <div
                     class="sm:basis-1/3 text-center"
@@ -45,9 +67,11 @@
 
 <script setup lang="ts">
 import TgIcon from '@/components/Shared/TgIcon.vue'
+import { useReleaseInfo } from '@/lib/ReleaseInfo'
 
 const year = new Date().getFullYear()
 const localePath = useLocalePath()
+const release = useReleaseInfo()
 </script>
 
 <style>
