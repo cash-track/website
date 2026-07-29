@@ -5,7 +5,7 @@
                 <div class="navbar-mobile-head">
                     <ULink
                         class="logo-link"
-                        to="/"
+                        :to="localePath('/')"
                     >
                         <Logo />
                     </ULink>
@@ -24,7 +24,7 @@
                         <div class="navbar-main">
                             <ULink
                                 class="logo-link"
-                                to="/"
+                                :to="localePath('/')"
                             >
                                 <Logo />
                             </ULink>
@@ -319,7 +319,7 @@ function applyProfileLocale(profileLocale: string) {
 function onLogout() {
     logout().finally(() => {
         authStore.logout()
-        router.push('/')
+        router.push(localePath('/'))
     })
 }
 

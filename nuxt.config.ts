@@ -115,7 +115,9 @@ export default defineNuxtConfig({
             webAppUrl: process.env.NUXT_PUBLIC_WEB_APP_URL,
             gatewayUrl: process.env.NUXT_PUBLIC_GATEWAY_URL,
             googleClientId: process.env.NUXT_PUBLIC_GOOGLE_CLIENT_ID,
-            captchaClientKey: process.env.NUXT_PUBLIC_CAPTCHA_CLIENT_KEY
+            captchaClientKey: process.env.NUXT_PUBLIC_CAPTCHA_CLIENT_KEY,
+            appVersion: process.env.NUXT_PUBLIC_APP_VERSION ?? '',
+            appCommit: process.env.NUXT_PUBLIC_APP_COMMIT ?? ''
         }
     },
     devServer: {
