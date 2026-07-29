@@ -112,7 +112,7 @@
 </template>
 
 <script setup lang="ts">
-import { useHead, defineI18nRoute, useLocalePath, useI18n, computed } from '#imports'
+import { useHead, useLocalePath, useI18n, computed } from '#imports'
 import { useWebAppLinks } from '@/lib/WebAppLinks'
 import { useAuthStore } from '@/store/auth'
 import TgIcon from '@/components/Shared/TgIcon.vue'
@@ -126,7 +126,6 @@ useHead({
     title: t('home.title'),
     meta: [{ property: 'og:title', content: t('home.title') }]
 })
-defineI18nRoute(false)
 
 const isLogged = computed(() => auth.isLogged)
 const isProfileLoading = computed(() => auth.isProfileLoading)
