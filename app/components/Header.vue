@@ -196,8 +196,10 @@
 <script setup lang="ts">
 import type { DropdownMenuItem } from '@nuxt/ui'
 import type { LocaleObject } from '@nuxtjs/i18n'
+import { FetchError } from 'ofetch'
 import { useLocalePath, useI18n, useColorMode, onMounted, useRouter, useRequestHeaders, useState, computed, ref } from '#imports'
 import { readCookieValue } from '@/utils/cookies'
+import { parseCachedProfile } from '@/utils/profileCookie'
 import { useWebAppLinks } from '@/lib/WebAppLinks'
 import { useAuthStore } from '@/store/auth'
 import { profileGet, profilePutLocale, type ProfileInterface } from '@/api/profile'
@@ -289,6 +291,18 @@ const isFreshVisitor = useState('ct-fresh-visitor-locale', () => {
     return readCookieValue(cookieHeader, 'cshtrkl') === null
 })
 
+// Same SSR-resolve-once/hydrate pattern as isFreshVisitor above: parsing cshtrkp from the
+// request's Cookie header lets the header render signed-in on first paint (#147).
+const cachedProfile = useState('ct-cached-profile', () => {
+    const cookieHeader = useRequestHeaders(['cookie']).cookie ?? ''
+    return parseCachedProfile(cookieHeader)
+})
+
+const initialCachedProfile = cachedProfile.value
+if (initialCachedProfile) {
+    authStore.seedFromCache(initialCachedProfile)
+}
+
 onMounted(() => {
     loadProfile()
 })
@@ -297,8 +311,15 @@ function loadProfile() {
     profileGet().then((response) => {
         authStore.login(response.data)
         applyProfileLocale(response.data.locale)
-    }).catch(() => {
-        authStore.logout()
+    }).catch((error) => {
+        // Only a 401 proves the session is dead (the gateway's refresh failed) and may clear
+        // the cache. Anything else is transient — reset() drops the UI state, not the cookie.
+        if (error instanceof FetchError && error.statusCode === 401) {
+            authStore.logout()
+        }
+        else {
+            authStore.reset()
+        }
     })
 }
 

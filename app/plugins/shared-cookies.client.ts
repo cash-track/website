@@ -1,52 +1,13 @@
 // `@nuxtjs/color-mode`/`@nuxtjs/i18n`'s cookies are host-only (build-time config can't carry a `domain` — one image, configured per-env at runtime).
 // This plugin re-scopes `cshtrkt` and `cshtrkl` to the parent domain so the frontend SPA can share them.
 // Only one cookie of each name may exist at rest, or the pre-paint theme parser breaks — the host-only one is deleted first.
-import { useRuntimeConfig, useColorMode, watch, nextTick } from '#imports'
+import { useColorMode, watch, nextTick } from '#imports'
 import { readCookieValue } from '@/utils/cookies'
+import { parentDomain, deleteHostOnlyCookie, writeSharedCookie } from '@/utils/sharedCookie'
 
 const THEME_COOKIE = 'cshtrkt'
 const LOCALE_COOKIE = 'cshtrkl'
 const COOKIE_MAX_AGE = 60 * 60 * 24 * 365
-
-function parentDomain(): string | null {
-    const config = useRuntimeConfig()
-    const candidates = [config.public.baseUrl, window.location.origin]
-
-    for (const candidate of candidates) {
-        if (!candidate) {
-            continue
-        }
-
-        try {
-            return new URL(candidate).hostname
-        }
-        catch {
-            continue
-        }
-    }
-
-    return null
-}
-
-function deleteHostOnlyCookie(name: string) {
-    document.cookie = `${name}=; path=/; max-age=0`
-}
-
-function writeDomainCookie(name: string, value: string, domain: string) {
-    const attrs = [
-        `${name}=${encodeURIComponent(value)}`,
-        `Domain=.${domain}`,
-        'path=/',
-        `max-age=${COOKIE_MAX_AGE}`,
-        'SameSite=Lax'
-    ]
-
-    if (window.location.protocol === 'https:') {
-        attrs.push('Secure')
-    }
-
-    document.cookie = attrs.join('; ')
-}
 
 export default defineNuxtPlugin((nuxtApp) => {
     const colorMode = useColorMode()
@@ -59,7 +20,7 @@ export default defineNuxtPlugin((nuxtApp) => {
 
     function sync(name: string, value: string) {
         deleteHostOnlyCookie(name)
-        writeDomainCookie(name, value, domain as string)
+        writeSharedCookie(name, value, COOKIE_MAX_AGE)
     }
 
     // nextTick/flush:'post' runs after color-mode's own watcher writes the host-only cookie, to avoid racing it.
