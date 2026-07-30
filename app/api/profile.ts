@@ -4,7 +4,7 @@ export interface ProfileInterface {
     id: number
     name: string
     email: string
-    lastName: string
+    lastName: string | null
     nickName: string
     isEmailConfirmed: boolean
     photoUrl: string | null
