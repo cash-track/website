@@ -19,7 +19,9 @@ export default {
     error: {
         captcha: 'Captcha validation error, please refresh your page and try again.',
         validation: 'One or more fields is not valid.',
-        googleLogin: 'Unable to login by Google, please refresh your page and try again.'
+        googleLogin: 'Unable to login by Google, please refresh your page and try again.',
+        requestInProgress: 'Your previous request is still being processed. Please wait a moment and try again.',
+        requestConflict: 'We couldn\'t process your request. Please refresh the page and try again.'
     },
 
     signIn: {
