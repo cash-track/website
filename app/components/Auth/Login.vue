@@ -34,24 +34,35 @@ const recaptcha = async () => {
     return await recaptchaInstance?.executeRecaptcha('login')
 }
 
-async function onSubmit(event: FormSubmitEvent<LoginRequestInterface>) {
-    form?.value?.clear()
-    loader.setLoading()
-    messager.resetMessage()
-
-    let challenge: string | undefined
-
+// reCAPTCHA v3 tokens are single-use and expire in ~2 minutes, so every request the
+// gateway verifies needs its own freshly issued challenge. Returns undefined once the
+// captcha failure has been reported to the user.
+async function nextChallenge(loader: ReturnType<typeof useLoader>): Promise<string | undefined> {
     try {
-        challenge = await recaptcha()
+        const challenge = await recaptcha()
 
         if (challenge === undefined) {
             throw new Error('empty challenge')
         }
+
+        return challenge
     }
     catch (error) {
         console.log('Captcha error: ', error)
         messager.setMessage(t('error.captcha'))
         loader.setLoaded()
+        return undefined
+    }
+}
+
+async function onSubmit(event: FormSubmitEvent<LoginRequestInterface>) {
+    form?.value?.clear()
+    loader.setLoading()
+    messager.resetMessage()
+
+    const challenge = await nextChallenge(loader)
+
+    if (challenge === undefined) {
         return
     }
 
@@ -91,19 +102,9 @@ async function onLoggedByGoogle(response: google.accounts.id.CredentialResponse)
         return
     }
 
-    let challenge: string | undefined
+    const challenge = await nextChallenge(loader)
 
-    try {
-        challenge = await recaptcha()
-
-        if (challenge === undefined) {
-            throw new Error('empty challenge')
-        }
-    }
-    catch (error) {
-        console.log('Captcha error: ', error)
-        messager.setMessage(t('error.captcha'))
-        loader.setLoaded()
+    if (challenge === undefined) {
         return
     }
 
@@ -174,19 +175,9 @@ async function loginWithPasskey() {
     passkeyLoader.setLoading()
     messager.resetMessage()
 
-    let challenge: string | undefined
+    const challenge = await nextChallenge(passkeyLoader)
 
-    try {
-        challenge = await recaptcha()
-
-        if (challenge === undefined) {
-            throw new Error('empty challenge')
-        }
-    }
-    catch (error) {
-        console.log('Captcha error: ', error)
-        messager.setMessage(t('error.captcha'))
-        passkeyLoader.setLoaded()
+    if (challenge === undefined) {
         return
     }
 
@@ -212,10 +203,18 @@ async function loginWithPasskey() {
         return
     }
 
+    // The init request already consumed the first challenge, and the passkey prompt above
+    // can outlive a token, so the login request gets its own.
+    const loginChallenge = await nextChallenge(passkeyLoader)
+
+    if (loginChallenge === undefined) {
+        return
+    }
+
     let loginResponse: LoginResponseInterface
 
     try {
-        loginResponse = await passkeyLogin(initResponse.challenge, authResponse, challenge)
+        loginResponse = await passkeyLogin(initResponse.challenge, authResponse, loginChallenge)
     }
     catch (error) {
         passkeyLoader.setLoaded()
