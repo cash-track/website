@@ -89,14 +89,16 @@ const release = useReleaseInfo()
 @reference "../assets/css/main.css";
 
 .footer {
-    @apply py-5 px-0 w-full h-14 bottom-0 mt-4 text-sm border-t border-t-gray-200 dark:border-gray-600;
+    @apply py-5 px-0 w-full min-h-14 bottom-0 mt-4 text-sm border-t border-t-gray-200 dark:border-gray-600;
 
     .nav {
+        @apply flex flex-wrap items-center gap-x-4 gap-y-1;
+
         li {
             @apply inline-block align-middle leading-6 h-6;
 
             button, a {
-                @apply block px-4;
+                @apply block;
             }
         }
     }
