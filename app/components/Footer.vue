@@ -52,6 +52,16 @@
                         <li>
                             <ULink
                                 class="link"
+                                :to="STATUS_PAGE_URL"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                {{ $t('statusPage.link') }}
+                            </ULink>
+                        </li>
+                        <li>
+                            <ULink
+                                class="link"
                                 to="https://t.me/cash_track"
                                 target="_blank"
                             >
@@ -68,6 +78,7 @@
 <script setup lang="ts">
 import TgIcon from '@/components/Shared/TgIcon.vue'
 import { useReleaseInfo } from '@/lib/ReleaseInfo'
+import { STATUS_PAGE_URL } from '@/lib/StatusPage'
 
 const year = new Date().getFullYear()
 const localePath = useLocalePath()

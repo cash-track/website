@@ -3,6 +3,7 @@ import { useReCaptcha } from 'vue-recaptcha-v3'
 import { useI18n, useLocalePath, useTemplateRef } from '#imports'
 import { useLoader } from '@/lib/Loader'
 import { useValidationMessager } from '@/lib/ValidatorMessager'
+import StatusPageHint from '@/components/Shared/StatusPageHint.vue'
 import { resetPassword, type ResetPasswordRequestInterface } from '@/api/password'
 
 const { t } = useI18n()
@@ -121,8 +122,12 @@ async function onSubmit() {
                 icon="i-lucide-triangle-alert"
                 color="warning"
                 variant="subtle"
-                :description="messager.getMessage()"
-            />
+            >
+                <template #description>
+                    {{ messager.getMessage() }}
+                    <StatusPageHint />
+                </template>
+            </UAlert>
 
             <UAlert
                 v-if="isCodeInvalid"

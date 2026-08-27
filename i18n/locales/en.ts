@@ -189,6 +189,12 @@ export default {
         notice: 'This section still under construction.'
     },
 
+    statusPage: {
+        link: 'Status',
+        hint: 'If this keeps happening, check our',
+        hintLink: 'status page'
+    },
+
     cookiePolicy: {
         title: 'Cookie Policy - Cash Track',
         link: 'Cookie Policy',
