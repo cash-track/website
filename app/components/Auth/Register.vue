@@ -8,6 +8,7 @@ import { useLoader } from '@/lib/Loader'
 import type { LoginResponseInterface } from '@/api/login'
 import { checkNickName, register, type RegisterRequestInterface, type RegisterResponseInterface } from '@/api/register'
 import { useValidationMessager } from '@/lib/ValidatorMessager'
+import StatusPageHint from '@/components/Shared/StatusPageHint.vue'
 import { profileGet } from '@/api/profile'
 import { useAuthStore } from '@/store/auth'
 import { googleAuthProvider } from '@/api/authProvider'
@@ -330,8 +331,12 @@ function initGoogleAuthButton() {
                 icon="i-lucide-triangle-alert"
                 color="warning"
                 variant="subtle"
-                :description="messager.getMessage()"
-            />
+            >
+                <template #description>
+                    {{ messager.getMessage() }}
+                    <StatusPageHint />
+                </template>
+            </UAlert>
 
             <UButton
                 type="submit"

@@ -189,6 +189,12 @@ export default {
         notice: 'Цей розділ все ще наповнюється.'
     },
 
+    statusPage: {
+        link: 'Статус',
+        hint: 'Якщо це повторюється, перевірте нашу',
+        hintLink: 'сторінку стану'
+    },
+
     cookiePolicy: {
         title: 'Політика Cookie - Cash Track',
         link: 'Про Cookie',

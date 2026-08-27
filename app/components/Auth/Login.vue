@@ -7,6 +7,7 @@ import { onMounted, ref, useTemplateRef, useI18n, useLocalePath, useRuntimeConfi
 import { useLoader } from '@/lib/Loader'
 import { login, type LoginRequestInterface, type LoginResponseInterface } from '@/api/login'
 import { useValidationMessager } from '@/lib/ValidatorMessager'
+import StatusPageHint from '@/components/Shared/StatusPageHint.vue'
 import { profileGet } from '@/api/profile'
 import { useAuthStore } from '@/store/auth'
 import { googleAuthProvider } from '@/api/authProvider'
@@ -289,8 +290,12 @@ async function loginWithPasskey() {
                 icon="i-lucide-triangle-alert"
                 color="warning"
                 variant="subtle"
-                :description="messager.getMessage()"
-            />
+            >
+                <template #description>
+                    {{ messager.getMessage() }}
+                    <StatusPageHint />
+                </template>
+            </UAlert>
 
             <UButton
                 type="submit"

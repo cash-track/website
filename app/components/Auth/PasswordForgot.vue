@@ -3,6 +3,7 @@ import { useReCaptcha } from 'vue-recaptcha-v3'
 import { useI18n, useTemplateRef } from '#imports'
 import { useLoader } from '@/lib/Loader'
 import { useValidationMessager } from '@/lib/ValidatorMessager'
+import StatusPageHint from '@/components/Shared/StatusPageHint.vue'
 import { forgotPassword } from '@/api/password'
 
 interface PasswordForgot {
@@ -90,8 +91,12 @@ async function onSubmit() {
                 icon="i-lucide-triangle-alert"
                 color="warning"
                 variant="subtle"
-                :description="messager.getMessage()"
-            />
+            >
+                <template #description>
+                    {{ messager.getMessage() }}
+                    <StatusPageHint />
+                </template>
+            </UAlert>
 
             <UAlert
                 v-if="isSuccess"
