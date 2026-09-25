@@ -11,6 +11,7 @@ export default defineNuxtPlugin((nuxtApp) => {
         app: nuxtApp.vueApp,
         dsn: sentryDsn,
         release: appVersion ? `website@${appVersion}` : undefined,
+        environment: import.meta.dev ? 'development' : 'production',
         // Errors only; Tempo owns tracing.
         tracesSampleRate: 0,
         // sentry-trace/baggage headers would fail the gateway's CORS preflight.
