@@ -42,7 +42,7 @@ async function onSubmit() {
         }
     }
     catch (error) {
-        console.log('Captcha error: ', error)
+        console.warn('Captcha challenge failed', error)
         messager.setMessage(t('error.captcha'))
         loader.setLoaded()
         return

@@ -1,4 +1,5 @@
 import * as Sentry from '@sentry/vue'
+import { isReportable } from '@/lib/reportError'
 
 // Handled flows and browser noise, not bugs.
 const IGNORED_ERRORS: (string | RegExp)[] = ['ResizeObserver loop', /^Failed to fetch$/, /^Load failed$/]
@@ -18,6 +19,8 @@ export default defineNuxtPlugin((nuxtApp) => {
         tracePropagationTargets: [],
         ignoreErrors: IGNORED_ERRORS,
         beforeSend(event, hint) {
+            // Also catches unhandled rejections from fire-and-forget API calls.
+            if (!isReportable(hint.originalException)) return null
             const traceId = (hint.originalException as { response?: Response } | null)?.response?.headers?.get('x-ct-trace-id')
             if (traceId) event.tags = { ...event.tags, trace_id: traceId }
             return event

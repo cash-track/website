@@ -4,6 +4,7 @@ import { useLoader } from '@/lib/Loader'
 import { confirmEmail } from '@/api/email'
 import { useAuthStore } from '@/store/auth'
 import { useWebAppLinks } from '@/lib/WebAppLinks'
+import { reportUnexpectedError } from '@/lib/reportError'
 
 const loader = useLoader()
 const store = useAuthStore()
@@ -29,7 +30,10 @@ function submit() {
 
     confirmEmail(props.token)
         .then(onConfirmed)
-        .catch(onFailure)
+        .catch((error) => {
+            reportUnexpectedError(error)
+            onFailure()
+        })
         .finally(() => loader.setLoaded())
 }
 
