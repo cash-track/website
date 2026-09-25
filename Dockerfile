@@ -1,3 +1,4 @@
+# syntax=docker/dockerfile:1
 FROM node:22-alpine
 
 ENV APP_ROOT=/web
@@ -18,6 +19,7 @@ ARG GIT_COMMIT=""
 ENV NUXT_PUBLIC_APP_VERSION=${GIT_TAG}
 ENV NUXT_PUBLIC_APP_COMMIT=${GIT_COMMIT}
 
-RUN npm ci && npm run build
+# Uploads source maps to Sentry when the build passes the optional sentry_auth_token secret.
+RUN --mount=type=secret,id=sentry_auth_token,env=SENTRY_AUTH_TOKEN npm ci && npm run build
 
 CMD ["node", "/web/.output/server/index.mjs"]

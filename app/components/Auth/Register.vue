@@ -8,6 +8,7 @@ import { useLoader } from '@/lib/Loader'
 import type { LoginResponseInterface } from '@/api/login'
 import { checkNickName, register, type RegisterRequestInterface, type RegisterResponseInterface } from '@/api/register'
 import { useValidationMessager } from '@/lib/ValidatorMessager'
+import { reportUnexpectedError } from '@/lib/reportError'
 import StatusPageHint from '@/components/Shared/StatusPageHint.vue'
 import { profileGet } from '@/api/profile'
 import { useAuthStore } from '@/store/auth'
@@ -52,6 +53,7 @@ async function validateNickName() {
     }
     catch (error) {
         isNickNameValid.value = false
+        reportUnexpectedError(error)
         if (error instanceof FetchError && error.statusCode === 422 && error?.data?.errors?.nickName) {
             messager.setValidationMessage('nickName', error?.data?.errors?.nickName)
         }
@@ -73,7 +75,7 @@ async function onSubmit(event: FormSubmitEvent<RegisterRequestInterface>) {
         }
     }
     catch (error) {
-        console.log('Captcha error: ', error)
+        console.warn('Captcha challenge failed', error)
         messager.setMessage(t('error.captcha'))
         loader.setLoaded()
         return
@@ -112,7 +114,7 @@ async function onLoggedByGoogle(response: google.accounts.id.CredentialResponse)
     messager.resetMessage()
 
     if (!response?.credential) {
-        console.log('Google auth error: ', response)
+        console.warn('Google sign-in returned no credential')
         messager.setMessage(t('error.googleLogin'))
         loader.setLoaded()
         return
@@ -128,7 +130,7 @@ async function onLoggedByGoogle(response: google.accounts.id.CredentialResponse)
         }
     }
     catch (error) {
-        console.log('Captcha error: ', error)
+        console.warn('Captcha challenge failed', error)
         messager.setMessage(t('error.captcha'))
         loader.setLoaded()
         return

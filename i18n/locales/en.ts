@@ -43,7 +43,7 @@ export default {
         email: 'Email',
         reset: 'Reset',
         success: {
-            0: 'Password reset link has been sent to you email address.',
+            0: 'If an account exists for this email, a password reset link has been sent to it.',
             1: 'Follow the instruction in the email message.',
             2: 'Pay attention - reset link is temporary and may be expired quickly.',
             3: 'But you always can try again using the same form'

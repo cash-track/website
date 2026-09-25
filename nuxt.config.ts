@@ -1,3 +1,8 @@
+import { sentryVitePlugin } from '@sentry/vite-plugin'
+
+// Set only in CI release builds (Docker build secret); local and PR builds skip source maps.
+const sentryAuthToken = process.env.SENTRY_AUTH_TOKEN
+
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
     modules: [
@@ -117,7 +122,8 @@ export default defineNuxtConfig({
             googleClientId: process.env.NUXT_PUBLIC_GOOGLE_CLIENT_ID,
             captchaClientKey: process.env.NUXT_PUBLIC_CAPTCHA_CLIENT_KEY,
             appVersion: process.env.NUXT_PUBLIC_APP_VERSION ?? '',
-            appCommit: process.env.NUXT_PUBLIC_APP_COMMIT ?? ''
+            appCommit: process.env.NUXT_PUBLIC_APP_COMMIT ?? '',
+            sentryDsn: process.env.NUXT_PUBLIC_SENTRY_DSN ?? ''
         }
     },
     devServer: {
@@ -137,6 +143,32 @@ export default defineNuxtConfig({
         })()
     },
     compatibilityDate: '2026-07-26',
+
+    // Browser bundle only: the SDK runs client-side. Hidden maps are uploaded, then deleted
+    // from the client build dir before Nitro copies it to .output/public, so they never ship.
+    ...(sentryAuthToken && { sourcemap: { client: 'hidden' as const } }),
+    vite: {
+        plugins: sentryVitePlugin({
+            disable: !sentryAuthToken,
+            authToken: sentryAuthToken,
+            url: 'https://de.sentry.io/',
+            org: 'cashtrack-o2',
+            project: 'website',
+            // Events match maps by injected debug id, so no Sentry release is created here.
+            release: { create: false, finalize: false, inject: false },
+            sourcemaps: {
+                // `nuxt build` uses node_modules/.cache/nuxt/.nuxt as buildDir; `.nuxt` covers overrides.
+                filesToDeleteAfterUpload: [
+                    './node_modules/.cache/nuxt/.nuxt/dist/client/**/*.map',
+                    './.nuxt/dist/client/**/*.map'
+                ]
+            },
+            telemetry: false
+        }).map(plugin => ({
+            ...plugin,
+            applyToEnvironment: (environment: { name: string }) => environment.name === 'client'
+        }))
+    },
 
     typescript: {
         tsConfig: {

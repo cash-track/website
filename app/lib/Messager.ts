@@ -2,6 +2,7 @@ import { FetchError } from 'ofetch'
 import type { Ref } from 'vue'
 import type { ErrorResponseInterface, ValidationResponseInterface } from '@/api/response'
 import { ref, useI18n } from '#imports'
+import { reportUnexpectedError } from '@/lib/reportError'
 
 export function useMessager(): Messager {
     return new Messager()
@@ -43,6 +44,8 @@ export class Messager {
     }
 
     public dispatchError(error: unknown) {
+        reportUnexpectedError(error)
+
         if (!(error instanceof FetchError)) {
             return error
         }

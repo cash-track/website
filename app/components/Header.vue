@@ -201,6 +201,7 @@ import { useLocalePath, useI18n, useColorMode, onMounted, useRouter, useRequestH
 import { readCookieValue } from '@/utils/cookies'
 import { parseCachedProfile } from '@/utils/profileCookie'
 import { useWebAppLinks } from '@/lib/WebAppLinks'
+import { reportUnexpectedError } from '@/lib/reportError'
 import { useAuthStore } from '@/store/auth'
 import { profileGet, profilePutLocale, type ProfileInterface } from '@/api/profile'
 import { logout } from '@/api/login'
@@ -318,6 +319,7 @@ function loadProfile() {
             authStore.logout()
         }
         else {
+            reportUnexpectedError(error)
             authStore.reset()
         }
     })
@@ -338,7 +340,7 @@ function applyProfileLocale(profileLocale: string) {
 }
 
 function onLogout() {
-    logout().finally(() => {
+    logout().catch(reportUnexpectedError).finally(() => {
         authStore.logout()
         router.push(localePath('/'))
     })
@@ -348,7 +350,7 @@ function onLocaleChange(changed: LocaleObject) {
     setLocale(changed.code)
 
     if (isLogged.value) {
-        profilePutLocale(changed.code)
+        profilePutLocale(changed.code).catch(reportUnexpectedError)
     }
 }
 

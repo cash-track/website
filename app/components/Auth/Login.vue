@@ -49,7 +49,7 @@ async function nextChallenge(loader: ReturnType<typeof useLoader>): Promise<stri
         return challenge
     }
     catch (error) {
-        console.log('Captcha error: ', error)
+        console.warn('Captcha challenge failed', error)
         messager.setMessage(t('error.captcha'))
         loader.setLoaded()
         return undefined
@@ -97,7 +97,7 @@ async function onLoggedByGoogle(response: google.accounts.id.CredentialResponse)
     messager.resetMessage()
 
     if (!response?.credential) {
-        console.log('Google auth error: ', response)
+        console.warn('Google sign-in returned no credential')
         messager.setMessage(t('error.googleLogin'))
         loader.setLoaded()
         return
@@ -168,7 +168,6 @@ function initGoogleAuthButton() {
 
 async function loginWithPasskey() {
     if (!passkeysSupported.value) {
-        console.info('Passkeys: not supported')
         return
     }
 
@@ -200,6 +199,10 @@ async function loginWithPasskey() {
     }
     catch (error) {
         passkeyLoader.setLoaded()
+        // User cancelled or the prompt timed out.
+        if (error instanceof Error && (error.name === 'NotAllowedError' || error.name === 'AbortError')) {
+            return
+        }
         messager.dispatchError(error)
         return
     }
