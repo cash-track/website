@@ -117,7 +117,8 @@ export default defineNuxtConfig({
             googleClientId: process.env.NUXT_PUBLIC_GOOGLE_CLIENT_ID,
             captchaClientKey: process.env.NUXT_PUBLIC_CAPTCHA_CLIENT_KEY,
             appVersion: process.env.NUXT_PUBLIC_APP_VERSION ?? '',
-            appCommit: process.env.NUXT_PUBLIC_APP_COMMIT ?? ''
+            appCommit: process.env.NUXT_PUBLIC_APP_COMMIT ?? '',
+            sentryDsn: process.env.NUXT_PUBLIC_SENTRY_DSN ?? ''
         }
     },
     devServer: {
