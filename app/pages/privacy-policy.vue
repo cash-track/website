@@ -22,6 +22,8 @@
             <li>{{ $t('privacyPolicy.infoWeCollect[3]') }}</li>
             <li>{{ $t('privacyPolicy.infoWeCollect[4]') }}</li>
             <li>{{ $t('privacyPolicy.infoWeCollect[5]') }}</li>
+            <li>{{ $t('privacyPolicy.infoWeCollect[6]') }}</li>
+            <li>{{ $t('privacyPolicy.infoWeCollect[7]') }}</li>
         </ol>
 
         <h3>{{ $t('privacyPolicy.howWeCollectInfo[0]') }}</h3>
@@ -30,6 +32,7 @@
             <li>{{ $t('privacyPolicy.howWeCollectInfo[2]') }}</li>
             <li>{{ $t('privacyPolicy.howWeCollectInfo[3]') }}</li>
             <li>{{ $t('privacyPolicy.howWeCollectInfo[4]') }}</li>
+            <li>{{ $t('privacyPolicy.howWeCollectInfo[5]') }}</li>
         </ol>
 
         <h3>{{ $t('privacyPolicy.howWeUseInfo[0]') }}</h3>
@@ -38,6 +41,7 @@
             <li>{{ $t('privacyPolicy.howWeUseInfo[2]') }}</li>
             <li>{{ $t('privacyPolicy.howWeUseInfo[3]') }}</li>
             <li>{{ $t('privacyPolicy.howWeUseInfo[4]') }}</li>
+            <li>{{ $t('privacyPolicy.howWeUseInfo[6]') }}</li>
         </ol>
         <p>{{ $t('privacyPolicy.howWeUseInfo[5]') }}</p>
 
@@ -46,6 +50,7 @@
         <p>{{ $t('privacyPolicy.howWeShareInfo[1]') }}</p>
         <ol>
             <li>{{ $t('privacyPolicy.howWeShareInfo[2]') }}</li>
+            <li>{{ $t('privacyPolicy.howWeShareInfo[5]') }}</li>
         </ol>
 
         <p>{{ $t('privacyPolicy.howWeShareInfo[3]') }}</p>
@@ -71,6 +76,13 @@
 
         <h3>{{ $t('privacyPolicy.security[0]') }}</h3>
         <p>{{ $t('privacyPolicy.security[1]') }}</p>
+
+        <h3>{{ $t('privacyPolicy.errorMonitoring[0]') }}</h3>
+        <p>{{ $t('privacyPolicy.errorMonitoring[1]') }}</p>
+        <p>{{ $t('privacyPolicy.errorMonitoring[2]') }}</p>
+        <p>{{ $t('privacyPolicy.errorMonitoring[3]') }}</p>
+        <p>{{ t('privacyPolicy.errorMonitoring[4]', { email: 'support@mail.cash-track.app' }) }}</p>
+        <p>{{ $t('privacyPolicy.errorMonitoring[5]') }}</p>
 
         <h3>{{ $t('privacyPolicy.dataProtection[0]') }}</h3>
         <p>{{ t('privacyPolicy.dataProtection[1]', { email: 'support@mail.cash-track.app' }) }}</p>
