@@ -200,7 +200,7 @@ export default {
         link: 'Cookie Policy',
         cookiePolicy: 'Cookie Policy',
         effectiveDate: 'Effective Date: 15-Apr-2023',
-        lastUpdated: 'Last Updated: 15-Apr-2023',
+        lastUpdated: 'Last Updated: 26-Sep-2026',
         whatAreCookies: {
             0: '1. What are cookies?',
             1: 'This Cookie Policy explains what cookies are and how we use them, the types of cookies we use i.e, the information we collect using cookies and how that information is used, and how to manage the cookie settings.',
@@ -209,7 +209,8 @@ export default {
         howDoWeUseCookies: {
             0: '2. How do we use cookies?',
             1: 'As most of the online services, our website uses first-party and third-party cookies for several purposes. First-party cookies are mostly necessary for the website to function the right way, and they do not collect any of your personally identifiable data.',
-            2: 'The third-party cookies used on our website are mainly for understanding how the website performs, how you interact with our website, keeping our services secure, providing advertisements that are relevant to you, and all in all providing you with a better and improved user experience and help speed up your future interactions with our website.'
+            2: 'The third-party cookies used on our website are mainly for understanding how the website performs, how you interact with our website, keeping our services secure, providing advertisements that are relevant to you, and all in all providing you with a better and improved user experience and help speed up your future interactions with our website.',
+            3: 'We also use Sentry to detect errors in the website and the web application. Sentry does not set cookies or store any information on your device, so it is not listed in the table below and your cookie preferences do not affect it. Section 9 of our Privacy Policy describes what data error reports contain.'
         },
         typesOfCookiesWeUse: '3. Types of Cookies we use',
         cookieSettings: 'Cookie Settings',
@@ -226,9 +227,9 @@ export default {
         link: 'Privacy Policy',
         privacyPolicy: 'Privacy Policy',
         effectiveDate: 'Effective Date 15-Apr-2023',
-        lastUpdated: 'Last Updated On 15-Apr-2023',
+        lastUpdated: 'Last Updated On 26-Sep-2026',
         intro: {
-            0: 'This Privacy Policy describes the policies of Cash Track, Vinnytsia, 22600, Ukraine, email: {email} on the collection, use and disclosure of your information that we collect when you use our website ( https://cash-track.app ). (the “Service”). By accessing or using the Service, you are consenting to the collection, use and disclosure of your information in accordance with this Privacy Policy. If you do not consent to the same, please do not access or use the Service.',
+            0: 'This Privacy Policy describes the policies of Cash Track, Vinnytsia, 22600, Ukraine, email: {email} on the collection, use and disclosure of your information that we collect when you use our website ( https://cash-track.app ) and web application ( https://my.cash-track.app ) (the “Service”). By accessing or using the Service, you are consenting to the collection, use and disclosure of your information in accordance with this Privacy Policy. If you do not consent to the same, please do not access or use the Service.',
             1: 'We may modify this Privacy Policy at any time without any prior notice to you and will post the revised Privacy Policy on the Service. The revised Policy will be effective 180 days from when the revised Policy is posted in the Service and your continued access or use of the Service after such time will constitute your acceptance of the revised Privacy Policy. We therefore recommend that you periodically review this page.'
         },
         infoWeCollect: {
@@ -238,14 +239,16 @@ export default {
             3: 'Last Name',
             4: 'Email',
             5: 'Social Media Profile',
-            6: 'Nick Name'
+            6: 'Nick Name',
+            7: 'Technical data about errors in the Service (see section 9)'
         },
         howWeCollectInfo: {
             0: '2. How We Collect Your Information:',
             1: 'We collect/receive information about you in the following manner:',
             2: 'When a user fills up the registration form or otherwise submits personal information',
             3: 'Interacts with the website',
-            4: 'From public sources'
+            4: 'From public sources',
+            5: 'Automatically, when an error occurs in the Service (see section 9)'
         },
         howWeUseInfo: {
             0: '3. How We Use Your Information:',
@@ -253,12 +256,14 @@ export default {
             2: 'Creating user account',
             3: 'User to user comments',
             4: 'Manage user account',
+            6: 'Detecting, diagnosing and fixing errors in the Service',
             5: 'If we want to use your information for any other purpose, we will ask you for consent and will use your information only on receiving your consent and then, only for the purpose(s) for which grant consent unless we are required to do otherwise by law.'
         },
         howWeShareInfo: {
             0: '4. How We Share Your Information:',
             1: 'We will not transfer your personal information to any third party without seeking your consent, except in limited circumstances as described below:',
             2: 'Analytics',
+            5: 'Error monitoring (Sentry, see section 9)',
             3: 'We require such third party’s to use the personal information we transfer to them only for the purpose for which it was transferred and not to retain it for longer than is required for fulfilling the said purpose.',
             4: 'We may also disclose your personal information for the following: (1) to comply with applicable law, regulation, court order or other legal process; (2) to enforce your agreements with us, including this Privacy Policy; or (3) to respond to claims that your use of the Service violates any third-party rights. If the Service or our company is merged or acquired with another company, your information will be one of the assets that is transferred to the new owner.'
         },
@@ -280,8 +285,16 @@ export default {
             0: '8. Security:',
             1: 'The security of your information is important to us and we will use reasonable security measures to prevent the loss, misuse or unauthorized alteration of your information under our control. However, given the inherent risks, we cannot guarantee absolute security and consequently, we cannot ensure or warrant the security of any information you transmit to us and you do so at your own risk.'
         },
+        errorMonitoring: {
+            0: '9. Error Monitoring:',
+            1: 'We use Sentry, an error monitoring service provided by Functional Software, Inc. d/b/a Sentry, 45 Fremont Street, 8th Floor, San Francisco, CA 94105, USA, to detect and fix errors in the website, the web application and our servers. Sentry processes this data on our behalf as a data processor under its Data Processing Addendum.',
+            2: 'When an error occurs, an error report is sent to Sentry. It contains the error message and technical details of where it happened in our code, the address (URL) of the page or request, your browser, operating system and device type, the application version and a short log of recent events in the page before the error, such as pages visited, elements clicked and network requests made. The website and the web application also send an anonymous session signal when a page loads, which we use to count sessions without errors.',
+            3: 'We configure Sentry not to collect your IP address, cookies, the content of forms or requests you submit (such as passwords) or your account details, and Sentry removes values that look like passwords, tokens or card numbers before storing a report. An error report may still contain personal data by accident, for example an identifier that is part of a page address. Error monitoring does not use cookies or store any information on your device.',
+            4: 'We process this data based on our legitimate interest in keeping the Service working reliably and securely (Article 6(1)(f) GDPR). You can object to this processing by writing to us at {email}.',
+            5: 'Sentry stores error reports in its EU data region in Frankfurt, Germany, and deletes them automatically after no more than 90 days. Sentry is a US company, and it and its affiliates and subprocessors may access the data from outside the European Economic Area. Such transfers are protected by Sentry’s certification under the EU-U.S. Data Privacy Framework and by the Standard Contractual Clauses in its Data Processing Addendum.'
+        },
         dataProtection: {
-            0: '9. Grievance / Data Protection Officer:',
+            0: '10. Grievance / Data Protection Officer:',
             1: 'If you have any queries or concerns about the processing of your information that is available with us, you may email our Grievance Officer at Cash Track, Vinnytsia, email: {email}. We will address your concerns in accordance with applicable law.'
         }
     },
@@ -306,7 +319,7 @@ export default {
         link: 'Security Policy',
         securityAcknowledgement: 'Security Policy',
         effectiveDate: 'Effective Date 17-May-2025',
-        lastUpdated: 'Last Updated On 17-May-2025',
+        lastUpdated: 'Last Updated On 26-Sep-2026',
         intro: {
             0: 'We take the security of our web service seriously and appreciate the efforts of security researchers and users in helping us maintain a secure environment. This Security Policy outlines the procedures for reporting vulnerabilities, the legal terms associated with not reporting them, and the timeline for public disclosure if we do not respond.'
         },
@@ -317,7 +330,8 @@ export default {
             3: 'Steps to reproduce the vulnerability',
             4: 'Any potential impact of the vulnerability',
             5: 'Your contact information (optional, but helpful for follow-up)',
-            6: 'We will acknowledge receipt of your report as soon as possible and work to address the issue as quickly as possible.'
+            6: 'We will acknowledge receipt of your report as soon as possible and work to address the issue as quickly as possible.',
+            7: 'Vulnerabilities in third-party services we use, such as Sentry, are out of scope. Please report them to the vendor. The Sentry DSN key in our client-side code is public by design: it only allows sending error reports to our Sentry project. An exposed DSN is not a vulnerability on its own.'
         },
         legal: {
             0: 'Legal Terms for Not Reporting Vulnerabilities',

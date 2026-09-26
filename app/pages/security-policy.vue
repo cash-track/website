@@ -24,6 +24,7 @@
                 <li>{{ $t('securityPolicy.reporting[5]') }}</li>
             </ul>
             <p>{{ $t('securityPolicy.reporting[6]') }}</p>
+            <p>{{ $t('securityPolicy.reporting[7]') }}</p>
         </div>
 
         <h3>{{ $t('securityPolicy.legal[0]') }}</h3>

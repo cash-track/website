@@ -20,6 +20,7 @@
         <div>
             <p>{{ $t('cookiePolicy.howDoWeUseCookies[1]') }}</p>
             <p>{{ $t('cookiePolicy.howDoWeUseCookies[2]') }}</p>
+            <p>{{ $t('cookiePolicy.howDoWeUseCookies[3]') }}</p>
         </div>
 
         <h3>{{ $t('cookiePolicy.typesOfCookiesWeUse') }}</h3>
