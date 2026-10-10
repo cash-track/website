@@ -27,3 +27,11 @@ $ npm run start
 # generate static project
 $ npm run generate
 ```
+
+## License
+
+Copyright (c) Volodymyr Komarov. Source-available under the
+[PolyForm Noncommercial License 1.0.0](LICENSE): free to use, modify and share
+for noncommercial purposes. Any use that earns money needs a separate license,
+see [COMMERCIAL.md](COMMERCIAL.md). Forks must not present themselves as the
+official Cash Track.
