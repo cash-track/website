@@ -8,6 +8,7 @@ import { useLoader } from '@/lib/Loader'
 import type { LoginResponseInterface } from '@/api/login'
 import { checkNickName, register, type RegisterRequestInterface, type RegisterResponseInterface } from '@/api/register'
 import { useValidationMessager } from '@/lib/ValidatorMessager'
+import { onGoogleReady } from '@/lib/GoogleIdentity'
 import { reportUnexpectedError } from '@/lib/reportError'
 import StatusPageHint from '@/components/Shared/StatusPageHint.vue'
 import { profileGet } from '@/api/profile'
@@ -167,7 +168,7 @@ function onSuccess(response: LoginResponseInterface | RegisterResponseInterface)
 }
 
 onMounted(() => {
-    initGoogleAuthButton()
+    onGoogleReady(initGoogleAuthButton)
 })
 
 function initGoogleAuthButton() {
